@@ -15,12 +15,10 @@ namespace Pinetime {
     class Ble;
     class NotificationManager;
     class HeartRateController;
-    class MotionController;
   }
 
   namespace Applications {
     namespace Screens {
-
       class PineTimeStyle : public Screen {
       public:
         PineTimeStyle(DisplayApp* app,
@@ -29,8 +27,7 @@ namespace Pinetime {
                          Controllers::Ble& bleController,
                          Controllers::NotificationManager& notificatioManager,
                          Controllers::Settings& settingsController,
-                         Controllers::HeartRateController& heartRateController,
-                         Controllers::MotionController& motionController);
+                         Controllers::HeartRateController& heartRateController);
         ~PineTimeStyle() override;
 
         bool Refresh() override;
@@ -48,8 +45,6 @@ namespace Pinetime {
         DirtyValue<int> batteryPercentRemaining {};
         DirtyValue<bool> bleState {};
         DirtyValue<std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>> currentDateTime {};
-        DirtyValue<bool> motionSensorOk {};
-        DirtyValue<uint32_t> stepCount {};
         DirtyValue<uint8_t> heartbeat {};
         DirtyValue<bool> heartbeatRunning {};
         DirtyValue<bool> notificationState {};
@@ -82,7 +77,6 @@ namespace Pinetime {
         Controllers::NotificationManager& notificatioManager;
         Controllers::Settings& settingsController;
         Controllers::HeartRateController& heartRateController;
-        Controllers::MotionController& motionController;
       };
     }
   }

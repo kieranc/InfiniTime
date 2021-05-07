@@ -11,7 +11,6 @@
 #include "components/ble/BleController.h"
 #include "components/ble/NotificationManager.h"
 #include "components/heartrate/HeartRateController.h"
-#include "components/motion/MotionController.h"
 #include "components/settings/Settings.h"
 #include "../DisplayApp.h"
 
@@ -29,8 +28,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
                                    Controllers::Ble& bleController,
                                    Controllers::NotificationManager& notificatioManager,
                                    Controllers::Settings& settingsController,
-                                   Controllers::HeartRateController& heartRateController,
-                                   Controllers::MotionController& motionController)
+                                   Controllers::HeartRateController& heartRateController)
   : Screen(app),
     currentDateTime {{}},
     dateTimeController {dateTimeController},
@@ -38,8 +36,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
     bleController {bleController},
     notificatioManager {notificatioManager},
     settingsController {settingsController},
-    heartRateController {heartRateController},
-    motionController {motionController} {
+    heartRateController {heartRateController} {
 
   /* This sets the watchface number to return to after leaving the menu*/
   settingsController.SetClockFace(1);
@@ -239,24 +236,7 @@ bool PineTimeStyle::Refresh() {
     sprintf(minutesChar, "%02d", static_cast<int>(minute));
 
     char hoursChar[3];
-    char ampmChar[3];
-    if (settingsController.GetClockType() == Controllers::Settings::ClockType::H24) {
-      sprintf(hoursChar, "%02d", hour);
-    } else {
-      if (hour == 0 && hour != 12) {
-        hour = 12;
-        sprintf(ampmChar, "AM");
-      } else if (hour == 12 && hour != 0) {
-        hour = 12;
-        sprintf(ampmChar, "PM");
-      } else if (hour < 12 && hour != 0) {
-        sprintf(ampmChar, "AM");
-      } else if (hour > 12 && hour != 0) {
-        hour = hour - 12;
-        sprintf(ampmChar, "PM");
-      }
-      sprintf(hoursChar, "%02d", hour);
-    }
+    sprintf(hoursChar, "%02d", hour);
 
     if (hoursChar[0] != displayedChar[0] || hoursChar[1] != displayedChar[1] || minutesChar[0] != displayedChar[2] ||
         minutesChar[1] != displayedChar[3]) {
