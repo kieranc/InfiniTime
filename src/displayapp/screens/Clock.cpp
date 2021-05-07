@@ -13,7 +13,7 @@
 #include "components/ble/NotificationManager.h"
 #include "../DisplayApp.h"
 #include "WatchFaceDigital.h"
-#include "WatchFaceAnalog.h"
+#include "AwesomeFace.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -40,7 +40,7 @@ Clock::Clock(DisplayApp* app,
                  return WatchFaceDigitalScreen();
                },
                [this]() -> std::unique_ptr<Screen> {
-                 return WatchFaceAnalogScreen();
+                 return AwesomeFaceScreen();
                },
                // Examples for more watch faces
                //[this]() -> std::unique_ptr<Screen> { return WatchFaceMinimalScreen(); },
@@ -75,9 +75,10 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
                                                      motionController);
 }
 
-std::unique_ptr<Screen> Clock::WatchFaceAnalogScreen() {
-  return std::make_unique<Screens::WatchFaceAnalog>(
-    app, dateTimeController, batteryController, bleController, notificatioManager, settingsController);
+std::unique_ptr<Screen> Clock::AwesomeFaceScreen() {
+  return std::make_unique<Screens::AwesomeFace>(app,
+                                                     dateTimeController,
+                                                     settingsController);
 }
 
 /*

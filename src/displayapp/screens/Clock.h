@@ -49,7 +49,7 @@ namespace Pinetime {
 
         ScreenList<2> screens;
         std::unique_ptr<Screen> WatchFaceDigitalScreen();
-        std::unique_ptr<Screen> WatchFaceAnalogScreen();
+        std::unique_ptr<Screen> AwesomeFaceScreen();
 
         // Examples for more watch faces
         // std::unique_ptr<Screen> WatchFaceMinimalScreen();
