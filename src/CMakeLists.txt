@@ -417,7 +417,7 @@ list(APPEND SOURCE_FILES
 
         ## Watch faces
         displayapp/icons/bg_clock.c
-        displayapp/screens/WatchFaceAnalog.cpp
+        displayapp/screens/AwesomeFace.cpp
         displayapp/screens/WatchFaceDigital.cpp
         displayapp/screens/PineTimeStyle.cpp
 
@@ -468,6 +468,7 @@ list(APPEND SOURCE_FILES
         displayapp/fonts/jetbrains_mono_bold_20.c
         displayapp/fonts/jetbrains_mono_76.c
         displayapp/fonts/open_sans_light.c
+        displayapp/fonts/comic_sans.c
         displayapp/fonts/lv_font_sys_48.c
         displayapp/lv_pinetime_theme.c
 

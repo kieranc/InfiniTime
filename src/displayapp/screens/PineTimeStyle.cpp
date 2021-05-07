@@ -42,7 +42,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
     motionController {motionController} {
 
   /* This sets the watchface number to return to after leaving the menu*/
-  settingsController.SetClockFace(2);
+  settingsController.SetClockFace(1);
 
   displayedChar[0] = 0;
   displayedChar[1] = 0;
