@@ -406,6 +406,7 @@ list(APPEND SOURCE_FILES
         displayapp/screens/FlashLight.cpp
         displayapp/screens/List.cpp
         displayapp/screens/BatteryInfo.cpp
+        displayapp/screens/Steps.cpp
 
         ## Settings
         displayapp/screens/settings/QuickSettings.cpp
@@ -414,6 +415,7 @@ list(APPEND SOURCE_FILES
         displayapp/screens/settings/SettingTimeFormat.cpp
         displayapp/screens/settings/SettingWakeUp.cpp
         displayapp/screens/settings/SettingDisplay.cpp
+        displayapp/screens/settings/SettingSteps.cpp
 
         ## Watch faces
         displayapp/icons/bg_clock.c
@@ -469,6 +471,7 @@ list(APPEND SOURCE_FILES
         displayapp/fonts/jetbrains_mono_76.c
         displayapp/fonts/open_sans_light.c
         displayapp/fonts/comic_sans.c
+        displayapp/fonts/jetbrains_mono_42.c
         displayapp/fonts/lv_font_sys_48.c
         displayapp/lv_pinetime_theme.c
 
