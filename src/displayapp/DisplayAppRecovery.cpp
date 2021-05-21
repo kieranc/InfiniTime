@@ -17,9 +17,10 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
                        System::SystemTask& systemTask,
                        Pinetime::Controllers::NotificationManager& notificationManager,
                        Pinetime::Controllers::HeartRateController& heartRateController,
-                       Pinetime::Controllers::Settings& settingsController,
+                       Controllers::Settings& settingsController,
                        Pinetime::Controllers::MotorController& motorController,
-                       Pinetime::Controllers::MotionController& motionController)
+                       Pinetime::Controllers::MotionController& motionController,
+                       Pinetime::Controllers::TimerController& timerController)
   : lcd {lcd}, bleController {bleController} {
   msgQueue = xQueueCreate(queueSize, itemSize);
 }
@@ -37,7 +38,7 @@ void DisplayApp::Process(void* instance) {
   xTaskNotifyGive(xTaskGetCurrentTaskHandle());
 
   app->InitHw();
-  while (1) {
+  while (true) {
     app->Refresh();
   }
 }
@@ -51,10 +52,11 @@ void DisplayApp::Refresh() {
   if (xQueueReceive(msgQueue, &msg, 200)) {
     switch (msg) {
       case Display::Messages::UpdateBleConnection:
-        if (bleController.IsConnected())
+        if (bleController.IsConnected()) {
           DisplayLogo(colorBlue);
-        else
+        } else {
           DisplayLogo(colorWhite);
+        }
         break;
       case Display::Messages::BleFirmwareUpdateStarted:
         DisplayLogo(colorGreen);
