@@ -1,6 +1,6 @@
 [submodule "src/libs/lvgl"]
 	path = src/libs/lvgl
 	url = https://github.com/joaquimorg/lvgl.git
-[submodule "mynewt-nimble"]
-	path = mynewt-nimble
+[submodule "src/libs/mynewt-nimble"]
+	path = src/libs/mynewt-nimble
 	url = https://github.com/apache/mynewt-nimble
