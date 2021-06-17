@@ -161,7 +161,7 @@ std::unique_ptr<Screen> SystemInfo::CreateScreen2() {
                         brightnessController.ToString(),
                         resetReason);
   lv_obj_align(label, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
-  return std::make_unique<Screens::Label>(1, 4, app, label);
+  return std::make_unique<Screens::Label>(1, 5, app, label);
 }
 
 std::unique_ptr<Screen> SystemInfo::CreateScreen3() {
@@ -198,7 +198,7 @@ std::unique_ptr<Screen> SystemInfo::CreateScreen3() {
   return std::make_unique<Screens::Label>(2, 5, app, label);
 }
 
-bool sortById(const TaskStatus_t& lhs, const TaskStatus_t& rhs) {
+bool SystemInfo::sortById(const TaskStatus_t& lhs, const TaskStatus_t& rhs) {
   return lhs.xTaskNumber < rhs.xTaskNumber;
 }
 

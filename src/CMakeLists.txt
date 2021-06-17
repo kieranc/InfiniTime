@@ -396,6 +396,7 @@ list(APPEND SOURCE_FILES
         displayapp/screens/FirmwareUpdate.cpp
         displayapp/screens/Music.cpp
         displayapp/screens/Navigation.cpp
+        displayapp/screens/Metronome.cpp
         displayapp/screens/Motion.cpp
         displayapp/screens/FirmwareValidation.cpp
         displayapp/screens/ApplicationList.cpp
@@ -534,7 +535,6 @@ list(APPEND RECOVERY_SOURCE_FILES
         systemtask/SystemTask.cpp
         drivers/TwiMaster.cpp
         components/gfx/Gfx.cpp
-        displayapp/icons/infinitime/infinitime-nb.c
         components/rle/RleDecoder.cpp
         components/heartrate/HeartRateController.cpp
         heartratetask/HeartRateTask.cpp
@@ -561,7 +561,6 @@ list(APPEND RECOVERYLOADER_SOURCE_FILES
         drivers/St7789.cpp
         components/brightness/BrightnessController.cpp
 
-        displayapp/icons/infinitime/infinitime-nb.c
         recoveryLoader.cpp
         )
 
@@ -595,6 +594,7 @@ set(INCLUDE_FILES
         displayapp/Apps.h
         displayapp/screens/Notifications.h
         displayapp/screens/HeartRate.h
+        displayapp/screens/Metronome.h
         displayapp/screens/Motion.h
         displayapp/screens/Timer.h
         drivers/St7789.h
