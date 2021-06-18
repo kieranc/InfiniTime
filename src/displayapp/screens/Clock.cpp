@@ -82,7 +82,7 @@ std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
                                                      bleController,
                                                      notificatioManager,
                                                      settingsController,
-                                                     heartRateController);
+                                                     motionController);
 }
 
 std::unique_ptr<Screen> Clock::AwesomeFaceScreen() {

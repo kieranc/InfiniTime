@@ -10,7 +10,7 @@
 #include "components/battery/BatteryController.h"
 #include "components/ble/BleController.h"
 #include "components/ble/NotificationManager.h"
-#include "components/heartrate/HeartRateController.h"
+#include "components/motion/MotionController.h"
 #include "components/settings/Settings.h"
 #include "../DisplayApp.h"
 
@@ -28,7 +28,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
                                    Controllers::Ble& bleController,
                                    Controllers::NotificationManager& notificatioManager,
                                    Controllers::Settings& settingsController,
-                                   Controllers::HeartRateController& heartRateController)
+                                   Controllers::MotionController& motionController)
   : Screen(app),
     currentDateTime {{}},
     dateTimeController {dateTimeController},
@@ -36,7 +36,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
     bleController {bleController},
     notificatioManager {notificatioManager},
     settingsController {settingsController},
-    heartRateController {heartRateController} {
+    motionController {motionController} {
 
   /* This sets the watchface number to return to after leaving the menu*/
   settingsController.SetClockFace(1);
@@ -155,7 +155,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_align(dateMonth, sidebar, LV_ALIGN_CENTER, 0, 32);
 
   /*Display heartrate info*/
-
+/*
   heartbeatIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(heartbeatIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_label_set_text(heartbeatIcon, Symbols::heartBeat);
@@ -165,6 +165,31 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_text_color(heartbeatValue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_label_set_text(heartbeatValue, "---");
   lv_obj_align(heartbeatValue, sidebar, LV_ALIGN_IN_BOTTOM_MID, 0, -10);
+*/
+
+// Step count gauge
+
+  lv_color_t needle_colors[1];
+
+  needle_colors[0] = lv_color_hex(0x000000);
+
+  //Create a gauge
+  stepGauge = lv_gauge_create(lv_scr_act(), nullptr);
+  lv_gauge_set_needle_count(stepGauge, 1, needle_colors);
+  lv_obj_set_style_local_bg_opa(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
+  lv_obj_set_style_local_bg_opa(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, LV_OPA_100);
+  lv_obj_set_style_local_bg_opa(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_100);
+  lv_obj_set_style_local_line_opa(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, LV_OPA_100);
+  lv_obj_set_style_local_line_opa(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_100);
+  lv_obj_set_style_local_line_opa(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
+  lv_obj_set_style_local_line_color(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, lv_color_hex(0xffffff));
+  lv_obj_set_style_local_line_color(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xffffff));
+  lv_obj_set_style_local_line_color(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, lv_color_hex(0xffffff));
+  lv_obj_set_size(stepGauge, 34, 34);
+  lv_obj_align(stepGauge, sidebar, LV_ALIGN_IN_BOTTOM_MID, 0, -8);
+  lv_gauge_set_scale(stepGauge, 360, 11, 0);
+  lv_gauge_set_range(stepGauge, 0, 10000);
+  lv_gauge_set_value(stepGauge, 0, 0);
 
   backgroundLabel = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_click(backgroundLabel, true);
@@ -277,6 +302,16 @@ bool PineTimeStyle::Refresh() {
     }
   }
 
+  stepCount = motionController.NbSteps();
+  motionSensorOk = motionController.IsSensorOk();
+  if (stepCount.IsUpdated() || motionSensorOk.IsUpdated()) {
+      //sprintf(stepCount, "%u", stepCount.Get());
+      //lv_gauge_set_value(stepGauge, 0, stepCount.Get());
+      //lv_obj_realign(stepGauge);
+    //lv_label_set_text_fmt(stepValue, "%lu", stepCount.Get());
+  }
+
+  /*
   heartbeat = heartRateController.HeartRate();
   heartbeatRunning = heartRateController.State() != Controllers::HeartRateController::States::Stopped;
   if (heartbeat.IsUpdated() || heartbeatRunning.IsUpdated()) {
@@ -289,6 +324,6 @@ bool PineTimeStyle::Refresh() {
     lv_label_set_text(heartbeatValue, heartbeatBuffer);
     lv_obj_realign(heartbeatValue);
   }
-
+*/
   return running;
 }
