@@ -69,6 +69,12 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_label_set_text(timeDD2, "34");
   lv_obj_align(timeDD2, timebar, LV_ALIGN_IN_BOTTOM_MID, 5, -5);
 
+  timeAMPM = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x008080));
+  lv_obj_set_style_local_text_line_space(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -3);
+  lv_label_set_text(timeAMPM, "");
+  lv_obj_align(timeAMPM, timebar, LV_ALIGN_IN_BOTTOM_LEFT, 2, -20);
+
   /*Create a 40px wide bar down the right side of the screen*/
 
   sidebar = lv_obj_create(lv_scr_act(), nullptr);
@@ -86,17 +92,14 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
 
   batteryPlug = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(batteryPlug, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-//  lv_label_set_text(batteryPlug, Symbols::plug);
   lv_obj_align(batteryPlug, sidebar, LV_ALIGN_IN_TOP_MID, 0, 2);
 
   bleIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-//  lv_label_set_text(bleIcon, BleIcon::GetIcon(false));
   lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-//  lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(false));
   lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 40);
 
   /* Calendar icon */
@@ -234,10 +237,8 @@ bool PineTimeStyle::Refresh() {
     if (notificationState.Get() == true) {
       lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(true));
       lv_obj_realign(notificationIcon);
-//      lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, -8, 25);
     } else {
       lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(false));
-//      lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
     }
   }
 
@@ -262,7 +263,25 @@ bool PineTimeStyle::Refresh() {
     sprintf(minutesChar, "%02d", static_cast<int>(minute));
 
     char hoursChar[3];
-    sprintf(hoursChar, "%02d", hour);
+    char ampmChar[5];
+
+      if (settingsController.GetClockType() == Controllers::Settings::ClockType::H24) {
+        sprintf(hoursChar, "%02d", hour);
+      } else {
+        if (hour == 0 && hour != 12) {
+          hour = 12;
+          sprintf(ampmChar, "A\nM");
+        } else if (hour == 12 && hour != 0) {
+          hour = 12;
+          sprintf(ampmChar, "P\nM");
+        } else if (hour < 12 && hour != 0) {
+          sprintf(ampmChar, "A\nM");
+        } else if (hour > 12 && hour != 0) {
+          hour = hour - 12;
+          sprintf(ampmChar, "P\nM");
+        }
+        sprintf(hoursChar, "%02d", hour);
+      }
 
     if (hoursChar[0] != displayedChar[0] || hoursChar[1] != displayedChar[1] || minutesChar[0] != displayedChar[2] ||
         minutesChar[1] != displayedChar[3]) {
@@ -273,6 +292,10 @@ bool PineTimeStyle::Refresh() {
 
       char hourStr[3];
       char minStr[3];
+
+      if (settingsController.GetClockType() == Controllers::Settings::ClockType::H12) {
+        lv_label_set_text(timeAMPM, ampmChar);
+      }
 
       /*Display the time as 2 pairs of digits*/
       sprintf(hourStr, "%c%c", hoursChar[0], hoursChar[1]);
@@ -306,10 +329,8 @@ bool PineTimeStyle::Refresh() {
   stepCount = motionController.NbSteps();
   motionSensorOk = motionController.IsSensorOk();
   if (stepCount.IsUpdated() || motionSensorOk.IsUpdated()) {
-      //sprintf(stepCount, "%u", stepCount.Get());
       lv_gauge_set_value(stepGauge, 0, (stepCount.Get() / 100));
       lv_obj_realign(stepGauge);
-    //lv_label_set_text_fmt(stepValue, "%lu", stepCount.Get());
   }
 
   /*
