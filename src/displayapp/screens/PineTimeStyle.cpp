@@ -168,72 +168,29 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
 */
 
 // Step count gauge
-
-  lv_color_t needle_colors[1];
-
+  static lv_color_t needle_colors[1];
   needle_colors[0] = LV_COLOR_WHITE;
-  /*
-  lv_style_t stepGaugeStyle;
-  lv_style_init(&stepGaugeStyle);
-
-  //Set a background color and a radius
-  lv_style_set_radius(&stepGaugeStyle, LV_STATE_DEFAULT, 0);
-  lv_style_set_bg_opa(&stepGaugeStyle, LV_STATE_DEFAULT, LV_OPA_COVER);
-  lv_style_set_bg_color(&stepGaugeStyle, LV_STATE_DEFAULT, LV_COLOR_SILVER);
-
-  //Set some paddings
-  lv_style_set_pad_inner(&stepGaugeStyle, LV_STATE_DEFAULT,0);
-  lv_style_set_pad_top(&stepGaugeStyle, LV_STATE_DEFAULT, 0);
-  lv_style_set_pad_left(&stepGaugeStyle, LV_STATE_DEFAULT, 0);
-  lv_style_set_pad_right(&stepGaugeStyle, LV_STATE_DEFAULT, 0);
-
-  lv_style_set_scale_end_color(&stepGaugeStyle, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_style_set_line_color(&stepGaugeStyle, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_style_set_scale_grad_color(&stepGaugeStyle, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_style_set_line_width(&stepGaugeStyle, LV_STATE_DEFAULT, 4);
-  lv_style_set_scale_end_line_width(&stepGaugeStyle, LV_STATE_DEFAULT, 4);
-  lv_style_set_scale_end_border_width(&stepGaugeStyle, LV_STATE_DEFAULT, 4);
-*/
-
-
-  //Create a gauge
   stepGauge = lv_gauge_create(lv_scr_act(), nullptr);
   lv_gauge_set_needle_count(stepGauge, 1, needle_colors);
-
-  //lv_obj_set_style_local_bg_opa(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_COVER);
-  //lv_obj_set_style_local_bg_opa(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, LV_OPA_COVER);
-  //lv_obj_set_style_local_bg_opa(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
-  lv_obj_set_style_local_pad_inner(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, 4);
-  lv_obj_set_style_local_pad_right(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 3);
-  lv_obj_set_style_local_pad_left(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 3);
-  lv_obj_set_style_local_pad_bottom(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 3);
-  //lv_obj_set_style_local_bg_color(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_COLOR_WHITE);
-  //lv_obj_set_style_local_bg_color(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-//   lv_obj_set_style_local_line_opa(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, LV_OPA_COVER);
-//   lv_obj_set_style_local_scale_width(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, 4);
-//   lv_obj_set_style_local_line_width(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, 4);
-//   lv_obj_set_style_local_line_color(stepGauge, LV_GAUGE_PART_MAJOR, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-
-  lv_obj_set_style_local_line_opa(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
-  lv_obj_set_style_local_scale_width(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 4);
-  lv_obj_set_style_local_line_width(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 4);
-  lv_obj_set_style_local_line_color(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  //lv_obj_set_style_local_bg_color(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_TEAL);
-
-  lv_obj_set_style_local_line_opa(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_COVER);
-  lv_obj_set_style_local_line_color(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_COLOR_WHITE);
-  lv_obj_set_style_local_line_width(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, 4);
-
-
-//   lv_obj_add_style(stepGauge, LV_GAUGE_PART_MAIN, &stepGaugeStyle);
-//   lv_obj_add_style(stepGauge, LV_GAUGE_PART_NEEDLE, &stepGaugeStyle);
   lv_obj_set_size(stepGauge, 40, 40);
   lv_obj_align(stepGauge, sidebar, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
   lv_gauge_set_scale(stepGauge, 360, 11, 0);
   lv_gauge_set_angle_offset(stepGauge, 180);
-  lv_gauge_set_critical_value(stepGauge, 100);
-  lv_gauge_set_range(stepGauge, 0, 100);
+  lv_gauge_set_critical_value(stepGauge, (settingsController.GetStepsGoal() / 100));
+  lv_gauge_set_range(stepGauge, 0, (settingsController.GetStepsGoal() / 100));
   lv_gauge_set_value(stepGauge, 0, 0);
+
+  lv_obj_set_style_local_pad_right(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 3);
+  lv_obj_set_style_local_pad_left(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 3);
+  lv_obj_set_style_local_pad_bottom(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 3);
+  lv_obj_set_style_local_line_opa(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
+  lv_obj_set_style_local_scale_width(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 4);
+  lv_obj_set_style_local_line_width(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, 4);
+  lv_obj_set_style_local_line_color(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+
+  lv_obj_set_style_local_line_opa(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_COVER);
+  lv_obj_set_style_local_line_width(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, 4);
+  lv_obj_set_style_local_pad_inner(stepGauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, 4);
 
   backgroundLabel = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_click(backgroundLabel, true);
