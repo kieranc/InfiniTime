@@ -9,6 +9,7 @@
 #include "../DisplayApp.h"
 #include "WatchFaceDigital.h"
 #include "WatchFaceAnalog.h"
+#include "WatchFaceFuzzy.h"
 #include "PineTimeStyle.h"
 
 using namespace Pinetime::Applications::Screens;
@@ -40,6 +41,9 @@ Clock::Clock(DisplayApp* app,
         case 2:
           return PineTimeStyleScreen();
           break;
+        case 3:
+          return WatchFaceFuzzyScreen();
+          break;
       }
       return WatchFaceDigitalScreen();
     }()} {
@@ -68,6 +72,10 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
 std::unique_ptr<Screen> Clock::WatchFaceAnalogScreen() {
   return std::make_unique<Screens::WatchFaceAnalog>(
     app, dateTimeController, batteryController, bleController, notificatioManager, settingsController);
+}
+
+std::unique_ptr<Screen> Clock::WatchFaceFuzzyScreen() {
+  return std::make_unique<Screens::WatchFaceFuzzy>(app, dateTimeController);
 }
 
 std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
