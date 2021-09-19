@@ -205,6 +205,13 @@ PineTimeStyle::~PineTimeStyle() {
   lv_obj_clean(lv_scr_act());
 }
 
+bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
+  if (event == Pinetime::Applications::TouchEvents::LongTap) {
+    lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_LIME);
+  }
+  return true;
+}
+
 void PineTimeStyle::Refresh() {
   batteryPercentRemaining = batteryController.PercentRemaining();
   if (batteryPercentRemaining.IsUpdated()) {
