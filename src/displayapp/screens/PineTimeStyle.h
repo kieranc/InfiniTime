@@ -34,6 +34,8 @@ namespace Pinetime {
 
         void Refresh() override;
 
+        static void delete_obj_task(lv_task_t* mytask);
+
       private:
         char displayedChar[5];
 
@@ -69,6 +71,7 @@ namespace Pinetime {
         lv_obj_t* calendarCrossBar2;
         lv_obj_t* notificationIcon;
         lv_obj_t* stepGauge;
+        lv_obj_t* button;
         lv_color_t needle_colors[1];
 
         Controllers::DateTime& dateTimeController;
@@ -79,6 +82,7 @@ namespace Pinetime {
         Controllers::MotionController& motionController;
 
         lv_task_t* taskRefresh;
+        lv_task_t* mytask;
       };
     }
   }

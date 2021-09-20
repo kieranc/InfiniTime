@@ -205,9 +205,19 @@ PineTimeStyle::~PineTimeStyle() {
   lv_obj_clean(lv_scr_act());
 }
 
+void PineTimeStyle::delete_obj_task(lv_task_t* mytask) {
+  lv_obj_del((lv_obj_t*)mytask->user_data);
+}
+
 bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
   if (event == Pinetime::Applications::TouchEvents::LongTap) {
-    lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_LIME);
+    button = lv_btn_create(lv_scr_act(), NULL);
+    lv_obj_set_height(button, 200);
+    lv_obj_set_width(button, 150);
+    lv_obj_align(button, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_style_local_bg_color(button, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_NAVY);
+    mytask = lv_task_create(delete_obj_task, 3000, LV_TASK_PRIO_HIGHEST, &button);
+    lv_task_reset(mytask)
   }
   return true;
 }
