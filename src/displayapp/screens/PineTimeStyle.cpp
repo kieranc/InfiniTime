@@ -205,9 +205,10 @@ PineTimeStyle::~PineTimeStyle() {
   lv_obj_clean(lv_scr_act());
 }
 
-void PineTimeStyle::delete_obj_task(lv_task_t* mytask) {
-  lv_obj_del((lv_obj_t*)mytask->user_data);
-}
+//void PineTimeStyle::delete_obj_task(lv_task_t* mytask) {
+//  lv_obj_del((lv_obj_t*)mytask->user_data);
+//  lv_task_del(mytask);
+//}
 
 bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
   if (event == Pinetime::Applications::TouchEvents::LongTap) {
@@ -216,8 +217,10 @@ bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
     lv_obj_set_width(button, 150);
     lv_obj_align(button, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_style_local_bg_color(button, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_NAVY);
-    mytask = lv_task_create(delete_obj_task, 3000, LV_TASK_PRIO_HIGHEST, &button);
-    lv_task_reset(mytask)
+    //mytask = lv_task_create(delete_obj_task, 3000, LV_TASK_PRIO_HIGHEST, &button);
+    //lv_task_set_repeat_count(mytask, 1);
+    //lv_task_reset(mytask);
+    //delete_obj_task(mytask);
   }
   return true;
 }
