@@ -34,7 +34,7 @@ namespace Pinetime {
 
         void Refresh() override;
 
-        static void delete_obj_task(lv_task_t* mytask);
+        //static void delete_obj_task(lv_task_t* mytask);
 
       private:
         char displayedChar[5];
@@ -43,6 +43,8 @@ namespace Pinetime {
         Pinetime::Controllers::DateTime::Months currentMonth = Pinetime::Controllers::DateTime::Months::Unknown;
         Pinetime::Controllers::DateTime::Days currentDayOfWeek = Pinetime::Controllers::DateTime::Days::Unknown;
         uint8_t currentDay = 0;
+        uint32_t savedTick = 0;
+        bool btnDisplayed = 0;
 
         DirtyValue<uint8_t> batteryPercentRemaining {};
         DirtyValue<bool> bleState {};
@@ -82,7 +84,7 @@ namespace Pinetime {
         Controllers::MotionController& motionController;
 
         lv_task_t* taskRefresh;
-        lv_task_t* mytask;
+        //lv_task_t* mytask;
       };
     }
   }

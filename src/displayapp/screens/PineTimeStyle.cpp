@@ -54,7 +54,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
     motionController {motionController} {
 
   // This sets the watchface number to return to after leaving the menu
-  settingsController.SetClockFace(2);
+  //settingsController.SetClockFace(2);
 
   displayedChar[0] = 0;
   displayedChar[1] = 0;
@@ -62,7 +62,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   displayedChar[3] = 0;
   displayedChar[4] = 0;
 
-  //Create a 200px wide background rectangle
+  // Create a 200px wide background rectangle
   timebar = lv_obj_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorBG()));
   lv_obj_set_style_local_radius(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
@@ -217,6 +217,8 @@ bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
     lv_obj_set_width(button, 150);
     lv_obj_align(button, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_style_local_bg_color(button, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_NAVY);
+    savedTick = lv_tick_get();
+    btnDisplayed = 1;
     //mytask = lv_task_create(delete_obj_task, 3000, LV_TASK_PRIO_HIGHEST, &button);
     //lv_task_set_repeat_count(mytask, 1);
     //lv_task_reset(mytask);
@@ -316,6 +318,12 @@ void PineTimeStyle::Refresh() {
       currentMonth = month;
       currentDayOfWeek = dayOfWeek;
       currentDay = day;
+    }
+    if (btnDisplayed == 1) {
+      if (lv_tick_get() - savedTick > 3000) {
+        lv_obj_del(button);
+        btnDisplayed = 0;
+      }
     }
   }
 
