@@ -20,10 +20,10 @@ Fill the font converter fields as follows:
 - **Bpp:** 1 bit-per-pixel
 - Do *not* enable font compression or horizontal subpixel hinting
 - Do *not* enable use of glyph color
-- Load `JetBrainsMono-Bold.tff` (use the file in this repo to ensure the version matches)
+- Load `src/displayapp/fonts/JetBrainsMono-Bold.ttf` (use the file in this repo to ensure the version matches)
 - **Range:** `0x20-0x7f,0x410-0x44f` and add any additional glyphs
 - Include a second font
-- Load `FontAwesome5-Solid+Brands+Regular.woff` (use the file in this repo to ensure the version matches)
+- Load `src/libs/lvgl/scripts/built_in_font/FontAwesome5-Solid+Brands+Regular.woff` (use the file in this repo to ensure the version matches)
 - **Range:**
 
     ```
@@ -61,7 +61,7 @@ Fill the font converter fields as follows:
 - **Bpp:** 1 bit-per-pixel
 - Do *not* enable font compression or horizontal subpixel hinting
 - Do *not* enable use of glyph color
-- Load `JetBrainsMono-Regular.tff` (use the file in this repo to ensure the version matches)
+- Load `src/displayapp/fonts/JetBrainsMono-Regular.ttf` (use the file in this repo to ensure the version matches)
 - **Range:** `0x20,0x27,0x30-0x3A,0x61-0x7A` and add any additional glyphs
 - Click on "Convert"
 - Download the file `jetbrains_mono_42.c` and replace the existing one in `src/displayapp/fonts/`
@@ -82,7 +82,7 @@ lv_font_navi_80.c
 
 ### Adding a new font
 
-If you want to add a new font, you will need to have access to the TFF/WOFF font file.
+If you want to add a new font, you will need to have access to the TTF/WOFF font file.
 Here is an example of how to add Open Sans Light:
 
 - **Name:** `open_sans_light_150`
@@ -90,7 +90,7 @@ Here is an example of how to add Open Sans Light:
 - **Bpp:** 1 bit-per-pixel
 - Do *not* enable font compression and horizontal subpixel hinting
 - Do *not* enable use of glyph color
-- Load the font file (`open_sans_light.tff` in this case)
+- Load the font file (`open_sans_light.ttf` in this case)
 - Specify the glyphs that you need in the "Range" or "Symbols" fields (for example add `0123456789` to the "Symbols" field)
 - Click on "Convert"
 - Download the file `open_sans_light_150.c` and add it to `src/displayapp/fonts/`
