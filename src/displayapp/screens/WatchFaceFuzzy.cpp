@@ -8,13 +8,13 @@ using namespace Pinetime::Applications::Screens;
 WatchFaceFuzzy::WatchFaceFuzzy(DisplayApp* app, Controllers::DateTime& dateTimeController)
   : Screen(app), dateTimeController {dateTimeController} {
 
-  label_time = lv_label_create(lv_scr_act(), nullptr);
-  lv_label_set_long_mode(label_time, LV_LABEL_LONG_BREAK);
-  lv_obj_set_width(label_time, LV_HOR_RES);
-  lv_label_set_align(label_time, LV_LABEL_ALIGN_CENTER);
-  lv_label_set_recolor(label_time, true);
-  lv_obj_set_style_local_text_color(label_time, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_GRAY);
-  lv_obj_set_style_local_text_font(label_time, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_42);
+  timeLabel = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_long_mode(timeLabel, LV_LABEL_LONG_BREAK);
+  lv_obj_set_width(timeLabel, LV_HOR_RES);
+  lv_label_set_align(timeLabel, LV_LABEL_ALIGN_CENTER);
+  lv_label_set_recolor(timeLabel, true);
+  lv_obj_set_style_local_text_color(timeLabel, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_GRAY);
+  lv_obj_set_style_local_text_font(timeLabel, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_42);
 
   taskRefresh = lv_task_create(RefreshTaskCallback, 60000, LV_TASK_PRIO_MID, this);
 
@@ -40,8 +40,8 @@ void WatchFaceFuzzy::Refresh() {
   hoursStr = std::string("#") + timeAccent + " " + hourNames[hours] + "#";
   timeStr.replace(timeStr.find("%"), 2, hoursStr);
 
-  lv_label_set_text(label_time, timeStr.c_str());
-  lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
+  lv_label_set_text(timeLabel, timeStr.c_str());
+  lv_obj_align(timeLabel, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
 }
 
 /* Inspired by XFCE4-panel's fuzzy clock.
