@@ -31,9 +31,27 @@ bool MotionController::ShouldWakeUp(bool isSleeping) {
   }
   return false;
 }
+
+/* TODO: might need reset when stepping in a new screen */
+bool MotionController::Shaken() {
+  if (shakeState == 0 && y > shakeThreshold)
+      shakeState += 1;
+  else if (shakeState == 1 && y < 0)
+      shakeState += 1;
+  else if (shakeState == 2 && y > shakeThreshold) {
+      /* shakeState += 1; */
+  /* else if (shakeState == 3 && y < 0) { */
+      shakeState = 0;
+      return true;
+  } else
+      shakeState = 0;
+  return false;
+}
+
 void MotionController::IsSensorOk(bool isOk) {
   isSensorOk = isOk;
 }
+
 void MotionController::Init(Pinetime::Drivers::Bma421::DeviceTypes types) {
   switch(types){
     case Drivers::Bma421::DeviceTypes::BMA421: this->deviceType = DeviceTypes::BMA421; break;

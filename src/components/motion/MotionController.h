@@ -28,6 +28,7 @@ namespace Pinetime {
         return nbSteps;
       }
       bool ShouldWakeUp(bool isSleeping);
+      bool Shaken();
 
       void IsSensorOk(bool isOk);
       bool IsSensorOk() const {
@@ -47,6 +48,8 @@ namespace Pinetime {
       int16_t z;
       int16_t lastYForWakeUp = 0;
       bool isSensorOk = false;
+      uint8_t shakeState = 0;
+      int16_t shakeThreshold = 64;
       DeviceTypes deviceType = DeviceTypes::Unknown;
     };
   }

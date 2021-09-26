@@ -5,8 +5,14 @@
 
 using namespace Pinetime::Applications::Screens;
 
-WatchFaceFuzzy::WatchFaceFuzzy(DisplayApp* app, Controllers::DateTime& dateTimeController)
-  : Screen(app), dateTimeController {dateTimeController} {
+WatchFaceFuzzy::WatchFaceFuzzy(DisplayApp* app,
+    Controllers::DateTime& dateTimeController,
+    Controllers::MotorController& motorController,
+    Controllers::MotionController& motionController)
+  : Screen(app),
+    dateTimeController {dateTimeController},
+    motorController {motorController},
+    motionController {motionController} {
 
   timeLabel = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_long_mode(timeLabel, LV_LABEL_LONG_BREAK);
@@ -16,7 +22,7 @@ WatchFaceFuzzy::WatchFaceFuzzy(DisplayApp* app, Controllers::DateTime& dateTimeC
   lv_obj_set_style_local_text_color(timeLabel, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_GRAY);
   lv_obj_set_style_local_text_font(timeLabel, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_42);
 
-  taskRefresh = lv_task_create(RefreshTaskCallback, 60000, LV_TASK_PRIO_MID, this);
+  taskRefresh = lv_task_create(RefreshTaskCallback, LV_DISP_DEF_REFR_PERIOD, LV_TASK_PRIO_MID, this);
 
   Refresh();
 }
@@ -27,6 +33,10 @@ WatchFaceFuzzy::~WatchFaceFuzzy() {
 }
 
 void WatchFaceFuzzy::Refresh() {
+  if (motionController.Shaken()) {
+    motorController.RunForDuration(120);
+  }
+
   uint8_t hours, minutes;
   std::string hoursStr, timeStr;
 

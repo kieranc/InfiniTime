@@ -21,7 +21,8 @@ Clock::Clock(DisplayApp* app,
              Controllers::NotificationManager& notificatioManager,
              Controllers::Settings& settingsController,
              Controllers::HeartRateController& heartRateController,
-             Controllers::MotionController& motionController)
+             Controllers::MotionController& motionController,
+             Controllers::MotorController& motorController)
   : Screen(app),
     dateTimeController {dateTimeController},
     batteryController {batteryController},
@@ -30,6 +31,7 @@ Clock::Clock(DisplayApp* app,
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
+    motorController {motorController},
     screen {[this, &settingsController]() {
       switch (settingsController.GetClockFace()) {
         case 0:
@@ -75,7 +77,7 @@ std::unique_ptr<Screen> Clock::WatchFaceAnalogScreen() {
 }
 
 std::unique_ptr<Screen> Clock::WatchFaceFuzzyScreen() {
-  return std::make_unique<Screens::WatchFaceFuzzy>(app, dateTimeController);
+  return std::make_unique<Screens::WatchFaceFuzzy>(app, dateTimeController, motorController, motionController);
 }
 
 std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
