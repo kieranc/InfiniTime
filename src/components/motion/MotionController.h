@@ -28,7 +28,7 @@ namespace Pinetime {
         return nbSteps;
       }
       bool ShouldWakeUp(bool isSleeping);
-      bool Shaken();
+      bool Shaken(uint32_t sinceLastCall);
 
       void IsSensorOk(bool isOk);
       bool IsSensorOk() const {
@@ -48,8 +48,12 @@ namespace Pinetime {
       int16_t z;
       int16_t lastYForWakeUp = 0;
       bool isSensorOk = false;
-      uint8_t shakeState = 0;
-      int16_t shakeThreshold = 64;
+      /* Minimum value to be considered a positive wrist turn.
+       * Higher requires a higher wrist turn */
+      int16_t shakeThreshold = 512;
+      /* Lower requires a quicker shake (needs to be higher than
+       * refresh speed) */
+      uint32_t shakeSpeed = 60; // [ms]
       DeviceTypes deviceType = DeviceTypes::Unknown;
     };
   }
