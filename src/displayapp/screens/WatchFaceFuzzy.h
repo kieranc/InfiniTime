@@ -23,10 +23,14 @@ namespace Pinetime {
         Controllers::MotorController& motorController;
         Controllers::MotionController& motionController;
         lv_task_t* taskRefresh;
-        lv_obj_t* timeLabel;
+        lv_obj_t *fuzzyLabel;
+        lv_obj_t *digitalView, *digitalViewLine, *timeLabel, *dateLabel;
+        lv_point_t digitalViewLinePoints[2] {{0, 1}, {239, 1}};
         const char* timeAccent = "ffffff";
         static const char* timeSectors[12];
         static const char* hourNames[12];
+        uint32_t isDigitalView = 0;
+        uint32_t digitalViewDuration = 3000; // [ms]
       };
     }
   }
