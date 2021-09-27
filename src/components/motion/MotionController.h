@@ -51,9 +51,8 @@ namespace Pinetime {
       /* Minimum value to be considered a positive wrist turn.
        * Higher requires a higher wrist turn */
       int16_t shakeThreshold = 512;
-      /* Lower requires a quicker shake (needs to be higher than
-       * refresh speed) */
-      uint32_t shakeSpeed = 60; // [ms]
+      /* Lower requires a quicker shake */
+      uint32_t shakeSpeed = 300; // [ticks]
       DeviceTypes deviceType = DeviceTypes::Unknown;
     };
   }

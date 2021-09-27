@@ -37,25 +37,27 @@ bool MotionController::ShouldWakeUp(bool isSleeping) {
 bool MotionController::Shaken(uint32_t sinceLastCall) {
   static uint8_t shakeState = 0;
   static uint32_t shakeTime = 0;
+  static int16_t shakeStart = y;
   shakeTime += sinceLastCall;
   if (shakeTime < shakeSpeed) {
-    if (shakeState == 0 && y > shakeThreshold) {
+    if (shakeState == 0 && y > shakeStart + shakeThreshold) {
       shakeState += 1;
       shakeTime = 0;
-    } else if (shakeState == 1 && y < 0) {
+    } else if (shakeState == 1 && y < shakeStart) {
       shakeState += 1;
       shakeTime = 0;
-    } else if (shakeState == 2 && y > shakeThreshold) {
-      shakeState += 1;
-      shakeTime = 0;
-    } else if (shakeState == 3 && y < 0) {
+    } else if (shakeState == 2 && y > shakeStart + shakeThreshold) {
+      /* shakeState += 1; */
+      /* shakeTime = 0; */
+    /* } else if (shakeState == 3 && y < shakeStart) { */
       shakeState = 0;
       shakeTime = 0;
       return true;
     }
   } else {
     shakeState = 0;
-    shakeTime -= shakeSpeed;
+    shakeStart = y;
+    shakeTime = 0;
   }
   return false;
 }
