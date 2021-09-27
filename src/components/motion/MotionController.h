@@ -29,7 +29,7 @@ namespace Pinetime {
         return nbSteps;
       }
     
-      bool Should_ShakeWake();
+      bool Should_ShakeWake(uint16_t thresh);
       bool Should_RaiseWake(bool isSleeping);
 
       void IsSensorOk(bool isOk);

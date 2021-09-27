@@ -47,6 +47,7 @@
 #include "displayapp/screens/settings/SettingPineTimeStyle.h"
 #include "displayapp/screens/settings/SettingSetDate.h"
 #include "displayapp/screens/settings/SettingSetTime.h"
+#include "displayapp/screens/settings/SettingShakeThreshold.h"
 
 #include "libs/lv_conf.h"
 
@@ -388,6 +389,10 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       break;
     case Apps::SettingPineTimeStyle:
       currentScreen = std::make_unique<Screens::SettingPineTimeStyle>(this, settingsController);
+      ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
+      break;
+    case Apps::SettingShakeThreshold:
+      currentScreen = std::make_unique<Screens::SettingShakeThreshold>(this, settingsController);
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
     case Apps::BatteryInfo:
