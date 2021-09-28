@@ -2,6 +2,7 @@
 
 #include <lvgl/src/lv_core/lv_obj.h>
 #include "Screen.h"
+#include "systemtask/SystemTask.h"
 #include "components/datetime/DateTimeController.h"
 #include "components/motor/MotorController.h"
 #include "components/motion/MotionController.h"
@@ -12,6 +13,7 @@ namespace Pinetime {
       class WatchFaceFuzzy : public Screen {
       public:
         WatchFaceFuzzy(DisplayApp* app,
+          System::SystemTask& systemTask,
           Controllers::DateTime& dateTimeController,
           Controllers::MotorController& motorController,
           Controllers::MotionController& motionController);
@@ -19,6 +21,7 @@ namespace Pinetime {
         void Refresh() override;
 
       private:
+        System::SystemTask& systemTask;
         Controllers::DateTime& dateTimeController;
         Controllers::MotorController& motorController;
         Controllers::MotionController& motionController;

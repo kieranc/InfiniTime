@@ -25,6 +25,7 @@ namespace Pinetime {
         StopRinging,
         MeasureBatteryTimerExpired,
         BatteryMeasurementDone,
+        ReloadIdleTimer,
       };
     }
 }

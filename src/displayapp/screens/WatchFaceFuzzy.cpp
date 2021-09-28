@@ -6,10 +6,12 @@
 using namespace Pinetime::Applications::Screens;
 
 WatchFaceFuzzy::WatchFaceFuzzy(DisplayApp* app,
+    System::SystemTask& systemTask,
     Controllers::DateTime& dateTimeController,
     Controllers::MotorController& motorController,
     Controllers::MotionController& motionController)
   : Screen(app),
+    systemTask {systemTask},
     dateTimeController {dateTimeController},
     motorController {motorController},
     motionController {motionController} {
@@ -73,6 +75,7 @@ void WatchFaceFuzzy::Refresh() {
     /* Check shaking motion */
     if (motionController.Shaken(tickCount - lastTickCount)) {
       motorController.RunForDuration(60);
+      systemTask.PushMessage(System::Messages::ReloadIdleTimer);
       isDigitalView = digitalViewDuration;
     }
     /* Update information */

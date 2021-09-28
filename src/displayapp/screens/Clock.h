@@ -7,6 +7,7 @@
 #include <components/heartrate/HeartRateController.h>
 #include "Screen.h"
 #include "components/datetime/DateTimeController.h"
+#include "systemtask/SystemTask.h"
 
 namespace Pinetime {
   namespace Controllers {
@@ -23,6 +24,7 @@ namespace Pinetime {
       class Clock : public Screen {
       public:
         Clock(DisplayApp* app,
+              System::SystemTask& systemTask,
               Controllers::DateTime& dateTimeController,
               Controllers::Battery& batteryController,
               Controllers::Ble& bleController,
@@ -36,6 +38,7 @@ namespace Pinetime {
         bool OnTouchEvent(TouchEvents event) override;
 
       private:
+        System::SystemTask& systemTask;
         Controllers::DateTime& dateTimeController;
         Controllers::Battery& batteryController;
         Controllers::Ble& bleController;

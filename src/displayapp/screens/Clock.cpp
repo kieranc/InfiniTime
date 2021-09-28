@@ -15,6 +15,7 @@
 using namespace Pinetime::Applications::Screens;
 
 Clock::Clock(DisplayApp* app,
+             System::SystemTask& systemTask,
              Controllers::DateTime& dateTimeController,
              Controllers::Battery& batteryController,
              Controllers::Ble& bleController,
@@ -24,6 +25,7 @@ Clock::Clock(DisplayApp* app,
              Controllers::MotionController& motionController,
              Controllers::MotorController& motorController)
   : Screen(app),
+    systemTask {systemTask},
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
@@ -77,7 +79,7 @@ std::unique_ptr<Screen> Clock::WatchFaceAnalogScreen() {
 }
 
 std::unique_ptr<Screen> Clock::WatchFaceFuzzyScreen() {
-  return std::make_unique<Screens::WatchFaceFuzzy>(app, dateTimeController, motorController, motionController);
+  return std::make_unique<Screens::WatchFaceFuzzy>(app, systemTask, dateTimeController, motorController, motionController);
 }
 
 std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
