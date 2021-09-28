@@ -33,31 +33,23 @@ bool MotionController::ShouldWakeUp(bool isSleeping) {
 }
 
 /* TODO: might need reset when stepping in a new screen */
-/* TODO: reset when going to sleep */
 bool MotionController::Shaken(uint32_t sinceLastCall) {
-  static uint8_t shakeState = 0;
-  static uint32_t shakeTime = 0;
   static int16_t shakeStart = y;
-  shakeTime += sinceLastCall;
-  if (shakeTime < shakeSpeed) {
-    if (shakeState == 0 && y > shakeStart + shakeThreshold) {
+  shakeTimer += sinceLastCall;
+  if (shakeTimer < shakeSpeed) {
+    if ((shakeState == 0 && y > shakeStart + shakeThreshold) ||
+        (shakeState == 1 && y < shakeStart)) {
       shakeState += 1;
-      shakeTime = 0;
-    } else if (shakeState == 1 && y < shakeStart) {
-      shakeState += 1;
-      shakeTime = 0;
+      shakeTimer = 0;
     } else if (shakeState == 2 && y > shakeStart + shakeThreshold) {
-      /* shakeState += 1; */
-      /* shakeTime = 0; */
-    /* } else if (shakeState == 3 && y < shakeStart) { */
       shakeState = 0;
-      shakeTime = 0;
+      shakeTimer = 0;
       return true;
     }
   } else {
     shakeState = 0;
     shakeStart = y;
-    shakeTime = 0;
+    shakeTimer = 0;
   }
   return false;
 }

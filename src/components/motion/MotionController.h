@@ -48,11 +48,13 @@ namespace Pinetime {
       int16_t z;
       int16_t lastYForWakeUp = 0;
       bool isSensorOk = false;
+      uint8_t shakeState = 0;
       /* Minimum value to be considered a positive wrist turn.
        * Higher requires a higher wrist turn */
       int16_t shakeThreshold = 512;
       /* Lower requires a quicker shake */
       uint32_t shakeSpeed = 300; // [ticks]
+      uint32_t shakeTimer = 0;
       DeviceTypes deviceType = DeviceTypes::Unknown;
     };
   }
