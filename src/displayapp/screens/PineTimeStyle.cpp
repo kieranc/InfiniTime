@@ -37,6 +37,13 @@
 
 using namespace Pinetime::Applications::Screens;
 
+namespace {
+  static void event_handler(lv_obj_t* obj, lv_event_t event) {
+    PineTimeStyle* screen = static_cast<PineTimeStyle*>(obj->user_data);
+    screen->UpdateSelected(obj, event);
+  }
+}
+
 PineTimeStyle::PineTimeStyle(DisplayApp* app,
                              Controllers::DateTime& dateTimeController,
                              Controllers::Battery& batteryController,
@@ -213,18 +220,25 @@ PineTimeStyle::~PineTimeStyle() {
 bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
   if (event == Pinetime::Applications::TouchEvents::LongTap) {
     button = lv_btn_create(lv_scr_act(), NULL);
-    lv_obj_set_height(button, 200);
+    button->user_data = this;
+    lv_obj_set_height(button, 150);
     lv_obj_set_width(button, 150);
     lv_obj_align(button, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
-    lv_obj_set_style_local_bg_color(button, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_NAVY);
+    lv_obj_set_style_local_radius(button, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 30);
+    lv_obj_set_style_local_bg_color(button, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x111111));
+    lv_obj_set_event_cb(button, event_handler);
+    lbl_btn = lv_label_create(button, nullptr);
+    lv_obj_set_style_local_text_font(lbl_btn, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_sys_48);
+    lv_label_set_text_static(lbl_btn, Symbols::settings);
     savedTick = lv_tick_get();
     btnDisplayed = 1;
     //mytask = lv_task_create(delete_obj_task, 3000, LV_TASK_PRIO_HIGHEST, &button);
     //lv_task_set_repeat_count(mytask, 1);
     //lv_task_reset(mytask);
     //delete_obj_task(mytask);
+    //return true;
   }
-  return true;
+  return false;
 }
 
 void PineTimeStyle::Refresh() {
@@ -337,4 +351,110 @@ void PineTimeStyle::Refresh() {
       lv_obj_set_style_local_scale_grad_color(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_WHITE);
     }
   }
+}
+
+void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
+  auto valueTime = settingsController.GetPTSColorTime();
+  auto valueBar = settingsController.GetPTSColorBar();
+  auto valueBG = settingsController.GetPTSColorBG();
+
+  if (event == LV_EVENT_PRESSED) {
+    if (object == btnNextTime) {
+      valueTime = GetNext(valueTime);
+
+      settingsController.SetPTSColorTime(valueTime);
+      lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+    }
+    if (object == btnPrevTime) {
+      valueTime = GetPrevious(valueTime);
+      settingsController.SetPTSColorTime(valueTime);
+      lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+    }
+    if (object == btnNextBar) {
+      valueBar = GetNext(valueBar);
+      if(valueBar == Controllers::Settings::Colors::Black)
+        valueBar = GetNext(valueBar);
+      settingsController.SetPTSColorBar(valueBar);
+      lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(valueBar));
+    }
+    if (object == btnPrevBar) {
+      valueBar = GetPrevious(valueBar);
+      if(valueBar == Controllers::Settings::Colors::Black)
+        valueBar = GetPrevious(valueBar);
+      settingsController.SetPTSColorBar(valueBar);
+      lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(valueBar));
+    }
+    if (object == btnNextBG) {
+      valueBG = GetNext(valueBG);
+      settingsController.SetPTSColorBG(valueBG);
+      lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(valueBG));
+    }
+    if (object == btnPrevBG) {
+      valueBG = GetPrevious(valueBG);
+      settingsController.SetPTSColorBG(valueBG);
+      lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(valueBG));
+    }
+    if (object == btnReset) {
+      settingsController.SetPTSColorTime(Controllers::Settings::Colors::Teal);
+      lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      settingsController.SetPTSColorBar(Controllers::Settings::Colors::Teal);
+      lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      settingsController.SetPTSColorBG(Controllers::Settings::Colors::Black);
+      lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Black));
+    }
+    if (object == btnRandom) {
+      uint8_t randTime = rand() % 17;
+      uint8_t randBar = rand() % 17;
+      uint8_t randBG = rand() % 17;
+      // Check if the time color is the same as its background, or if the sidebar is black. If so, change them to more useful values.
+      if (randTime == randBG) {
+        randBG += 1;
+      }
+      if (randBar == 3) {
+        randBar -= 1;
+      }
+      settingsController.SetPTSColorTime(static_cast<Controllers::Settings::Colors>(randTime));
+      lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(static_cast<Controllers::Settings::Colors>(randTime)));
+      lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT,  Convert(static_cast<Controllers::Settings::Colors>(randTime)));
+      lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT,  Convert(static_cast<Controllers::Settings::Colors>(randTime)));
+      settingsController.SetPTSColorBar(static_cast<Controllers::Settings::Colors>(randBar));
+      lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT,  Convert(static_cast<Controllers::Settings::Colors>(randBar)));
+      settingsController.SetPTSColorBG(static_cast<Controllers::Settings::Colors>(randBG));
+      lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT,  Convert(static_cast<Controllers::Settings::Colors>(randBG)));
+    } else if (event == LV_EVENT_CLICKED) {
+      if (object == button) {
+        lv_obj_del(button);
+        btnDisplayed = 0;
+      }
+    }
+  }
+}
+
+Pinetime::Controllers::Settings::Colors PineTimeStyle::GetNext(Pinetime::Controllers::Settings::Colors color) {
+  auto colorAsInt = static_cast<uint8_t>(color);
+  Pinetime::Controllers::Settings::Colors nextColor;
+  if (colorAsInt < 16) {
+    nextColor = static_cast<Controllers::Settings::Colors>(colorAsInt + 1);
+  } else {
+    nextColor = static_cast<Controllers::Settings::Colors>(0);
+  }
+  return nextColor;
+}
+
+Pinetime::Controllers::Settings::Colors PineTimeStyle::GetPrevious(Pinetime::Controllers::Settings::Colors color) {
+  auto colorAsInt = static_cast<uint8_t>(color);
+  Pinetime::Controllers::Settings::Colors prevColor;
+
+  if (colorAsInt > 0) {
+    prevColor = static_cast<Controllers::Settings::Colors>(colorAsInt - 1);
+  } else {
+    prevColor = static_cast<Controllers::Settings::Colors>(16);
+  }
+  return prevColor;
 }

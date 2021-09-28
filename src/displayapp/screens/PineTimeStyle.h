@@ -34,6 +34,8 @@ namespace Pinetime {
 
         void Refresh() override;
 
+        void UpdateSelected(lv_obj_t *object, lv_event_t event);
+
         //static void delete_obj_task(lv_task_t* mytask);
 
       private:
@@ -53,6 +55,17 @@ namespace Pinetime {
         DirtyValue<uint32_t> stepCount {};
         DirtyValue<bool> notificationState {};
 
+        Pinetime::Controllers::Settings::Colors GetNext(Controllers::Settings::Colors color);
+        Pinetime::Controllers::Settings::Colors GetPrevious(Controllers::Settings::Colors color);
+
+        lv_obj_t* btnNextTime;
+        lv_obj_t* btnPrevTime;
+        lv_obj_t* btnNextBar;
+        lv_obj_t* btnPrevBar;
+        lv_obj_t* btnNextBG;
+        lv_obj_t* btnPrevBG;
+        lv_obj_t* btnReset;
+        lv_obj_t* btnRandom;
         lv_obj_t* timebar;
         lv_obj_t* sidebar;
         lv_obj_t* timeDD1;
@@ -74,6 +87,7 @@ namespace Pinetime {
         lv_obj_t* notificationIcon;
         lv_obj_t* stepGauge;
         lv_obj_t* button;
+        lv_obj_t* lbl_btn;
         lv_color_t needle_colors[1];
 
         Controllers::DateTime& dateTimeController;
