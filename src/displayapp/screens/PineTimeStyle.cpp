@@ -219,7 +219,7 @@ PineTimeStyle::~PineTimeStyle() {
 
 bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
   if (event == Pinetime::Applications::TouchEvents::LongTap) {
-    button = lv_btn_create(lv_scr_act(), NULL);
+    button = lv_btn_create(lv_scr_act(), nullptr);
     button->user_data = this;
     lv_obj_set_height(button, 150);
     lv_obj_set_width(button, 150);
@@ -236,7 +236,7 @@ bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
     //lv_task_set_repeat_count(mytask, 1);
     //lv_task_reset(mytask);
     //delete_obj_task(mytask);
-    //return true;
+    return true;
   }
   return false;
 }
@@ -333,12 +333,6 @@ void PineTimeStyle::Refresh() {
       currentDayOfWeek = dayOfWeek;
       currentDay = day;
     }
-    if (btnDisplayed == 1) {
-      if (lv_tick_get() - savedTick > 3000) {
-        lv_obj_del(button);
-        btnDisplayed = 0;
-      }
-    }
   }
 
   stepCount = motionController.NbSteps();
@@ -351,6 +345,12 @@ void PineTimeStyle::Refresh() {
       lv_obj_set_style_local_scale_grad_color(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_WHITE);
     }
   }
+  if (btnDisplayed == 1) {
+    if (lv_tick_get() - savedTick > 5000) {
+      lv_obj_del(button);
+      btnDisplayed = 0;
+    }
+  }
 }
 
 void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
@@ -358,7 +358,7 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
   auto valueBar = settingsController.GetPTSColorBar();
   auto valueBG = settingsController.GetPTSColorBG();
 
-  if (event == LV_EVENT_PRESSED) {
+  if (event == LV_EVENT_CLICKED) {
     if (object == btnNextTime) {
       valueTime = GetNext(valueTime);
 
@@ -427,7 +427,7 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
       lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT,  Convert(static_cast<Controllers::Settings::Colors>(randBar)));
       settingsController.SetPTSColorBG(static_cast<Controllers::Settings::Colors>(randBG));
       lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT,  Convert(static_cast<Controllers::Settings::Colors>(randBG)));
-    } else if (event == LV_EVENT_CLICKED) {
+    } else if (event == LV_EVENT_PRESSED) {
       if (object == button) {
         lv_obj_del(button);
         btnDisplayed = 0;
