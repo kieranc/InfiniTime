@@ -66,6 +66,7 @@ namespace Pinetime {
         lv_obj_t* btnPrevBG;
         lv_obj_t* btnReset;
         lv_obj_t* btnRandom;
+        lv_obj_t* btnClose;
         lv_obj_t* timebar;
         lv_obj_t* sidebar;
         lv_obj_t* timeDD1;
