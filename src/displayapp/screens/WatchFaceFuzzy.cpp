@@ -43,6 +43,7 @@ WatchFaceFuzzy::WatchFaceFuzzy(DisplayApp* app,
 
   taskRefresh = lv_task_create(RefreshTaskCallback, LV_DISP_DEF_REFR_PERIOD, LV_TASK_PRIO_MID, this);
 
+  lastTickCount = xTaskGetTickCount();
   Refresh();
 }
 
@@ -52,6 +53,7 @@ WatchFaceFuzzy::~WatchFaceFuzzy() {
 }
 
 void WatchFaceFuzzy::Refresh() {
+  uint32_t tickCount = xTaskGetTickCount();
   if (isDigitalView > 0) {
     /* Switch face */
     lv_obj_set_hidden(fuzzyLabel, true);
@@ -63,15 +65,13 @@ void WatchFaceFuzzy::Refresh() {
     lv_obj_align(timeLabel, digitalView, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text_fmt(dateLabel, "%s %d %s %d", dateTimeController.DayOfWeekShortToString(), dateTimeController.Day(), dateTimeController.MonthShortToString(), dateTimeController.Year());
     lv_obj_align(dateLabel, timeLabel, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
-    // TODO: this is not how you should keep track of time, set up a
-    // timer instead.
-    isDigitalView -= LV_DISP_DEF_REFR_PERIOD;
+    isDigitalView -= tickCount - lastTickCount;
   } else {
     /* Switch face */
     lv_obj_set_hidden(fuzzyLabel, false);
     lv_obj_set_hidden(digitalView, true);
     /* Check shaking motion */
-    if (motionController.Shaken(LV_DISP_DEF_REFR_PERIOD)) {
+    if (motionController.Shaken(tickCount - lastTickCount)) {
       motorController.RunForDuration(60);
       isDigitalView = digitalViewDuration;
     }
@@ -96,6 +96,7 @@ void WatchFaceFuzzy::Refresh() {
     lv_label_set_text(fuzzyLabel, timeStr.c_str());
     lv_obj_align(fuzzyLabel, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
   }
+  lastTickCount = tickCount;
 }
 
 /* Inspired by XFCE4-panel's fuzzy clock.

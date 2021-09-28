@@ -29,8 +29,9 @@ namespace Pinetime {
         const char* timeAccent = "ffffff";
         static const char* timeSectors[12];
         static const char* hourNames[12];
-        uint32_t isDigitalView = 0;
-        uint32_t digitalViewDuration = 3000; // [ms]
+        int32_t isDigitalView = 0;
+        uint32_t lastTickCount;
+        uint32_t digitalViewDuration = 5 * 1024; // [ticks]
       };
     }
   }
