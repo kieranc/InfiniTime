@@ -49,6 +49,7 @@ namespace Pinetime {
         bool btnDisplayed = 0;
 
         DirtyValue<uint8_t> batteryPercentRemaining {};
+        DirtyValue<bool> isCharging {};
         DirtyValue<bool> bleState {};
         DirtyValue<std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>> currentDateTime {};
         DirtyValue<bool> motionSensorOk {};
@@ -78,7 +79,6 @@ namespace Pinetime {
         lv_obj_t* backgroundLabel;
         lv_obj_t* batteryIcon;
         lv_obj_t* bleIcon;
-        lv_obj_t* batteryPlug;
         lv_obj_t* calendarOuter;
         lv_obj_t* calendarInner;
         lv_obj_t* calendarBar1;
@@ -97,6 +97,8 @@ namespace Pinetime {
         Controllers::NotificationManager& notificatioManager;
         Controllers::Settings& settingsController;
         Controllers::MotionController& motionController;
+
+        void SetBatteryIcon();
 
         lv_task_t* taskRefresh;
         //lv_task_t* mytask;
