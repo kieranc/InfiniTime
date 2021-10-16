@@ -46,7 +46,6 @@ namespace Pinetime {
         Pinetime::Controllers::DateTime::Days currentDayOfWeek = Pinetime::Controllers::DateTime::Days::Unknown;
         uint8_t currentDay = 0;
         uint32_t savedTick = 0;
-        bool btnDisplayed = 0;
 
         DirtyValue<uint8_t> batteryPercentRemaining {};
         DirtyValue<bool> isCharging {};
@@ -87,7 +86,7 @@ namespace Pinetime {
         lv_obj_t* calendarCrossBar2;
         lv_obj_t* notificationIcon;
         lv_obj_t* stepGauge;
-        lv_obj_t* button;
+        lv_obj_t* btnSet;
         lv_obj_t* lbl_btn;
         lv_color_t needle_colors[1];
 
@@ -101,7 +100,6 @@ namespace Pinetime {
         void SetBatteryIcon();
 
         lv_task_t* taskRefresh;
-        //lv_task_t* mytask;
       };
     }
   }

@@ -60,9 +60,6 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
     settingsController {settingsController},
     motionController {motionController} {
 
-  // This sets the watchface number to return to after leaving the menu
-  //settingsController.SetClockFace(2);
-
   displayedChar[0] = 0;
   displayedChar[1] = 0;
   displayedChar[2] = 0;
@@ -104,69 +101,69 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
 
   // Display icons
   batteryIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(batteryIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_color(batteryIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_label_set_text(batteryIcon, Symbols::batteryFull);
   lv_obj_align(batteryIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 2);
   lv_obj_set_auto_realign(batteryIcon, true);
 
   bleIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 40);
 
   // Calendar icon
   calendarOuter = lv_obj_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_bg_color(calendarOuter, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_bg_color(calendarOuter, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_set_style_local_radius(calendarOuter, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(calendarOuter, 34, 34);
   lv_obj_align(calendarOuter, sidebar, LV_ALIGN_CENTER, 0, 0);
 
   calendarInner = lv_obj_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_bg_color(calendarInner, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xffffff));
+  lv_obj_set_style_local_bg_color(calendarInner, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_WHITE);
   lv_obj_set_style_local_radius(calendarInner, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(calendarInner, 27, 27);
   lv_obj_align(calendarInner, calendarOuter, LV_ALIGN_CENTER, 0, 0);
 
   calendarBar1 = lv_obj_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_bg_color(calendarBar1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_bg_color(calendarBar1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_set_style_local_radius(calendarBar1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(calendarBar1, 3, 12);
   lv_obj_align(calendarBar1, calendarOuter, LV_ALIGN_IN_TOP_MID, -6, -3);
 
   calendarBar2 = lv_obj_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_bg_color(calendarBar2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_bg_color(calendarBar2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_set_style_local_radius(calendarBar2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(calendarBar2, 3, 12);
   lv_obj_align(calendarBar2, calendarOuter, LV_ALIGN_IN_TOP_MID, 6, -3);
 
   calendarCrossBar1 = lv_obj_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_bg_color(calendarCrossBar1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_bg_color(calendarCrossBar1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_set_style_local_radius(calendarCrossBar1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(calendarCrossBar1, 8, 3);
   lv_obj_align(calendarCrossBar1, calendarBar1, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
 
   calendarCrossBar2 = lv_obj_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_bg_color(calendarCrossBar2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_bg_color(calendarCrossBar2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_set_style_local_radius(calendarCrossBar2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(calendarCrossBar2, 8, 3);
   lv_obj_align(calendarCrossBar2, calendarBar2, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
 
   // Display date
   dateDayOfWeek = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(dateDayOfWeek, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_color(dateDayOfWeek, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_label_set_text(dateDayOfWeek, "THU");
   lv_obj_align(dateDayOfWeek, sidebar, LV_ALIGN_CENTER, 0, -34);
 
   dateDay = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(dateDay, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_color(dateDay, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_label_set_text(dateDay, "25");
   lv_obj_align(dateDay, sidebar, LV_ALIGN_CENTER, 0, 3);
 
   dateMonth = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(dateMonth, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_color(dateMonth, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_label_set_text(dateMonth, "MAR");
   lv_obj_align(dateMonth, sidebar, LV_ALIGN_CENTER, 0, 32);
 
@@ -200,18 +197,18 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_set_pos(backgroundLabel, 0, 0);
   lv_label_set_text(backgroundLabel, "");
 
-  button = lv_btn_create(lv_scr_act(), nullptr);
-  button->user_data = this;
-  lv_obj_set_height(button, 150);
-  lv_obj_set_width(button, 150);
-  lv_obj_align(button, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
-  lv_obj_set_style_local_radius(button, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 30);
-  lv_obj_set_style_local_bg_opa(button, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
-  lv_obj_set_event_cb(button, event_handler);
-  lbl_btn = lv_label_create(button, nullptr);
+  btnSet = lv_btn_create(lv_scr_act(), nullptr);
+  btnSet->user_data = this;
+  lv_obj_set_height(btnSet, 150);
+  lv_obj_set_width(btnSet, 150);
+  lv_obj_align(btnSet, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
+  lv_obj_set_style_local_radius(btnSet, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 30);
+  lv_obj_set_style_local_bg_opa(btnSet, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_set_event_cb(btnSet, event_handler);
+  lbl_btn = lv_label_create(btnSet, nullptr);
   lv_obj_set_style_local_text_font(lbl_btn, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_sys_48);
   lv_label_set_text_static(lbl_btn, Symbols::settings);
-  lv_obj_set_hidden(button, true);
+  lv_obj_set_hidden(btnSet, true);
 
   btnNextTime = lv_btn_create(lv_scr_act(), nullptr);
   btnNextTime->user_data = this;
@@ -301,14 +298,12 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
 PineTimeStyle::~PineTimeStyle() {
   lv_task_del(taskRefresh);
   lv_obj_clean(lv_scr_act());
-  settingsController.SaveSettings();
 }
 
 bool PineTimeStyle::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
   if (event == Pinetime::Applications::TouchEvents::LongTap) {
-    lv_obj_set_hidden(button, false);
+    lv_obj_set_hidden(btnSet, false);
     savedTick = lv_tick_get();
-    btnDisplayed = 1;
     return true;
   }
   return false;
@@ -424,10 +419,10 @@ void PineTimeStyle::Refresh() {
       lv_obj_set_style_local_scale_grad_color(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_WHITE);
     }
   }
-  if (btnDisplayed == 1) {
-    if (lv_tick_get() - savedTick > 5000) {
-      lv_obj_set_hidden(button, true);
-      btnDisplayed = 0;
+  if (lv_obj_get_hidden(btnSet) == false) {
+    if (lv_tick_get() - savedTick > 3000) {
+      lv_obj_set_hidden(btnSet, true);
+      savedTick = 0;
     }
   }
 }
@@ -508,6 +503,7 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
       lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT,  Convert(static_cast<Controllers::Settings::Colors>(randBG)));
     }
     if (object == btnClose) {
+      settingsController.SaveSettings();
       lv_obj_set_hidden(btnNextTime, true);
       lv_obj_set_hidden(btnPrevTime, true);
       lv_obj_set_hidden(btnNextBar, true);
@@ -518,9 +514,8 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
       lv_obj_set_hidden(btnRandom, true);
       lv_obj_set_hidden(btnClose, true);
     }
-    if (object == button) {
-      lv_obj_set_hidden(button, true);
-      btnDisplayed = 0;
+    if (object == btnSet) {
+      lv_obj_set_hidden(btnSet, true);
       lv_obj_set_hidden(btnNextTime, false);
       lv_obj_set_hidden(btnPrevTime, false);
       lv_obj_set_hidden(btnNextBar, false);
