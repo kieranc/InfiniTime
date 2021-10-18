@@ -452,6 +452,11 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
       valueBar = GetNext(valueBar);
       if(valueBar == Controllers::Settings::Colors::Black)
         valueBar = GetNext(valueBar);
+      if(valueBar == Controllers::Settings::Colors::White) {
+        needle_colors[0] = LV_COLOR_GRAY; 
+        } else {
+        needle_colors[0] = LV_COLOR_WHITE;
+      }
       settingsController.SetPTSColorBar(valueBar);
       lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(valueBar));
     }
@@ -459,6 +464,11 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
       valueBar = GetPrevious(valueBar);
       if(valueBar == Controllers::Settings::Colors::Black)
         valueBar = GetPrevious(valueBar);
+      if(valueBar == Controllers::Settings::Colors::White) {
+        needle_colors[0] = LV_COLOR_GRAY; 
+        } else {
+        needle_colors[0] = LV_COLOR_WHITE;
+      }
       settingsController.SetPTSColorBar(valueBar);
       lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(valueBar));
     }
