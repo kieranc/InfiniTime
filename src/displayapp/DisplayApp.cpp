@@ -29,6 +29,7 @@
 #include "displayapp/screens/FlashLight.h"
 #include "displayapp/screens/BatteryInfo.h"
 #include "displayapp/screens/Steps.h"
+#include "displayapp/screens/PassKey.h"
 #include "displayapp/screens/Error.h"
 
 #include "drivers/Cst816s.h"
@@ -268,6 +269,9 @@ void DisplayApp::Refresh() {
         // Added to remove warning
         // What should happen here?
         break;
+      case Messages::ShowPairingKey:
+        LoadApp(Apps::PassKey, DisplayApp::FullRefreshDirections::Up);
+        break;
     }
   }
 
@@ -330,6 +334,11 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       currentScreen = std::make_unique<Screens::FirmwareUpdate>(this, bleController);
       ReturnApp(Apps::Clock, FullRefreshDirections::Down, TouchEvents::None);
       break;
+
+     case Apps::PassKey:
+       currentScreen = std::make_unique<Screens::PassKey>(this, bleController.GetPairingKey());
+       ReturnApp(Apps::Clock, FullRefreshDirections::Up, TouchEvents::SwipeDown);
+       break;
 
     case Apps::Notifications:
       currentScreen = std::make_unique<Screens::Notifications>(
