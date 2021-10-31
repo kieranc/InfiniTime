@@ -104,18 +104,18 @@ void NimbleController::Init() {
 
   bleController.Address(std::move(address));
   switch (addrType) {
-    case BLE_OWN_ADDR_PUBLIC :
-                               bleController.AddressType(Ble::AddressTypes::Public);
-                               break;
-    case BLE_OWN_ADDR_RANDOM :
-                               bleController.AddressType(Ble::AddressTypes::Random);
-                               break;
-    case BLE_OWN_ADDR_RPA_PUBLIC_DEFAULT :
-                               bleController.AddressType(Ble::AddressTypes::RPA_Public);
-                               break;
-    case BLE_OWN_ADDR_RPA_RANDOM_DEFAULT :
-                               bleController.AddressType(Ble::AddressTypes::RPA_Random);
-                               break;
+    case BLE_OWN_ADDR_PUBLIC:
+      bleController.AddressType(Ble::AddressTypes::Public);
+      break;
+    case BLE_OWN_ADDR_RANDOM:
+      bleController.AddressType(Ble::AddressTypes::Random);
+      break;
+    case BLE_OWN_ADDR_RPA_PUBLIC_DEFAULT:
+      bleController.AddressType(Ble::AddressTypes::RPA_Public);
+      break;
+    case BLE_OWN_ADDR_RPA_RANDOM_DEFAULT:
+      bleController.AddressType(Ble::AddressTypes::RPA_Random);
+      break;
   }
 
   rc = ble_gatts_start();
@@ -129,7 +129,6 @@ void NimbleController::StartAdvertising() {
   struct ble_gap_adv_params adv_params;
   struct ble_hs_adv_fields fields;
   struct ble_hs_adv_fields rsp_fields;
-  int rc;
 
   memset(&adv_params, 0, sizeof(adv_params));
   memset(&fields, 0, sizeof(fields));
@@ -153,16 +152,11 @@ void NimbleController::StartAdvertising() {
   fields.uuids128_is_complete = 1;
   fields.tx_pwr_lvl = BLE_HS_ADV_TX_PWR_LVL_AUTO;
 
-  /* The advertising payload is split into advertising data fields
-   * and advertising response fields because all of the data cannot
-   * fit into single packet. Therefore the name of device is sent as
-   * a response to the scan request.
-   */
-
-  rsp_fields.name = (uint8_t*) deviceName;
+  rsp_fields.name = reinterpret_cast<const uint8_t*>(deviceName);
   rsp_fields.name_len = strlen(deviceName);
   rsp_fields.name_is_complete = 1;
 
+  int rc;
   rc = ble_gap_adv_set_fields(&fields);
   ASSERT(rc == 0);
 
@@ -224,10 +218,10 @@ int NimbleController::OnGAPEvent(ble_gap_event* event) {
       /* The central has requested updated connection parameters */
       NRF_LOG_INFO("Update event : BLE_GAP_EVENT_CONN_UPDATE_REQ");
       NRF_LOG_INFO("update request : itvl_min=%d itvl_max=%d latency=%d supervision=%d",
-                    event->conn_update_req.peer_params->itvl_min,
-                    event->conn_update_req.peer_params->itvl_max,
-                    event->conn_update_req.peer_params->latency,
-                    event->conn_update_req.peer_params->supervision_timeout);
+                   event->conn_update_req.peer_params->itvl_min,
+                   event->conn_update_req.peer_params->itvl_max,
+                   event->conn_update_req.peer_params->latency,
+                   event->conn_update_req.peer_params->supervision_timeout);
       break;
 
     case BLE_GAP_EVENT_ENC_CHANGE:
@@ -245,8 +239,8 @@ int NimbleController::OnGAPEvent(ble_gap_event* event) {
       if (event->passkey.params.action == BLE_SM_IOACT_DISP) {
         struct ble_sm_io pkey = {0};
         pkey.action = event->passkey.params.action;
-        for (int i=0; i<6; i++) {
-          pkey.passkey += (ble_ll_rand() % 10) * pow(10,i);
+        for (int i = 0; i < 6; i++) {
+          pkey.passkey += (ble_ll_rand() % 10) * pow(10, i);
         }
         bleController.SetPairingKey(pkey.passkey);
         systemTask.PushMessage(Pinetime::System::Messages::OnPairing);
@@ -266,8 +260,7 @@ int NimbleController::OnGAPEvent(ble_gap_event* event) {
       break;
 
     case BLE_GAP_EVENT_MTU:
-      NRF_LOG_INFO("MTU Update event; conn_handle=%d cid=%d mtu=%d",
-        event->mtu.conn_handle, event->mtu.channel_id, event->mtu.value);
+      NRF_LOG_INFO("MTU Update event; conn_handle=%d cid=%d mtu=%d", event->mtu.conn_handle, event->mtu.channel_id, event->mtu.value);
       break;
 
     case BLE_GAP_EVENT_REPEAT_PAIRING: {

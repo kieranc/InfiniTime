@@ -335,10 +335,10 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       ReturnApp(Apps::Clock, FullRefreshDirections::Down, TouchEvents::None);
       break;
 
-     case Apps::PassKey:
-       currentScreen = std::make_unique<Screens::PassKey>(this, bleController.GetPairingKey());
-       ReturnApp(Apps::Clock, FullRefreshDirections::Up, TouchEvents::SwipeDown);
-       break;
+    case Apps::PassKey:
+      currentScreen = std::make_unique<Screens::PassKey>(this, bleController.GetPairingKey());
+      ReturnApp(Apps::Clock, FullRefreshDirections::Up, TouchEvents::SwipeDown);
+      break;
 
     case Apps::Notifications:
       currentScreen = std::make_unique<Screens::Notifications>(
