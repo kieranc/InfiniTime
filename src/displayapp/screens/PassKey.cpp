@@ -16,8 +16,9 @@ PassKey::~PassKey() {
 }
 
 bool PassKey::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
-  if (event == Pinetime::Applications::TouchEvents::SwipeDown)
+  if (event == Pinetime::Applications::TouchEvents::SwipeDown) {
     return false;
+  }
 
   return true;
 }
