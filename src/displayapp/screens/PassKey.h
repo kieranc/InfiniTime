@@ -15,7 +15,8 @@ namespace Pinetime {
         bool OnTouchEvent(Pinetime::Applications::TouchEvents event) override;
 
       private:
-        lv_obj_t* lpasskey;
+        lv_obj_t* passkeyLabel;
+        lv_obj_t* backgroundLabel;
       };
     }
   }
