@@ -61,7 +61,7 @@ std::unique_ptr<Screen> Settings::CreateScreen3() {
 
   std::array<Screens::List::Applications, 4> applications {{
     {Symbols::paintbrush, "PTS Colors", Apps::SettingPineTimeStyle},
-        {Symbols::none, "Wake Sense", Apps::SettingShakeThreshold}.
+        {Symbols::none, "Wake Sense", Apps::SettingShakeThreshold},
     {Symbols::check, "Firmware", Apps::FirmwareValidation},
     {Symbols::list, "About", Apps::SysInfo}
 
