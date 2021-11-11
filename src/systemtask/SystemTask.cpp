@@ -473,6 +473,8 @@ void SystemTask::UpdateMotion() {
   if (motionController.ShouldWakeUp(isSleeping)) {
     GoToRunning();
   }
+  if (motionController.ShouldSleep(isSleeping))
+    PushMessage(Messages::GoToSleep);
 }
 
 void SystemTask::HandleButtonAction(Controllers::ButtonActions action) {

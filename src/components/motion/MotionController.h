@@ -29,6 +29,7 @@ namespace Pinetime {
         return nbSteps;
       }
       bool ShouldWakeUp(bool isSleeping);
+      bool ShouldSleep(bool isSleeping);
 
       void IsSensorOk(bool isOk);
       bool IsSensorOk() const {
@@ -48,6 +49,7 @@ namespace Pinetime {
       int16_t y;
       int16_t z;
       int16_t lastYForWakeUp = 0;
+      int16_t lastYForSleep = 0;
       bool isSensorOk = false;
       DeviceTypes deviceType = DeviceTypes::Unknown;
       Pinetime::Controllers::MotionService* service = nullptr;
