@@ -39,6 +39,7 @@ namespace Pinetime {
       bool Should_ShakeWake(uint16_t thresh);
       bool Should_RaiseWake(bool isSleeping);
       int32_t currentShakeSpeed();
+      bool ShouldSleep(bool isSleeping);
       void IsSensorOk(bool isOk);
       bool IsSensorOk() const {
         return isSensorOk;
@@ -58,6 +59,7 @@ namespace Pinetime {
       int16_t y;
       int16_t z;
       int16_t lastYForWakeUp = 0;
+      int16_t lastYForSleep = 0;
       bool isSensorOk = false;
       DeviceTypes deviceType = DeviceTypes::Unknown;
       Pinetime::Controllers::MotionService* service = nullptr;
