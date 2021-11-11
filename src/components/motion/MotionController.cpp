@@ -67,17 +67,14 @@ int32_t MotionController::currentShakeSpeed() {
 }
 
 bool MotionController::ShouldSleep(bool isSleeping) {
-  if (not isSleeping) {
-    if (y <= 0) {
-      lastYForSleep = 0;
-      return false;
-    }
-    if (y - 230 > lastYForSleep) {
-      lastYForSleep = y;
-      return true;
-    }
-  }
-  return false;
+  bool ret = false;
+
+  if (y >= lastYForSleep + 192 && !isSleeping)
+    ret = true;
+
+  lastYForSleep = (y > 320) ? y : 320;
+
+  return ret;
 }
 
 void MotionController::IsSensorOk(bool isOk) {
