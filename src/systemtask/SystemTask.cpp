@@ -499,8 +499,10 @@ void SystemTask::UpdateMotion() {
       motionController.Should_ShakeWake(settingsController.GetShakeThreshold())) {
     GoToRunning();
   }
-  if (motionController.ShouldSleep(isSleeping))
-    PushMessage(Messages::GoToSleep);
+  if (settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::LowerWrist)) {
+    if (motionController.ShouldSleep(isSleeping))
+      PushMessage(Messages::GoToSleep);
+  }
 }
 
 void SystemTask::HandleButtonAction(Controllers::ButtonActions action) {
