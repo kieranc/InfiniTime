@@ -17,17 +17,16 @@ void MotionController::Update(int16_t x, int16_t y, int16_t z, uint32_t nbSteps)
   this->nbSteps = nbSteps;
 }
 
-bool MotionController::ShouldWakeUp(bool isSleeping) {
+bool MotionController::ShouldWakeUp() {
   bool ret = false;
 
   if (x >= -384 && x <= 384 &&
       z <= 0 &&
-      y <= lastYForWakeUp - 192 &&
-      isSleeping) {
+      y <= lastYForWakeUp - 128) {
     ret = true;
   }
 
-  lastYForWakeUp = (y < 0) ? y : 0;
+  lastYForWakeUp = (y < 128) ? y : 128;
 
   return ret;
 }
