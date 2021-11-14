@@ -491,8 +491,7 @@ void SystemTask::UpdateMotion() {
   motionController.IsSensorOk(motionSensor.IsOk());
   motionController.Update(motionValues.x, motionValues.y, motionValues.z, motionValues.steps);
 
-  if (settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::RaiseWrist) &&
-      motionController.Should_RaiseWake(isSleeping)) {
+  if (motionController.ShouldWakeUp() && isSleeping) {
     GoToRunning();
   }
   if (settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::Shake) &&
