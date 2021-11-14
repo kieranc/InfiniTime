@@ -66,11 +66,12 @@ int32_t MotionController::currentShakeSpeed() {
   return accumulatedspeed;
 }
 
-bool MotionController::ShouldSleep(bool isSleeping) {
+bool MotionController::ShouldSleep() {
   bool ret = false;
 
-  if (y >= lastYForSleep + 192 && !isSleeping)
+  if (y >= lastYForSleep + 192) {
     ret = true;
+  }
 
   lastYForSleep = (y > 320) ? y : 320;
 
