@@ -474,7 +474,7 @@ void SystemTask::UpdateMotion() {
     GoToRunning();
   }
   if (settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::LowerWrist)) {
-    if (motionController.ShouldSleep(isSleeping))
+    if (motionController.ShouldSleep() && !isSleeping)
       PushMessage(Messages::GoToSleep);
   }
 }

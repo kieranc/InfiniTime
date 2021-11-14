@@ -29,7 +29,7 @@ namespace Pinetime {
         return nbSteps;
       }
       bool ShouldWakeUp(bool isSleeping);
-      bool ShouldSleep(bool isSleeping);
+      bool ShouldSleep();
 
       void IsSensorOk(bool isOk);
       bool IsSensorOk() const {
