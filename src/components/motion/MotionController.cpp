@@ -22,11 +22,11 @@ bool MotionController::ShouldWakeUp() {
 
   if (x >= -384 && x <= 384 &&
       z <= 0 &&
-      y <= lastYForWakeUp - 128) {
+      y <= lastYForWakeUp - 160) {
     ret = true;
   }
 
-  lastYForWakeUp = (y < 128) ? y : 128;
+  lastYForWakeUp = (y < 0) ? y : 0;
 
   return ret;
 }
