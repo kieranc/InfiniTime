@@ -26,6 +26,7 @@ namespace Pinetime {
       Motion,
       Steps,
       PassKey,
+      Qr,
       QuickSettings,
       Settings,
       SettingWatchFace,
