@@ -423,6 +423,9 @@ void SystemTask::Work() {
           motorController.RunForDuration(35);
           displayApp.PushMessage(Pinetime::Applications::Display::Messages::ShowPairingKey);
           break;
+        case Messages::ReloadIdleTimer:
+          ReloadIdleTimer();
+          break;
 
         default:
           break;

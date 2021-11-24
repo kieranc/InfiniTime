@@ -36,10 +36,11 @@ As of now, here is the list of achievements of this project:
     * Brightness settings
     * Flashlight
     * Settings
- - 3 watch faces:
+ - 4 watch faces:
     * Digital
     * Analog
     * [PineTimeStyle](https://wiki.pine64.org/wiki/PineTimeStyle)
+    * Fuzzy
  - Multiple 'apps' :
     * Music (control the playback of music on your phone)
     * Heart rate (measure your heart rate)

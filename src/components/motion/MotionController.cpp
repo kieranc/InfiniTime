@@ -75,10 +75,32 @@ bool MotionController::Should_ShakeWake(uint16_t thresh) {
 int32_t MotionController::currentShakeSpeed() {
   return accumulatedspeed;
 }
+/* TODO: might need reset when stepping in a new screen */
+bool MotionController::Shaken(uint32_t sinceLastCall) {
+  static int16_t shakeStart = y;
+  shakeTimer += sinceLastCall;
+  if (shakeTimer < shakeSpeed) {
+    if ((shakeState == 0 && y > shakeStart + shakeThreshold) ||
+        (shakeState == 1 && y < shakeStart)) {
+      shakeState += 1;
+      shakeTimer = 0;
+    } else if (shakeState == 2 && y > shakeStart + shakeThreshold) {
+      shakeState = 0;
+      shakeTimer = 0;
+      return true;
+    }
+  } else {
+    shakeState = 0;
+    shakeStart = y;
+    shakeTimer = 0;
+  }
+  return false;
+}
 
 void MotionController::IsSensorOk(bool isOk) {
   isSensorOk = isOk;
 }
+
 void MotionController::Init(Pinetime::Drivers::Bma421::DeviceTypes types) {
   switch (types) {
     case Drivers::Bma421::DeviceTypes::BMA421:
