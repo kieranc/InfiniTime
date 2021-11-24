@@ -35,6 +35,7 @@ namespace Pinetime {
       SettingSteps,
       SettingSetDate,
       SettingSetTime,
+      SettingChimes,
       Error,
     };
   }
