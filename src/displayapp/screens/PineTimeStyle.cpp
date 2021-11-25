@@ -436,6 +436,10 @@ void PineTimeStyle::Refresh() {
       lv_label_set_text_fmt(timeD2, "%c", hoursChar[1]);
       lv_label_set_text_fmt(timeD3, "%c", minutesChar[0]);
       lv_label_set_text_fmt(timeD4, "%c", minutesChar[1]);
+      lv_obj_realign(timeD1);
+      lv_obj_realign(timeD2);
+      lv_obj_realign(timeD3);
+      lv_obj_realign(timeD4);
     }
 
     if ((year != currentYear) || (month != currentMonth) || (dayOfWeek != currentDayOfWeek) || (day != currentDay)) {
@@ -548,7 +552,7 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
       lv_obj_set_style_local_text_color(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
       lv_obj_set_style_local_text_color(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
       lv_obj_set_style_local_text_color(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
-            lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
       settingsController.SetPTSColorBar(Controllers::Settings::Colors::Teal);
       lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
       settingsController.SetPTSColorBG(Controllers::Settings::Colors::Black);
