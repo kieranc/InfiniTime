@@ -71,20 +71,32 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_bg_color(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorBG()));
   lv_obj_set_style_local_radius(timebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(timebar, 200, 240);
-  lv_obj_align(timebar, lv_scr_act(), LV_ALIGN_IN_TOP_LEFT, 5, 0);
+  lv_obj_align(timebar, lv_scr_act(), LV_ALIGN_IN_TOP_LEFT, 0, 0);
 
   // Display the time
-  timeDD1 = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &open_sans_light);
-  lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
-  lv_label_set_text(timeDD1, "12");
-  lv_obj_align(timeDD1, timebar, LV_ALIGN_IN_TOP_MID, 5, 5);
+  timeD1 = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(timeD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &leco_1976);
+  lv_obj_set_style_local_text_color(timeD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
+  lv_label_set_text(timeD1, "0");
+  lv_obj_align(timeD1, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
 
-  timeDD2 = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &open_sans_light);
-  lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
-  lv_label_set_text(timeDD2, "34");
-  lv_obj_align(timeDD2, timebar, LV_ALIGN_IN_BOTTOM_MID, 5, -5);
+  timeD2 = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &leco_1976);
+  lv_obj_set_style_local_text_color(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
+  lv_label_set_text(timeD2, "0");
+  lv_obj_align(timeD2, timebar, LV_ALIGN_IN_TOP_LEFT, 105, 5);
+
+  timeD3 = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &leco_1976);
+  lv_obj_set_style_local_text_color(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
+  lv_label_set_text(timeD3, "0");
+  lv_obj_align(timeD3, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 125);
+
+  timeD4 = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &leco_1976);
+  lv_obj_set_style_local_text_color(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
+  lv_label_set_text(timeD4, "0");
+  lv_obj_align(timeD4, timebar, LV_ALIGN_IN_TOP_LEFT, 105, 125);
 
   timeAMPM = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
@@ -420,8 +432,10 @@ void PineTimeStyle::Refresh() {
         lv_label_set_text(timeAMPM, ampmChar);
       }
 
-      lv_label_set_text_fmt(timeDD1, "%s", hoursChar);
-      lv_label_set_text_fmt(timeDD2, "%s", minutesChar);
+      lv_label_set_text_fmt(timeD1, "%c", hoursChar[0]);
+      lv_label_set_text_fmt(timeD2, "%c", hoursChar[1]);
+      lv_label_set_text_fmt(timeD3, "%c", minutesChar[0]);
+      lv_label_set_text_fmt(timeD4, "%c", minutesChar[1]);
     }
 
     if ((year != currentYear) || (month != currentMonth) || (dayOfWeek != currentDayOfWeek) || (day != currentDay)) {
@@ -467,8 +481,10 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
         valueTime = GetNext(valueTime);
       }
       settingsController.SetPTSColorTime(valueTime);
-      lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
-      lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
       lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
     }
     if (object == btnPrevTime) {
@@ -477,9 +493,11 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
         valueTime = GetPrevious(valueTime);
       }
       settingsController.SetPTSColorTime(valueTime);
-      lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
-      lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
-      lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+            lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
     }
     if (object == btnNextBar) {
       valueBar = GetNext(valueBar);
@@ -526,9 +544,11 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
     if (object == btnReset) {
       needle_colors[0] = LV_COLOR_WHITE;
       settingsController.SetPTSColorTime(Controllers::Settings::Colors::Teal);
-      lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
-      lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
-      lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      lv_obj_set_style_local_text_color(timeD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      lv_obj_set_style_local_text_color(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      lv_obj_set_style_local_text_color(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+      lv_obj_set_style_local_text_color(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
+            lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
       settingsController.SetPTSColorBar(Controllers::Settings::Colors::Teal);
       lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(Controllers::Settings::Colors::Teal));
       settingsController.SetPTSColorBG(Controllers::Settings::Colors::Black);
@@ -550,8 +570,10 @@ void PineTimeStyle::UpdateSelected(lv_obj_t* object, lv_event_t event) {
         needle_colors[0] = LV_COLOR_WHITE;
       }
       settingsController.SetPTSColorTime(static_cast<Controllers::Settings::Colors>(valueTime));
-      lv_obj_set_style_local_text_color(timeDD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
-      lv_obj_set_style_local_text_color(timeDD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
+      lv_obj_set_style_local_text_color(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
       lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(valueTime));
       settingsController.SetPTSColorBar(static_cast<Controllers::Settings::Colors>(valueBar));
       lv_obj_set_style_local_bg_color(sidebar, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, Convert(valueBar));

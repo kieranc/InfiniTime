@@ -495,6 +495,7 @@ list(APPEND SOURCE_FILES
         displayapp/fonts/jetbrains_mono_42.c
         displayapp/fonts/lv_font_sys_48.c
         displayapp/fonts/open_sans_light.c
+        displayapp/fonts/leco_1976.c
         displayapp/lv_pinetime_theme.c
 
         systemtask/SystemTask.cpp

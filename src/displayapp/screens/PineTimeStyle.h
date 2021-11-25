@@ -68,8 +68,10 @@ namespace Pinetime {
         lv_obj_t* btnClose;
         lv_obj_t* timebar;
         lv_obj_t* sidebar;
-        lv_obj_t* timeDD1;
-        lv_obj_t* timeDD2;
+        lv_obj_t* timeD1;
+        lv_obj_t* timeD2;
+        lv_obj_t* timeD3;
+        lv_obj_t* timeD4;
         lv_obj_t* timeAMPM;
         lv_obj_t* dateDayOfWeek;
         lv_obj_t* dateDay;
