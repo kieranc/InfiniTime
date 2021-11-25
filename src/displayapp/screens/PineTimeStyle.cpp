@@ -78,25 +78,25 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_text_font(timeD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &leco_1976);
   lv_obj_set_style_local_text_color(timeD1, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_label_set_text(timeD1, "0");
-  lv_obj_align(timeD1, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
+  lv_obj_align(timeD1, timebar, LV_ALIGN_IN_TOP_MID, -50, 5);
 
   timeD2 = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &leco_1976);
   lv_obj_set_style_local_text_color(timeD2, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_label_set_text(timeD2, "0");
-  lv_obj_align(timeD2, timebar, LV_ALIGN_IN_TOP_LEFT, 105, 5);
+  lv_obj_align(timeD2, timebar, LV_ALIGN_IN_TOP_MID, 50, 5);
 
   timeD3 = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &leco_1976);
   lv_obj_set_style_local_text_color(timeD3, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_label_set_text(timeD3, "0");
-  lv_obj_align(timeD3, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 125);
+  lv_obj_align(timeD3, timebar, LV_ALIGN_IN_TOP_MID, -50, 125);
 
   timeD4 = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &leco_1976);
   lv_obj_set_style_local_text_color(timeD4, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_label_set_text(timeD4, "0");
-  lv_obj_align(timeD4, timebar, LV_ALIGN_IN_TOP_LEFT, 105, 125);
+  lv_obj_align(timeD4, timebar, LV_ALIGN_IN_TOP_MID, 50, 125);
 
   timeAMPM = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(timeAMPM, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
