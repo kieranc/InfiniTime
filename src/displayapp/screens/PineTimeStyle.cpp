@@ -120,11 +120,9 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
 
   bleIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 50);
 
   // Calendar icon
   calendarOuter = lv_obj_create(lv_scr_act(), nullptr);
@@ -380,6 +378,15 @@ void PineTimeStyle::Refresh() {
   if (notificationState.IsUpdated()) {
     lv_label_set_text(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
     lv_obj_realign(notificationIcon);
+  }
+
+  if (notificationState.Get() && bleState.Get()) {
+    lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 8, 25);
+    lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, -8, 25);
+  } else if (notificationState.Get() && !bleState.Get()) {
+    lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
+  } else {
+    lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
   }
 
   currentDateTime = dateTimeController.CurrentDateTime();
