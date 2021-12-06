@@ -27,7 +27,6 @@ bool MotionController::Should_RaiseWake(bool isSleeping) {
         return false;
       }
     }
-
     if (y >= 0) {
       lastYForWakeUp = 0;
       return false;
@@ -38,6 +37,20 @@ bool MotionController::Should_RaiseWake(bool isSleeping) {
     }
   }
   return false;
+}
+
+bool MotionController::ShouldWakeUp() {
+  bool ret = false;
+
+  if (x >= -384 && x <= 384 &&
+      z <= 0 &&
+      y <= lastYForWakeUp - 160) {
+    ret = true;
+  }
+
+  lastYForWakeUp = (y < 0) ? y : 0;
+
+  return ret;
 }
 
 /* TODO: might need reset when stepping in a new screen */

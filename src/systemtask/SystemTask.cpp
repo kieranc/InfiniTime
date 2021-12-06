@@ -473,6 +473,9 @@ void SystemTask::UpdateMotion() {
   }
   if (settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::Shake) &&
       motionController.Should_ShakeWake(settingsController.GetShakeThreshold())) {
+     GoToRunning();
+  }
+  if (motionController.ShouldWakeUp() && isSleeping) {
     GoToRunning();
   }
 }

@@ -28,8 +28,8 @@ namespace Pinetime {
       uint32_t NbSteps() const {
         return nbSteps;
       }
-      bool ShouldWakeUp(bool isSleeping);
       bool Shaken(uint32_t sinceLastCall);
+      bool ShouldWakeUp();
 
     
       bool Should_ShakeWake(uint16_t thresh);
