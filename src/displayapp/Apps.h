@@ -35,7 +35,8 @@ namespace Pinetime {
       SettingSetDate,
       SettingSetTime,
       SettingChimes,
-      Error,
+      SettingShakeThreshold,
+      Error
     };
   }
 }
