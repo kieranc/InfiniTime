@@ -47,6 +47,7 @@
 #include "displayapp/screens/settings/SettingSteps.h"
 #include "displayapp/screens/settings/SettingSetDate.h"
 #include "displayapp/screens/settings/SettingSetTime.h"
+#include "displayapp/screens/settings/SettingChimes.h"
 
 #include "libs/lv_conf.h"
 
@@ -290,6 +291,9 @@ void DisplayApp::Refresh() {
         // Added to remove warning
         // What should happen here?
         break;
+      case Messages::Clock:
+        LoadApp(Apps::Clock, DisplayApp::FullRefreshDirections::None);
+        break;
     }
   }
 
@@ -406,6 +410,10 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       break;
     case Apps::SettingSetTime:
       currentScreen = std::make_unique<Screens::SettingSetTime>(this, dateTimeController);
+      ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
+      break;
+    case Apps::SettingChimes:
+      currentScreen = std::make_unique<Screens::SettingChimes>(this, settingsController);
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
     case Apps::BatteryInfo:
