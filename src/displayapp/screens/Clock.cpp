@@ -10,19 +10,23 @@
 #include "displayapp/DisplayApp.h"
 #include "displayapp/screens/WatchFaceDigital.h"
 #include "displayapp/screens/WatchFaceAnalog.h"
+#include "displayapp/screens/WatchFaceFuzzy.h"
 #include "displayapp/screens/PineTimeStyle.h"
 
 using namespace Pinetime::Applications::Screens;
 
 Clock::Clock(DisplayApp* app,
+             System::SystemTask& systemTask,
              Controllers::DateTime& dateTimeController,
              Controllers::Battery& batteryController,
              Controllers::Ble& bleController,
              Controllers::NotificationManager& notificatioManager,
              Controllers::Settings& settingsController,
              Controllers::HeartRateController& heartRateController,
-             Controllers::MotionController& motionController)
+             Controllers::MotionController& motionController,
+             Controllers::MotorController& motorController)
   : Screen(app),
+    systemTask {systemTask},
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
@@ -30,6 +34,7 @@ Clock::Clock(DisplayApp* app,
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
+    motorController {motorController},
     screen {[this, &settingsController]() {
       switch (settingsController.GetClockFace()) {
         case 0:
@@ -40,6 +45,9 @@ Clock::Clock(DisplayApp* app,
           break;
         case 2:
           return PineTimeStyleScreen();
+          break;
+        case 3:
+          return WatchFaceFuzzyScreen();
           break;
       }
       return WatchFaceDigitalScreen();
@@ -73,6 +81,10 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
 std::unique_ptr<Screen> Clock::WatchFaceAnalogScreen() {
   return std::make_unique<Screens::WatchFaceAnalog>(
     app, dateTimeController, batteryController, bleController, notificatioManager, settingsController);
+}
+
+std::unique_ptr<Screen> Clock::WatchFaceFuzzyScreen() {
+  return std::make_unique<Screens::WatchFaceFuzzy>(app, systemTask, dateTimeController, motorController, motionController);
 }
 
 std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {

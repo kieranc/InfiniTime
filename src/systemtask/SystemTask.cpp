@@ -419,6 +419,9 @@ void SystemTask::Work() {
         case Messages::BatteryPercentageUpdated:
           nimbleController.NotifyBatteryLevel(batteryController.PercentRemaining());
           break;
+        case Messages::ReloadIdleTimer:
+          ReloadIdleTimer();
+          break;
 
         default:
           break;

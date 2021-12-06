@@ -334,13 +334,15 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
     case Apps::None:
     case Apps::Clock:
       currentScreen = std::make_unique<Screens::Clock>(this,
+                                                       *systemTask,
                                                        dateTimeController,
                                                        batteryController,
                                                        bleController,
                                                        notificationManager,
                                                        settingsController,
                                                        heartRateController,
-                                                       motionController);
+                                                       motionController,
+                                                       motorController);
       break;
 
     case Apps::Error:
