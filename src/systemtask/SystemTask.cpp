@@ -111,7 +111,8 @@ SystemTask::SystemTask(Drivers::SpiMaster& spi,
                      batteryController,
                      spiNorFlash,
                      heartRateController,
-                     motionController) {
+                     motionController,
+                     fs) {
 }
 
 void SystemTask::Start() {
@@ -421,6 +422,13 @@ void SystemTask::Work() {
           break;
         case Messages::ReloadIdleTimer:
           ReloadIdleTimer();
+          break;
+        case Messages::OnPairing:
+          if (isSleeping && !isWakingUp) {
+            GoToRunning();
+          }
+          motorController.RunForDuration(35);
+          displayApp.PushMessage(Pinetime::Applications::Display::Messages::ShowPairingKey);
           break;
 
         default:

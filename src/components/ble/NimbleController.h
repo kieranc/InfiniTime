@@ -21,6 +21,7 @@
 #include "components/ble/ServiceDiscovery.h"
 #include "components/ble/HeartRateService.h"
 #include "components/ble/MotionService.h"
+#include "components/fs/FS.h"
 
 namespace Pinetime {
   namespace Drivers {
@@ -46,7 +47,8 @@ namespace Pinetime {
                        Controllers::Battery& batteryController,
                        Pinetime::Drivers::SpiNorFlash& spiNorFlash,
                        Controllers::HeartRateController& heartRateController,
-                       Controllers::MotionController& motionController);
+                       Controllers::MotionController& motionController,
+                       Pinetime::Controllers::FS& fs);
       void Init();
       void StartAdvertising();
       int OnGAPEvent(ble_gap_event* event);
@@ -82,6 +84,9 @@ namespace Pinetime {
         fastAdvCount = 0;
       }
 
+      void PersistBond(struct ble_gap_conn_desc &desc);
+      void RestoreBond();
+
     private:
       static constexpr const char* deviceName = "InfiniTime";
       Pinetime::System::SystemTask& systemTask;
@@ -103,10 +108,12 @@ namespace Pinetime {
       QrService qrService;
       HeartRateService heartRateService;
       MotionService motionService;
+      Pinetime::Controllers::FS& fs;
 
       uint8_t addrType; // 1 = Random, 0 = PUBLIC
       uint16_t connectionHandle = BLE_HS_CONN_HANDLE_NONE;
       uint8_t fastAdvCount = 0;
+      uint8_t bondId[16] = {0};
 
       ble_uuid128_t dfuServiceUuid {
         .u {.type = BLE_UUID_TYPE_128},
@@ -115,6 +122,6 @@ namespace Pinetime {
       ServiceDiscovery serviceDiscovery;
     };
 
-  static NimbleController* nptr;
+    static NimbleController* nptr;
   }
 }
