@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <memory>
 #include "displayapp/screens/Screen.h"
+#include <displayapp/Colors.h>
 #include "components/datetime/DateTimeController.h"
 
 namespace Pinetime {
@@ -100,6 +101,7 @@ namespace Pinetime {
 
         void SetBatteryIcon();
         void CloseMenu();
+        void AlignIcons();
 
         lv_task_t* taskRefresh;
       };
