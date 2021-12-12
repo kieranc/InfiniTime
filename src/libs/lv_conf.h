@@ -417,7 +417,9 @@ typedef void* lv_indev_drv_user_data_t;            /*Type of user data in the in
                                LV_FONT_DECLARE(jetbrains_mono_extrabold_compressed) \
                                LV_FONT_DECLARE(jetbrains_mono_42) \
                                LV_FONT_DECLARE(jetbrains_mono_76) \
-                               LV_FONT_DECLARE(open_sans_light) \
+                               LV_FONT_DECLARE(open_sans_light_1bpp) \
+                               LV_FONT_DECLARE(open_sans_light_2bpp) \
+                               LV_FONT_DECLARE(open_sans_light_4bpp) \
                                LV_FONT_DECLARE(leco_1976) \
                                LV_FONT_DECLARE(lv_font_sys_48)
 

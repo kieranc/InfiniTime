@@ -494,7 +494,9 @@ list(APPEND SOURCE_FILES
         displayapp/fonts/jetbrains_mono_76.c
         displayapp/fonts/jetbrains_mono_42.c
         displayapp/fonts/lv_font_sys_48.c
-        displayapp/fonts/open_sans_light.c
+        displayapp/fonts/open_sans_light_1bpp.c
+        displayapp/fonts/open_sans_light_2bpp.c
+        displayapp/fonts/open_sans_light_4bpp.c
         displayapp/fonts/leco_1976.c
         displayapp/lv_pinetime_theme.c
 
