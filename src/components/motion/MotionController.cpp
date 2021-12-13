@@ -11,6 +11,7 @@ void MotionController::Update(int16_t x, int16_t y, int16_t z, uint32_t nbSteps)
     service->OnNewMotionValues(x, y, z);
   }
 
+  lastY = this->y;
   this->x = x;
   this->y = y;
   this->z = z;
@@ -66,16 +67,8 @@ int32_t MotionController::currentShakeSpeed() {
   return accumulatedspeed;
 }
 
-bool MotionController::ShouldSleep() {
-  bool ret = false;
-
-  if (y >= lastYForSleep + 192) {
-    ret = true;
-  }
-
-  lastYForSleep = (y > 320) ? y : 320;
-
-  return ret;
+bool MotionController::ShouldLowerSleep() const {
+  return z <= 0 && y >= 512 && y >= lastY + 192;
 }
 
 void MotionController::IsSensorOk(bool isOk) {

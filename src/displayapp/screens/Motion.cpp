@@ -37,6 +37,11 @@ Motion::Motion(Pinetime::Applications::DisplayApp* app, Controllers::MotionContr
   lv_obj_align(labelStep, chart, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
   lv_label_set_text(labelStep, "Steps ---");
 
+  labelLastY = lv_label_create(lv_scr_act(), NULL);
+  lv_label_set_text(labelLastY, "LastY 0");
+  lv_label_set_align(labelLastY, LV_LABEL_ALIGN_RIGHT);
+  lv_obj_align(labelLastY, chart, LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
+
   taskRefresh = lv_task_create(RefreshTaskCallback, LV_DISP_DEF_REFR_PERIOD, LV_TASK_PRIO_MID, this);
 }
 
@@ -58,4 +63,7 @@ void Motion::Refresh() {
                         motionController.Y() / 0x10,
                         motionController.Z() / 0x10);
   lv_obj_align(label, NULL, LV_ALIGN_IN_TOP_MID, 0, 10);
+
+  lv_label_set_text_fmt(labelLastY, "LastY %d", motionController.LastY() / 0x10);
+  lv_obj_align(labelLastY, chart, LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
 }

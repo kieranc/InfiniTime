@@ -25,6 +25,9 @@ namespace Pinetime {
       int16_t Z() const {
         return z;
       }
+      int16_t LastY() const {
+        return lastY;
+      }
       uint32_t NbSteps() const {
         return nbSteps;
       }
@@ -39,7 +42,7 @@ namespace Pinetime {
       bool Should_ShakeWake(uint16_t thresh);
       bool Should_RaiseWake(bool isSleeping);
       int32_t currentShakeSpeed();
-      bool ShouldSleep();
+      bool ShouldLowerSleep() const;
       void IsSensorOk(bool isOk);
       bool IsSensorOk() const {
         return isSensorOk;
@@ -55,11 +58,11 @@ namespace Pinetime {
     private:
       uint32_t nbSteps;
       uint32_t currentTripSteps = 0;
-      int16_t x;
-      int16_t y;
-      int16_t z;
+      int16_t x = 0;
+      int16_t y = 0;
+      int16_t z = 0;
+      int16_t lastY = 0;
       int16_t lastYForWakeUp = 0;
-      int16_t lastYForSleep = 0;
       bool isSensorOk = false;
       DeviceTypes deviceType = DeviceTypes::Unknown;
       Pinetime::Controllers::MotionService* service = nullptr;
