@@ -470,7 +470,7 @@ void SystemTask::UpdateMotion() {
 
   motionController.IsSensorOk(motionSensor.IsOk());
   motionController.Update(motionValues.x, motionValues.y, motionValues.z, motionValues.steps);
-  if (motionController.ShouldWakeUp() && isSleeping) {
+  if (isSleeping && motionController.ShouldRaiseWake()) {
     GoToRunning();
   }
 }

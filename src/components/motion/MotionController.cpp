@@ -11,25 +11,17 @@ void MotionController::Update(int16_t x, int16_t y, int16_t z, uint32_t nbSteps)
     service->OnNewMotionValues(x, y, z);
   }
 
+  lastY = this->y;
   this->x = x;
   this->y = y;
   this->z = z;
   this->nbSteps = nbSteps;
 }
 
-bool MotionController::ShouldWakeUp() {
-  bool ret = false;
-
-  if (x >= -384 && x <= 384 &&
-      z <= 0 &&
-      y <= lastYForWakeUp - 160) {
-    ret = true;
-  }
-
-  lastYForWakeUp = (y < 0) ? y : 0;
-
-  return ret;
+bool MotionController::ShouldRaiseWake() const {
+  return x >= -384 && x <= 384 && z <= 0 && y <= -160 && y <= lastY - 160;
 }
+
 void MotionController::IsSensorOk(bool isOk) {
   isSensorOk = isOk;
 }
