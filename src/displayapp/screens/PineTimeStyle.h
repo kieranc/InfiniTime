@@ -58,6 +58,9 @@ namespace Pinetime {
         lv_obj_t* dateMonth;
         lv_obj_t* backgroundLabel;
         lv_obj_t* batteryIcon;
+        lv_obj_t* weatherIcon;
+        lv_obj_t* tempHigh;
+        lv_obj_t* tempLow;
         lv_obj_t* bleIcon;
         lv_obj_t* calendarOuter;
         lv_obj_t* calendarInner;

@@ -45,6 +45,13 @@ namespace Pinetime {
         static constexpr const char* eye = "\xEF\x81\xAE";
         static constexpr const char* home = "\xEF\x80\x95";
 
+        //fontawesome_weathericons.c
+        //static constexpr const char* sun = "\xEF\x86\x85";
+        static constexpr const char* cloudSun = "\xEF\x9B\x84";
+        static constexpr const char* cloudSunRain = "\xEF\x9D\x83";
+        static constexpr const char* cloudShowersHeavy = "\xEF\x9D\x80";
+        static constexpr const char* smog = "\xEF\x9D\x9F";
+
         // lv_font_sys_48.c
         static constexpr const char* settings = "\xEE\xA4\x82"; // e902
 

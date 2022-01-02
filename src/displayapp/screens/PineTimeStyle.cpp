@@ -103,19 +103,41 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_set_auto_realign(batteryIcon, true);
 
   bleIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_label_set_text(bleIcon, "");
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_label_set_text(notificationIcon, "");
+
+  weatherIcon = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_obj_set_style_local_text_font(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &fontawesome_weathericons);
+  lv_label_set_text(weatherIcon, Symbols::cloudSunRain);
+  lv_obj_align(weatherIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
+  lv_obj_set_auto_realign(weatherIcon, true);
+
+  tempHigh = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_label_set_text(tempHigh, "25");
+  lv_obj_align(tempHigh, sidebar, LV_ALIGN_IN_LEFT_MID, 5, -50);
+
+  /* tempSlash = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_label_set_text(tempSlash, "25/11");
+  lv_obj_align(tempSlash, sidebar, LV_ALIGN_IN_TOP_MID, 0, 70); */
+
+  tempLow = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_color(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  lv_label_set_text(tempLow, "11");
+  lv_obj_align(tempLow, sidebar, LV_ALIGN_IN_RIGHT_MID, -5, -30);
 
   // Calendar icon
   calendarOuter = lv_obj_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_bg_color(calendarOuter, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_obj_set_style_local_radius(calendarOuter, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(calendarOuter, 34, 34);
-  lv_obj_align(calendarOuter, sidebar, LV_ALIGN_CENTER, 0, 0);
+  lv_obj_align(calendarOuter, sidebar, LV_ALIGN_CENTER, 0, 25);
 
   calendarInner = lv_obj_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_bg_color(calendarInner, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xffffff));
@@ -151,17 +173,17 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   dateDayOfWeek = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(dateDayOfWeek, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_label_set_text(dateDayOfWeek, "THU");
-  lv_obj_align(dateDayOfWeek, sidebar, LV_ALIGN_CENTER, 0, -34);
+  lv_obj_align(dateDayOfWeek, calendarOuter, LV_ALIGN_CENTER, 0, -32);
 
   dateDay = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(dateDay, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_label_set_text(dateDay, "25");
-  lv_obj_align(dateDay, sidebar, LV_ALIGN_CENTER, 0, 3);
+  lv_obj_align(dateDay, calendarOuter, LV_ALIGN_CENTER, 0, 3);
 
   dateMonth = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(dateMonth, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_label_set_text(dateMonth, "MAR");
-  lv_obj_align(dateMonth, sidebar, LV_ALIGN_CENTER, 0, 32);
+  lv_obj_align(dateMonth, calendarOuter, LV_ALIGN_CENTER, 0, 32);
 
   // Step count gauge
   needle_colors[0] = LV_COLOR_WHITE;
@@ -209,12 +231,12 @@ void PineTimeStyle::SetBatteryIcon() {
 
 void PineTimeStyle::AlignIcons() {
   if (notificationState.Get() && bleState.Get()) {
-    lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 8, 25);
-    lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, -8, 25);
+    lv_obj_align(bleIcon, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
+    lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 30);
   } else if (notificationState.Get() && !bleState.Get()) {
-    lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
+    lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
   } else {
-    lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
+    lv_obj_align(bleIcon, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
   }
 }
 
