@@ -11,6 +11,7 @@ void MotionController::Update(int16_t x, int16_t y, int16_t z, uint32_t nbSteps)
     service->OnNewMotionValues(x, y, z);
   }
 
+  lastY = this->y;
   this->x = x;
   this->y = y;
   this->z = z;
@@ -43,6 +44,10 @@ bool MotionController::ShouldWakeUp(bool isSleeping) {
   }
   return false;
 }
+bool MotionController::ShouldLowerSleep() const {
+  return y >= 512 && y >= lastY + 192;
+}
+
 void MotionController::IsSensorOk(bool isOk) {
   isSensorOk = isOk;
 }
