@@ -57,6 +57,16 @@ namespace Pinetime {
         return settings.clockFace;
       };
 
+      void SetChimesState(uint8_t state) {
+        if (state != settings.chimesState) {
+          settingsChanged = true;
+        }
+        settings.chimesState = state;
+      };
+      uint8_t GetChimesState() const {
+        return settings.chimesState;
+      };
+
       void SetPTSColorTime(Colors colorTime) {
         if (colorTime != settings.PTS.ColorTime)
           settingsChanged = true;
@@ -190,7 +200,7 @@ namespace Pinetime {
     private:
       Pinetime::Controllers::FS& fs;
 
-      static constexpr uint32_t settingsVersion = 0x0002;
+      static constexpr uint32_t settingsVersion = 0x0003;
       struct SettingsData {
         uint32_t version = settingsVersion;
         uint32_t stepsGoal = 10000;
@@ -200,6 +210,7 @@ namespace Pinetime {
         Notification notificationStatus = Notification::ON;
 
         uint8_t clockFace = 0;
+        uint8_t chimesState = 0;
 
         PineTimeStyle PTS;
 

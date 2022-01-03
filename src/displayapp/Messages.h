@@ -22,6 +22,7 @@ namespace Pinetime {
         ShowPairingKey,
         AlarmTriggered,
         AirplaneModeToggle
+        Clock
       };
     }
   }

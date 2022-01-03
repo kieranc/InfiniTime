@@ -37,7 +37,8 @@ namespace Pinetime {
       SettingSetDate,
       SettingSetTime,
       SettingAirplaneMode,
-      Error
+      SettingChimes,
+      Error,
     };
   }
 }
