@@ -40,6 +40,7 @@ namespace Pinetime {
       }
       bool ShouldWakeUp(bool isSleeping);
       bool ShouldLowerSleep() const;
+      bool ShouldRaiseWake() const;
 
       void IsSensorOk(bool isOk);
       bool IsSensorOk() const {
