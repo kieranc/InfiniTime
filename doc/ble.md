@@ -9,6 +9,7 @@ This page describes the BLE implementation and API built in this firmware.
 ### Table of Contents
 
 - [BLE Connection](#ble-connection)
+- [BLE FS](#ble-fs)
 - [BLE UUIDs](#ble-uuids)
 - [BLE Services](#ble-services)
   - [CTS](#cts)
@@ -48,6 +49,13 @@ When the connection is established, the PineTime will try to discover services r
 If **CTS** is detected, it'll request the current time to the companion application. If **ANS** is detected, it will listen to new notifications coming from the companion application.
 
 ![BLE connection sequence diagram](ble/connection_sequence.png "BLE connection sequence diagram")
+
+---
+
+## BLE FS
+
+The documentation for BLE FS can be found here:
+[BLEFS.md](./BLEFS.md)
 
 ---
 
@@ -112,11 +120,11 @@ Reading a value from the firmware version characteristic will yield a UTF-8 enco
 
 #### Battery Level
 
-Reading from the battery level characteristic yields a single byte of data. This byte can be converted to an unsigned 8-bit integer which will be the battery percentage. This characteristic allows notify for updates as the value changes.
+Reading from the battery level characteristic yields a single byte of data. This byte can be converted to an unsigned 8-bit integer which will be the battery percentage. This characteristic allows notifications for updates as the value changes.
 
 #### Heart Rate
 
-Reading from the heart rate characteristic yields two bytes of data. I am not sure of the function of the first byte. It appears to always be zero. The second byte can be converted to an unsigned 8-bit integer which is the current heart rate. This characteristic also allows notify for updates as the value changes.
+Reading from the heart rate characteristic yields two bytes of data. I am not sure of the function of the first byte. It appears to always be zero. The second byte can be converted to an unsigned 8-bit integer which is the current heart rate. This characteristic also allows notifications for updates as the value changes.
 
 ---
 
