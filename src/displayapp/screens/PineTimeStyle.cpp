@@ -122,9 +122,11 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_set_auto_realign(weatherIcon, true);
 
   tempHigh = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
+  lv_obj_set_style_local_text_letter_space(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  lv_label_set_text(tempHigh, "25");
-  lv_obj_align(tempHigh, sidebar, LV_ALIGN_IN_LEFT_MID, 5, -50);
+  lv_label_set_text(tempHigh, "25°C");
+  lv_obj_align(tempHigh, sidebar, LV_ALIGN_IN_LEFT_MID, 2, -50);
 
   /* tempSlash = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
@@ -132,9 +134,11 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_align(tempSlash, sidebar, LV_ALIGN_IN_TOP_MID, 0, 70); */
 
   tempLow = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
+  lv_obj_set_style_local_text_letter_space(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  lv_label_set_text(tempLow, "11");
-  lv_obj_align(tempLow, sidebar, LV_ALIGN_IN_RIGHT_MID, -5, -30);
+  lv_label_set_text(tempLow, "11°C");
+  lv_obj_align(tempLow, sidebar, LV_ALIGN_IN_LEFT_MID, 2, -30);
 
   // Calendar icon
   calendarOuter = lv_obj_create(lv_scr_act(), nullptr);
