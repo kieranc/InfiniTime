@@ -261,7 +261,7 @@ void SystemTask::Work() {
           displayApp.PushMessage(Pinetime::Applications::Display::Messages::GoToRunning);
           heartRateApp.PushMessage(Pinetime::Applications::HeartRateTask::Messages::WakeUp);
 
-          if (!bleController.IsConnected()) {
+          if (bleController.GetConnectState() == Controllers::Ble::ConnectStates::Disconnected) {
             nimbleController.RestartFastAdv();
           }
 
@@ -444,7 +444,9 @@ void SystemTask::Work() {
           motorController.RunForDuration(35);
           displayApp.PushMessage(Pinetime::Applications::Display::Messages::ShowPairingKey);
           break;
-
+        case Messages::AirplaneModeToggle:
+          nimbleController.SwitchAirplaneMode(settingsController.GetAirplaneMode());
+          break;
         default:
           break;
       }
