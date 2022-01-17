@@ -37,7 +37,7 @@ void Hrs3300::Init() {
   WriteRegister(static_cast<uint8_t>(Registers::Res), 0x88);
 
   // 64x gain
-  WriteRegister(static_cast<uint8_t>(Registers::Hgain), 0x10);
+  WriteRegister(static_cast<uint8_t>(Registers::Hgain), 0x03);
 }
 
 void Hrs3300::Enable() {
