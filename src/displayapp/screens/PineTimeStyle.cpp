@@ -34,6 +34,9 @@
 #include "components/motion/MotionController.h"
 #include "components/settings/Settings.h"
 #include "displayapp/DisplayApp.h"
+#include "Weather.h"
+//#include <components/ble/weather/WeatherService.h>
+//#include "components/ble/weather/WeatherData.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -50,7 +53,8 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
                              Controllers::Ble& bleController,
                              Controllers::NotificationManager& notificatioManager,
                              Controllers::Settings& settingsController,
-                             Controllers::MotionController& motionController)
+                             Controllers::MotionController& motionController,
+                             Pinetime::Controllers::WeatherService& weather)
   : Screen(app),
     currentDateTime {{}},
     dateTimeController {dateTimeController},
@@ -58,7 +62,8 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
     bleController {bleController},
     notificatioManager {notificatioManager},
     settingsController {settingsController},
-    motionController {motionController} {
+    motionController {motionController},
+    weatherService(weather) {
 
   displayedChar[0] = 0;
   displayedChar[1] = 0;

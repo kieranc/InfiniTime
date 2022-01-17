@@ -31,6 +31,7 @@
 #include "displayapp/screens/Steps.h"
 #include "displayapp/screens/PassKey.h"
 #include "displayapp/screens/Error.h"
+#include "displayapp/screens/Weather.h"
 
 #include "drivers/Cst816s.h"
 #include "drivers/St7789.h"
@@ -97,7 +98,8 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
                        Pinetime::Controllers::MotionController& motionController,
                        Pinetime::Controllers::TimerController& timerController,
                        Pinetime::Controllers::AlarmController& alarmController,
-                       Pinetime::Controllers::TouchHandler& touchHandler)
+                       Pinetime::Controllers::TouchHandler& touchHandler,
+                       Pinetime::Controllers::WeatherService& weatherService)
   : lcd {lcd},
     lvgl {lvgl},
     touchPanel {touchPanel},
@@ -112,7 +114,8 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
     motionController {motionController},
     timerController {timerController},
     alarmController {alarmController},
-    touchHandler {touchHandler} {
+    touchHandler {touchHandler},
+    weatherService(weatherService) {
 }
 
 void DisplayApp::Start(System::BootErrors error) {
@@ -343,7 +346,8 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
                                                        notificationManager,
                                                        settingsController,
                                                        heartRateController,
-                                                       motionController);
+                                                       motionController,
+                                                       weatherService);
       break;
 
     case Apps::Error:
@@ -457,7 +461,8 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       currentScreen = std::make_unique<Screens::Music>(this, systemTask->nimble().music());
       break;
     case Apps::Navigation:
-      currentScreen = std::make_unique<Screens::Navigation>(this, systemTask->nimble().navigation());
+      //currentScreen = std::make_unique<Screens::Navigation>(this, systemTask->nimble().navigation());
+      currentScreen = std::make_unique<Screens::Weather>(this, systemTask->nimble().weather());
       break;
     case Apps::HeartRate:
       currentScreen = std::make_unique<Screens::HeartRate>(this, heartRateController, *systemTask);

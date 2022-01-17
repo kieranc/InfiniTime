@@ -110,6 +110,7 @@ Pinetime::Controllers::TimerController timerController;
 Pinetime::Controllers::AlarmController alarmController {dateTimeController};
 Pinetime::Controllers::TouchHandler touchHandler(touchPanel, lvgl);
 Pinetime::Controllers::ButtonHandler buttonHandler;
+Pinetime::Controllers::WeatherService weatherService(Pinetime::System::SystemTask& systemTask, Pinetime::Controllers::DateTime& dateTimeController);
 
 Pinetime::Controllers::FS fs {spiNorFlash};
 Pinetime::Controllers::Settings settingsController {fs};
@@ -129,7 +130,8 @@ Pinetime::Applications::DisplayApp displayApp(lcd,
                                               motionController,
                                               timerController,
                                               alarmController,
-                                              touchHandler);
+                                              touchHandler,
+                                              weatherService);
 
 Pinetime::System::SystemTask systemTask(spi,
                                         lcd,

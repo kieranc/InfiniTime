@@ -11,6 +11,8 @@
 #include "displayapp/screens/WatchFaceDigital.h"
 #include "displayapp/screens/WatchFaceAnalog.h"
 #include "displayapp/screens/PineTimeStyle.h"
+#include "displayapp/screens/Weather.h"
+#include <components/ble/weather/WeatherService.h>
 
 using namespace Pinetime::Applications::Screens;
 
@@ -21,7 +23,8 @@ Clock::Clock(DisplayApp* app,
              Controllers::NotificationManager& notificatioManager,
              Controllers::Settings& settingsController,
              Controllers::HeartRateController& heartRateController,
-             Controllers::MotionController& motionController)
+             Controllers::MotionController& motionController,
+             Pinetime::Controllers::WeatherService& weather)
   : Screen(app),
     dateTimeController {dateTimeController},
     batteryController {batteryController},
@@ -30,6 +33,7 @@ Clock::Clock(DisplayApp* app,
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
+    weatherService(weather),
     screen {[this, &settingsController]() {
       switch (settingsController.GetClockFace()) {
         case 0:
@@ -82,5 +86,6 @@ std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
                                                      bleController,
                                                      notificatioManager,
                                                      settingsController,
-                                                     motionController);
+                                                     motionController,
+                                                     weatherService);
 }
