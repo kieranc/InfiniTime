@@ -241,6 +241,7 @@ void SystemTask::Work() {
           if (!bleController.IsFirmwareUpdating()) {
             doNotGoToSleep = false;
           }
+          ReloadIdleTimer();
           break;
         case Messages::DisableSleeping:
           doNotGoToSleep = true;
