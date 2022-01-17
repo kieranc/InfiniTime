@@ -24,9 +24,9 @@ SettingWakeUp::SettingWakeUp(Pinetime::Applications::DisplayApp* app, Pinetime::
   lv_obj_set_style_local_pad_inner(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 5);
   lv_obj_set_style_local_border_width(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
 
-  lv_obj_set_pos(container1, 10, 60);
+  lv_obj_set_pos(container1, 10, 35);
   lv_obj_set_width(container1, LV_HOR_RES - 20);
-  lv_obj_set_height(container1, LV_VER_RES - 50);
+  lv_obj_set_height(container1, LV_VER_RES - 20);
   lv_cont_set_layout(container1, LV_LAYOUT_COLUMN_LEFT);
 
   lv_obj_t* title = lv_label_create(lv_scr_act(), nullptr);
@@ -70,6 +70,14 @@ SettingWakeUp::SettingWakeUp(Pinetime::Applications::DisplayApp* app, Pinetime::
   cbOption[optionsTotal]->user_data = this;
   lv_obj_set_event_cb(cbOption[optionsTotal], event_handler);
   if (settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::Shake)) {
+    lv_checkbox_set_checked(cbOption[optionsTotal], true);
+  }
+  optionsTotal++;
+  cbOption[optionsTotal] = lv_checkbox_create(container1, nullptr);
+  lv_checkbox_set_text_static(cbOption[optionsTotal], " Lower Wrist");
+  cbOption[optionsTotal]->user_data = this;
+  lv_obj_set_event_cb(cbOption[optionsTotal], event_handler);
+  if (settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::LowerWrist)) {
     lv_checkbox_set_checked(cbOption[optionsTotal], true);
   }
   optionsTotal++;

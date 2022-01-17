@@ -48,6 +48,10 @@ int32_t MotionController::currentShakeSpeed() {
   return accumulatedspeed;
 }
 
+bool MotionController::ShouldLowerSleep() const {
+  return y >= 512 && y >= lastY + 192;
+}
+
 void MotionController::IsSensorOk(bool isOk) {
   isSensorOk = isOk;
 }
