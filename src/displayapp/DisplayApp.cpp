@@ -115,7 +115,7 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
     timerController {timerController},
     alarmController {alarmController},
     touchHandler {touchHandler},
-    weatherService(weatherService) {
+    weatherService {weatherService} {
 }
 
 void DisplayApp::Start(System::BootErrors error) {
