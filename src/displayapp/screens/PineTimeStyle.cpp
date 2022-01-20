@@ -54,7 +54,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
                              Controllers::NotificationManager& notificatioManager,
                              Controllers::Settings& settingsController,
                              Controllers::MotionController& motionController,
-                             Pinetime::Controllers::WeatherService& weather)
+                             Controllers::WeatherService& weatherService)
   : Screen(app),
     currentDateTime {{}},
     dateTimeController {dateTimeController},
@@ -63,7 +63,7 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
     notificatioManager {notificatioManager},
     settingsController {settingsController},
     motionController {motionController},
-    weatherService(weather) {
+    weatherService {weatherService} {
 
   displayedChar[0] = 0;
   displayedChar[1] = 0;

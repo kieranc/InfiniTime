@@ -111,7 +111,7 @@ Pinetime::Controllers::TimerController timerController;
 Pinetime::Controllers::AlarmController alarmController {dateTimeController};
 Pinetime::Controllers::TouchHandler touchHandler(touchPanel, lvgl);
 Pinetime::Controllers::ButtonHandler buttonHandler;
-Pinetime::Controllers::WeatherService weatherService(Pinetime::System::SystemTask& systemTask, Pinetime::Controllers::DateTime& dateTimeController);
+Pinetime::Controllers::WeatherService weatherService;
 
 Pinetime::Controllers::FS fs {spiNorFlash};
 Pinetime::Controllers::Settings settingsController {fs};
@@ -132,7 +132,7 @@ Pinetime::Applications::DisplayApp displayApp(lcd,
                                               timerController,
                                               alarmController,
                                               touchHandler,
-                                              weatherService(systemTask, dateTimeController));
+                                              weatherService);
 
 Pinetime::System::SystemTask systemTask(spi,
                                         lcd,
@@ -348,3 +348,8 @@ int main(void) {
     APP_ERROR_HANDLER(NRF_ERROR_FORBIDDEN);
   }
 }
+/*
+void register(Pinetime::System::SystemTask* systemTask) {
+  this->systemTask = systemTask;
+}
+*/
