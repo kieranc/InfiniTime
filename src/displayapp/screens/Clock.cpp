@@ -24,7 +24,7 @@ Clock::Clock(DisplayApp* app,
              Controllers::Settings& settingsController,
              Controllers::HeartRateController& heartRateController,
              Controllers::MotionController& motionController,
-             Pinetime::Controllers::WeatherService& weatherService)
+             Controllers::WeatherService& weather)
   : Screen(app),
     dateTimeController {dateTimeController},
     batteryController {batteryController},
@@ -33,7 +33,7 @@ Clock::Clock(DisplayApp* app,
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
-    weatherService {weatherService},
+    weatherService(weather),
     screen {[this, &settingsController]() {
       switch (settingsController.GetClockFace()) {
         case 0:

@@ -347,7 +347,7 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
                                                        settingsController,
                                                        heartRateController,
                                                        motionController,
-                                                       weatherService);
+                                                       systemTask->nimble().weather());
       break;
 
     case Apps::Error:

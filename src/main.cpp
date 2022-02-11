@@ -48,7 +48,6 @@
 #include "drivers/PinMap.h"
 #include "touchhandler/TouchHandler.h"
 #include "buttonhandler/ButtonHandler.h"
-#include "displayapp/screens/Weather.h"
 
 #if NRF_LOG_ENABLED
   #include "logging/NrfLogger.h"
@@ -111,7 +110,6 @@ Pinetime::Controllers::TimerController timerController;
 Pinetime::Controllers::AlarmController alarmController {dateTimeController};
 Pinetime::Controllers::TouchHandler touchHandler(touchPanel, lvgl);
 Pinetime::Controllers::ButtonHandler buttonHandler;
-Pinetime::Controllers::WeatherService weatherService;
 
 Pinetime::Controllers::FS fs {spiNorFlash};
 Pinetime::Controllers::Settings settingsController {fs};
@@ -131,8 +129,7 @@ Pinetime::Applications::DisplayApp displayApp(lcd,
                                               motionController,
                                               timerController,
                                               alarmController,
-                                              touchHandler,
-                                              weatherService);
+                                              touchHandler);
 
 Pinetime::System::SystemTask systemTask(spi,
                                         lcd,
@@ -348,8 +345,3 @@ int main(void) {
     APP_ERROR_HANDLER(NRF_ERROR_FORBIDDEN);
   }
 }
-/*
-void register(Pinetime::System::SystemTask* systemTask) {
-  this->systemTask = systemTask;
-}
-*/
