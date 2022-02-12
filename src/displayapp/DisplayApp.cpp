@@ -31,7 +31,7 @@
 #include "displayapp/screens/Steps.h"
 #include "displayapp/screens/PassKey.h"
 #include "displayapp/screens/Error.h"
-#include "displayapp/screens/Weather.h"
+#include <components/ble/weather/WeatherService.h>
 
 #include "drivers/Cst816s.h"
 #include "drivers/St7789.h"
@@ -98,8 +98,7 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
                        Pinetime::Controllers::MotionController& motionController,
                        Pinetime::Controllers::TimerController& timerController,
                        Pinetime::Controllers::AlarmController& alarmController,
-                       Pinetime::Controllers::TouchHandler& touchHandler,
-                       Pinetime::Controllers::WeatherService& weatherService)
+                       Pinetime::Controllers::TouchHandler& touchHandler)
   : lcd {lcd},
     lvgl {lvgl},
     touchPanel {touchPanel},
@@ -114,8 +113,7 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
     motionController {motionController},
     timerController {timerController},
     alarmController {alarmController},
-    touchHandler {touchHandler},
-    weatherService {weatherService} {
+    touchHandler {touchHandler} {
 }
 
 void DisplayApp::Start(System::BootErrors error) {

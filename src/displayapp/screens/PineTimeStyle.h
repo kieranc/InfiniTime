@@ -57,6 +57,8 @@ namespace Pinetime {
         DirtyValue<bool> motionSensorOk {};
         DirtyValue<uint32_t> stepCount {};
         DirtyValue<bool> notificationState {};
+        DirtyValue<int16_t> minTemp {};
+        DirtyValue<int16_t> maxTemp {};
 
         static Pinetime::Controllers::Settings::Colors GetNext(Controllers::Settings::Colors color);
         static Pinetime::Controllers::Settings::Colors GetPrevious(Controllers::Settings::Colors color);

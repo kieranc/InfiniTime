@@ -34,9 +34,7 @@
 #include "components/motion/MotionController.h"
 #include "components/settings/Settings.h"
 #include "displayapp/DisplayApp.h"
-#include "Weather.h"
 #include <components/ble/weather/WeatherService.h>
-#include "components/ble/weather/WeatherData.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -126,11 +124,15 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_align(weatherIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
   lv_obj_set_auto_realign(weatherIcon, true);
 
+  //std::unique_ptr<Controllers::WeatherData::Temperature>& current = weatherService.GetCurrentTemperature();
+
   tempHigh = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  lv_label_set_text(tempHigh, "25°C");
+  lv_label_set_text(tempHigh, "--");
+  //lv_label_set_text_fmt(tempHigh, "%d#°C", current->temperature / 100);
+  //lv_label_set_text_fmt(tempHigh, "%i°C", weatherService.GetTodayMaxTemp() / 100);
   lv_obj_align(tempHigh, sidebar, LV_ALIGN_IN_LEFT_MID, 2, -50);
 
   /* tempSlash = lv_label_create(lv_scr_act(), nullptr);
@@ -142,7 +144,8 @@ PineTimeStyle::PineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_text_font(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  lv_label_set_text(tempLow, "11°C");
+  lv_label_set_text(tempLow, "--");
+  //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
   lv_obj_align(tempLow, sidebar, LV_ALIGN_IN_LEFT_MID, 2, -30);
 
   // Calendar icon
@@ -489,6 +492,16 @@ void PineTimeStyle::Refresh() {
       lv_obj_set_style_local_scale_grad_color(stepGauge, LV_GAUGE_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_WHITE);
     }
   }
+
+  minTemp = (weatherService.GetTodayMinTemp() / 100);
+  maxTemp = (weatherService.GetTodayMaxTemp() / 100);
+  if (minTemp.IsUpdated() || maxTemp.IsUpdated()) {
+    lv_label_set_text_fmt(tempLow, "%i°C", minTemp);
+    lv_label_set_text_fmt(tempHigh, "%i°C", maxTemp);
+    lv_obj_realign(tempLow);
+    lv_obj_realign(tempHigh);
+  }
+
   if (!lv_obj_get_hidden(btnSet)) {
     if ((savedTick > 0) && (lv_tick_get() - savedTick > 3000)) {
       lv_obj_set_hidden(btnSet, true);
