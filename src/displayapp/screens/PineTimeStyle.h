@@ -59,6 +59,10 @@ namespace Pinetime {
         DirtyValue<bool> notificationState {};
         DirtyValue<int16_t> minTemp {};
         DirtyValue<int16_t> maxTemp {};
+        //int16_t minTemp = 0;
+        //int16_t maxTemp = 0;
+        int16_t clouds = 0;
+        int16_t precip = 0;
 
         static Pinetime::Controllers::Settings::Colors GetNext(Controllers::Settings::Colors color);
         static Pinetime::Controllers::Settings::Colors GetPrevious(Controllers::Settings::Colors color);

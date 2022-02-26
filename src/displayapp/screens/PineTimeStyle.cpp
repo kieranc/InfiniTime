@@ -495,11 +495,25 @@ void PineTimeStyle::Refresh() {
 
   minTemp = (weatherService.GetTodayMinTemp() / 100);
   maxTemp = (weatherService.GetTodayMaxTemp() / 100);
+  clouds = (weatherService.GetCurrentClouds()->amount);
+  precip = (weatherService.GetCurrentPrecipitation()->amount);
+  //if (minTemp.IsUpdated() || maxTemp.IsUpdated() || clouds.IsUpdated() || precip.IsUpdated()) {
   if (minTemp.IsUpdated() || maxTemp.IsUpdated()) {
-    lv_label_set_text_fmt(tempLow, "%i°C", minTemp);
-    lv_label_set_text_fmt(tempHigh, "%i°C", maxTemp);
+  //if (true) {
+    lv_label_set_text_fmt(tempLow, "%d", minTemp);
+    lv_label_set_text_fmt(tempHigh, "%d", maxTemp);
+    if ((clouds < 50) && (precip < 30)) {
+      lv_label_set_text(weatherIcon, Symbols::sun);
+    } else if ((clouds > 50) && (precip < 30)) {
+      lv_label_set_text(weatherIcon, Symbols::cloud);
+    } else if ((clouds > 50) && (precip > 30)) {
+      lv_label_set_text(weatherIcon, Symbols::cloudShowersHeavy);
+    } else {
+      lv_label_set_text(weatherIcon, Symbols::cloudSunRain);
+    };
     lv_obj_realign(tempLow);
     lv_obj_realign(tempHigh);
+    lv_obj_realign(weatherIcon);
   }
 
   if (!lv_obj_get_hidden(btnSet)) {
