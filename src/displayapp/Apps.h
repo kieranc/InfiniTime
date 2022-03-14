@@ -25,6 +25,8 @@ namespace Pinetime {
       Metronome,
       Motion,
       Steps,
+      Weather,
+      PassKey,
       QuickSettings,
       Settings,
       SettingWatchFace,
@@ -34,7 +36,10 @@ namespace Pinetime {
       SettingSteps,
       SettingSetDate,
       SettingSetTime,
-      Error,
+      SettingChimes,
+      SettingShakeThreshold,
+      SettingAirplaneMode,
+      Error
     };
   }
 }

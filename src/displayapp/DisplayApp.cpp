@@ -29,6 +29,7 @@
 #include "displayapp/screens/FlashLight.h"
 #include "displayapp/screens/BatteryInfo.h"
 #include "displayapp/screens/Steps.h"
+#include "displayapp/screens/PassKey.h"
 #include "displayapp/screens/Error.h"
 
 #include "drivers/Cst816s.h"
@@ -46,6 +47,9 @@
 #include "displayapp/screens/settings/SettingSteps.h"
 #include "displayapp/screens/settings/SettingSetDate.h"
 #include "displayapp/screens/settings/SettingSetTime.h"
+#include "displayapp/screens/settings/SettingChimes.h"
+#include "displayapp/screens/settings/SettingShakeThreshold.h"
+#include "displayapp/screens/settings/SettingAirplaneMode.h"
 
 #include "libs/lv_conf.h"
 
@@ -94,6 +98,7 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
                        Pinetime::Controllers::MotionController& motionController,
                        Pinetime::Controllers::TimerController& timerController,
                        Pinetime::Controllers::AlarmController& alarmController,
+                       Pinetime::Controllers::BrightnessController& brightnessController,
                        Pinetime::Controllers::TouchHandler& touchHandler)
   : lcd {lcd},
     lvgl {lvgl},
@@ -109,6 +114,7 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
     motionController {motionController},
     timerController {timerController},
     alarmController {alarmController},
+    brightnessController {brightnessController},
     touchHandler {touchHandler} {
 }
 
@@ -213,6 +219,10 @@ void DisplayApp::Refresh() {
         } else {
           LoadApp(Apps::Alarm, DisplayApp::FullRefreshDirections::None);
         }
+        break;
+      case Messages::ShowPairingKey:
+        LoadApp(Apps::PassKey, DisplayApp::FullRefreshDirections::Up);
+        break;
       case Messages::TouchEvent: {
         if (state != States::Running) {
           break;
@@ -283,9 +293,15 @@ void DisplayApp::Refresh() {
       case Messages::BleFirmwareUpdateStarted:
         LoadApp(Apps::FirmwareUpdate, DisplayApp::FullRefreshDirections::Down);
         break;
+      case Messages::BleRadioEnableToggle:
+        PushMessageToSystemTask(System::Messages::BleRadioEnableToggle);
+        break;
       case Messages::UpdateDateTime:
         // Added to remove warning
         // What should happen here?
+        break;
+      case Messages::Clock:
+        LoadApp(Apps::Clock, DisplayApp::FullRefreshDirections::None);
         break;
     }
   }
@@ -350,21 +366,26 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       ReturnApp(Apps::Clock, FullRefreshDirections::Down, TouchEvents::None);
       break;
 
+    case Apps::PassKey:
+      currentScreen = std::make_unique<Screens::PassKey>(this, bleController.GetPairingKey());
+      ReturnApp(Apps::Clock, FullRefreshDirections::Down, TouchEvents::SwipeDown);
+      break;
+
     case Apps::Notifications:
       currentScreen = std::make_unique<Screens::Notifications>(
-        this, notificationManager, systemTask->nimble().alertService(), motorController, Screens::Notifications::Modes::Normal);
+        this, notificationManager, systemTask->nimble().alertService(), motorController, *systemTask, Screens::Notifications::Modes::Normal);
       ReturnApp(Apps::Clock, FullRefreshDirections::Up, TouchEvents::SwipeUp);
       break;
     case Apps::NotificationsPreview:
       currentScreen = std::make_unique<Screens::Notifications>(
-        this, notificationManager, systemTask->nimble().alertService(), motorController, Screens::Notifications::Modes::Preview);
+        this, notificationManager, systemTask->nimble().alertService(), motorController, *systemTask, Screens::Notifications::Modes::Preview);
       ReturnApp(Apps::Clock, FullRefreshDirections::Up, TouchEvents::SwipeUp);
       break;
     case Apps::Timer:
       currentScreen = std::make_unique<Screens::Timer>(this, timerController);
       break;
     case Apps::Alarm:
-      currentScreen = std::make_unique<Screens::Alarm>(this, alarmController);
+      currentScreen = std::make_unique<Screens::Alarm>(this, alarmController, settingsController, *systemTask);
       break;
 
     // Settings
@@ -402,7 +423,19 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
     case Apps::SettingSetTime:
-      currentScreen = std::make_unique<Screens::SettingSetTime>(this, dateTimeController);
+      currentScreen = std::make_unique<Screens::SettingSetTime>(this, dateTimeController, settingsController);
+      ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
+      break;
+    case Apps::SettingChimes:
+      currentScreen = std::make_unique<Screens::SettingChimes>(this, settingsController);
+      ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
+      break;
+    case Apps::SettingShakeThreshold:
+      currentScreen = std::make_unique<Screens::SettingShakeThreshold>(this, settingsController, motionController, *systemTask);
+      ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
+      break;
+    case Apps::SettingAirplaneMode:
+      currentScreen = std::make_unique<Screens::SettingAirplaneMode>(this, settingsController);
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
     case Apps::BatteryInfo:
@@ -492,8 +525,9 @@ void DisplayApp::SetFullRefresh(DisplayApp::FullRefreshDirections direction) {
 }
 
 void DisplayApp::PushMessageToSystemTask(Pinetime::System::Messages message) {
-  if (systemTask != nullptr)
+  if (systemTask != nullptr) {
     systemTask->PushMessage(message);
+  }
 }
 
 void DisplayApp::Register(Pinetime::System::SystemTask* systemTask) {
