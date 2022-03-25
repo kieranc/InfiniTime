@@ -9,6 +9,7 @@
 #include "components/settings/Settings.h"
 #include "displayapp/DisplayApp.h"
 #include "displayapp/screens/WatchFaceDigital.h"
+#include "displayapp/screens/WatchFaceTerminal.h"
 #include "displayapp/screens/WatchFaceAnalog.h"
 #include "displayapp/screens/PineTimeStyle.h"
 #include "displayapp/screens/Weather.h"
@@ -44,6 +45,9 @@ Clock::Clock(DisplayApp* app,
           break;
         case 2:
           return PineTimeStyleScreen();
+          break;
+        case 3:
+          return WatchFaceTerminalScreen();
           break;
       }
       return WatchFaceDigitalScreen();
@@ -88,4 +92,15 @@ std::unique_ptr<Screen> Clock::PineTimeStyleScreen() {
                                                      settingsController,
                                                      motionController,
                                                      weatherService);
+}
+
+std::unique_ptr<Screen> Clock::WatchFaceTerminalScreen() {
+  return std::make_unique<Screens::WatchFaceTerminal>(app,
+                                                      dateTimeController,
+                                                      batteryController,
+                                                      bleController,
+                                                      notificatioManager,
+                                                      settingsController,
+                                                      heartRateController,
+                                                      motionController);
 }
