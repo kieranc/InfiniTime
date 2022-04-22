@@ -29,11 +29,35 @@ namespace Pinetime {
           lv_obj_t * btnPrevTile;
           lv_obj_t * btnOpacity;
           lv_obj_t * btnReset;
-          lv_obj_t * listColor;
+         // lv_obj_t * listColor;
+          //lv_obj_t * listColorM;
+          lv_obj_t * theme1p1;
+          lv_obj_t * theme1p1m;
+          lv_obj_t * theme1p2;
+          lv_obj_t * theme1p2m;
+          lv_obj_t * theme1p3;
+          lv_obj_t * theme1p3m;
+          lv_obj_t * theme2p1;
+          lv_obj_t * theme2p1m;
+          lv_obj_t * theme2p2;
+          lv_obj_t * theme2p2m;
+          lv_obj_t * theme2p3;
+          lv_obj_t * theme2p3m;
+          lv_obj_t * theme3p1;
+          lv_obj_t * theme3p1m;
+          lv_obj_t * theme3p2;
+          lv_obj_t * theme3p2m;
+          lv_obj_t * theme3p3;
+          lv_obj_t * theme3p3m;
           lv_obj_t * tileColor;
-          lv_obj_t * labelList;
-          lv_obj_t * labelTile;
+          lv_obj_t * labelTheme1;
+          lv_obj_t * labelTheme2;
+          lv_obj_t * labelTheme3;
+          lv_obj_t * labelIcon1;
+          lv_obj_t * labelIcon2;
+          lv_obj_t * labelIcon3;
           lv_obj_t * backgroundLabel;
+          //lv_draw_mask_line_param_t * mask1;
       };
     }
   }
