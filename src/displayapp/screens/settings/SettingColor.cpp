@@ -15,21 +15,25 @@ namespace {
 */
 SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::Settings& settingsController)
   : Screen(app), settingsController {settingsController} {
-//Theme1P1
+  // Theme1P1
+  // Some notes about the code below, used to create a multi-color button with angled divisions using the LVGL masking feature
+  // Create the mask object the full size of the original button
   theme1p1m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme1p1m, 220, 60);
   lv_obj_align(theme1p1m, lv_scr_act(), LV_ALIGN_CENTER, 0, -80);
-
+  // Create the mask, add some points to define the 'cut' line and add the mask to the mask object
   lv_draw_mask_line_param_t theme1m1;
   lv_draw_mask_line_points_init(&theme1m1, 140, 0, 130, 60, LV_DRAW_MASK_LINE_SIDE_LEFT);
   lv_objmask_add_mask(theme1p1m, &theme1m1);
-
-  theme1p1 = lv_obj_create(theme1p1m, theme1p1m);
+  // Create the button based on the cut size of the masked object
+  theme1p1 = lv_btn_create(theme1p1m, theme1p1m);
   lv_obj_align(theme1p1, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme1p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x19e3b1));
   lv_obj_set_style_local_bg_opa(theme1p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
   lv_obj_set_style_local_radius(theme1p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 15);
-//Theme1P2
+  // Repeat for the other parts, part 2 has 2 masks as it's only the middle piece of the button
+
+  // Theme1P2
   theme1p2m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme1p2m, 220, 60);
   lv_obj_align(theme1p2m, lv_scr_act(), LV_ALIGN_CENTER, 0, -80);
@@ -42,13 +46,13 @@ SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Co
   lv_objmask_add_mask(theme1p2m, &theme1m2);
   lv_objmask_add_mask(theme1p2m, &theme1m3);
 
-  theme1p2 = lv_obj_create(theme1p2m, theme1p2m);
+  theme1p2 = lv_btn_create(theme1p2m, theme1p2m);
   lv_obj_align(theme1p2, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme1p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xf5f6f3));
   lv_obj_set_style_local_bg_opa(theme1p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
   lv_obj_set_style_local_radius(theme1p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 15);
 
-//Theme1P3
+  // Theme1P3
   theme1p3m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme1p3m, 220, 60);
   lv_obj_align(theme1p3m, lv_scr_act(), LV_ALIGN_CENTER, 0, -80);
@@ -57,13 +61,13 @@ SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Co
   lv_draw_mask_line_points_init(&theme1m4, 160, 0, 150, 60, LV_DRAW_MASK_LINE_SIDE_RIGHT);
   lv_objmask_add_mask(theme1p3m, &theme1m4);
 
-  theme1p3 = lv_obj_create(theme1p3m, theme1p3m);
+  theme1p3 = lv_btn_create(theme1p3m, theme1p3m);
   lv_obj_align(theme1p3, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme1p3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x0236fb));
   lv_obj_set_style_local_bg_opa(theme1p3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
   lv_obj_set_style_local_radius(theme1p3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 15);
 
-//Theme2P1
+  // Theme2P1
   theme2p1m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme2p1m, 220, 60);
   lv_obj_align(theme2p1m, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
@@ -72,12 +76,13 @@ SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Co
   lv_draw_mask_line_points_init(&theme2m1, 140, 0, 130, 60, LV_DRAW_MASK_LINE_SIDE_LEFT);
   lv_objmask_add_mask(theme2p1m, &theme2m1);
 
-  theme2p1 = lv_obj_create(theme2p1m, theme2p1m);
+  theme2p1 = lv_btn_create(theme2p1m, theme2p1m);
   lv_obj_align(theme2p1, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme2p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x81d7ce));
   lv_obj_set_style_local_bg_opa(theme2p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
   lv_obj_set_style_local_radius(theme2p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 15);
-//Theme2P2
+
+  // Theme2P2
   theme2p2m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme2p2m, 220, 60);
   lv_obj_align(theme2p2m, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
@@ -90,13 +95,13 @@ SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Co
   lv_objmask_add_mask(theme2p2m, &theme2m2);
   lv_objmask_add_mask(theme2p2m, &theme2m3);
 
-  theme2p2 = lv_obj_create(theme2p2m, theme2p2m);
+  theme2p2 = lv_btn_create(theme2p2m, theme2p2m);
   lv_obj_align(theme2p2, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme2p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xa2a1a1));
   lv_obj_set_style_local_bg_opa(theme2p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
   lv_obj_set_style_local_radius(theme2p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 15);
 
-//Theme2P3
+  // Theme2P3
   theme2p3m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme2p3m, 220, 60);
   lv_obj_align(theme2p3m, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
@@ -105,13 +110,13 @@ SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Co
   lv_draw_mask_line_points_init(&theme2m4, 160, 0, 150, 60, LV_DRAW_MASK_LINE_SIDE_RIGHT);
   lv_objmask_add_mask(theme2p3m, &theme2m4);
 
-  theme2p3 = lv_obj_create(theme2p3m, theme2p3m);
+  theme2p3 = lv_btn_create(theme2p3m, theme2p3m);
   lv_obj_align(theme2p3, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme2p3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xf35162));
   lv_obj_set_style_local_bg_opa(theme2p3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
   lv_obj_set_style_local_radius(theme2p3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 15);
 
-  //Theme3P1
+  // Theme3P1
   theme3p1m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme3p1m, 220, 60);
   lv_obj_align(theme3p1m, lv_scr_act(), LV_ALIGN_CENTER, 0, 80);
@@ -120,12 +125,13 @@ SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Co
   lv_draw_mask_line_points_init(&theme3m1, 140, 0, 130, 60, LV_DRAW_MASK_LINE_SIDE_LEFT);
   lv_objmask_add_mask(theme3p1m, &theme3m1);
 
-  theme3p1 = lv_obj_create(theme3p1m, theme3p1m);
+  theme3p1 = lv_btn_create(theme3p1m, theme3p1m);
   lv_obj_align(theme3p1, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme3p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xf0bd3c));
   lv_obj_set_style_local_bg_opa(theme3p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
   lv_obj_set_style_local_radius(theme3p1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 15);
-//Theme3P2
+
+  // Theme3P2
   theme3p2m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme3p2m, 220, 60);
   lv_obj_align(theme3p2m, lv_scr_act(), LV_ALIGN_CENTER, 0, 80);
@@ -138,13 +144,13 @@ SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Co
   lv_objmask_add_mask(theme3p2m, &theme3m2);
   lv_objmask_add_mask(theme3p2m, &theme3m3);
 
-  theme3p2 = lv_obj_create(theme3p2m, theme3p2m);
+  theme3p2 = lv_btn_create(theme3p2m, theme3p2m);
   lv_obj_align(theme3p2, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme3p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xe8e9eb));
   lv_obj_set_style_local_bg_opa(theme3p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
   lv_obj_set_style_local_radius(theme3p2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 15);
 
-//Theme3P3
+  // Theme3P3
   theme3p3m = lv_objmask_create(lv_scr_act(), nullptr);
   lv_obj_set_size(theme3p3m, 220, 60);
   lv_obj_align(theme3p3m, lv_scr_act(), LV_ALIGN_CENTER, 0, 80);
@@ -153,7 +159,7 @@ SettingColor::SettingColor(Pinetime::Applications::DisplayApp* app, Pinetime::Co
   lv_draw_mask_line_points_init(&theme3m4, 160, 0, 150, 60, LV_DRAW_MASK_LINE_SIDE_RIGHT);
   lv_objmask_add_mask(theme3p3m, &theme3m4);
 
-  theme3p3 = lv_obj_create(theme3p3m, theme3p3m);
+  theme3p3 = lv_btn_create(theme3p3m, theme3p3m);
   lv_obj_align(theme3p3, nullptr, LV_ALIGN_CENTER, 0, 0);
   lv_obj_set_style_local_bg_color(theme3p3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x009ecb));
   lv_obj_set_style_local_bg_opa(theme3p3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_100);
