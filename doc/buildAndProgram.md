@@ -12,6 +12,10 @@ To build this project, you'll need:
 	 python -m pip install -r tools/mcuboot/requirements.txt
 	 ```
  - A reasonably recent version of CMake (I use 3.16.5)
+ - lv_font_conv, to generate the font .c files
+   - see [lv_font_conv](https://github.com/lvgl/lv_font_conv#install-the-script)
+   - install npm (commonly done via the package manager, ensure node's version is at least 12)
+   - install lv_font_conv: `npm install lv_font_conv`
 
 ## Build steps 
 ### Clone the repo
@@ -43,7 +47,7 @@ By default, this variable is set to *Release*. It compiles the code with size an
 The *Debug* mode disables all optimizations, which makes the code easier to debug. However, the binary size will likely be too big to fit in the internal flash memory. If you want to build and debug a *Debug* binary, you'll need to disable some parts of the code. For example, the icons for the **Navigation** app use a lot of memory space. You can comment the content of `m_iconMap` in the [Navigation](https://github.com/InfiniTimeOrg/InfiniTime/blob/develop/src/displayapp/screens/Navigation.h#L148) application to free some memory.
 
 ####(**) Note about **BUILD_DFU**:
-DFU files are the files you'll need to install your build of InfiniTime using OTA (over-the-air) mecanism. To generate the DFU file, the Python tool [adafruit-nrfutil](https://github.com/adafruit/Adafruit_nRF52_nrfutil) is needed on your system. Check that this tool is properly installed before enabling this option.
+DFU files are the files you'll need to install your build of InfiniTime using OTA (over-the-air) mechanism. To generate the DFU file, the Python tool [adafruit-nrfutil](https://github.com/adafruit/Adafruit_nRF52_nrfutil) is needed on your system. Check that this tool is properly installed before enabling this option.
 
 #### CMake command line for JLink
 ```
