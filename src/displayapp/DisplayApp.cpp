@@ -130,6 +130,11 @@ void DisplayApp::InitHw() {
 }
 
 void DisplayApp::Refresh() {
+  auto LoadPreviousScreen = [this]() {
+    brightnessController.Set(settingsController.GetBrightness());
+    LoadApp(returnToApp, returnDirection);
+  };
+
   TickType_t queueTimeout;
   switch (state) {
     case States::Idle:
@@ -137,7 +142,7 @@ void DisplayApp::Refresh() {
       break;
     case States::Running:
       if (!currentScreen->IsRunning()) {
-        LoadApp(returnToApp, returnDirection);
+        LoadPreviousScreen();
       }
       queueTimeout = lv_task_handler();
       break;
@@ -150,12 +155,10 @@ void DisplayApp::Refresh() {
   if (xQueueReceive(msgQueue, &msg, queueTimeout)) {
     switch (msg) {
       case Messages::DimScreen:
-        // Backup brightness is the brightness to return to after dimming or sleeping
-        brightnessController.Backup();
         brightnessController.Set(Controllers::BrightnessController::Levels::Low);
         break;
       case Messages::RestoreBrightness:
-        brightnessController.Restore();
+        brightnessController.Set(settingsController.GetBrightness());
         break;
       case Messages::GoToSleep:
         while (brightnessController.Level() != Controllers::BrightnessController::Levels::Off) {
@@ -166,7 +169,7 @@ void DisplayApp::Refresh() {
         state = States::Idle;
         break;
       case Messages::GoToRunning:
-        brightnessController.Restore();
+        brightnessController.Set(settingsController.GetBrightness());
         state = States::Running;
         break;
       case Messages::UpdateTimeOut:
@@ -225,9 +228,7 @@ void DisplayApp::Refresh() {
                 break;
             }
           } else if (returnTouchEvent == gesture) {
-            LoadApp(returnToApp, returnDirection);
-            brightnessController.Set(settingsController.GetBrightness());
-            brightnessController.Backup();
+            LoadPreviousScreen();
           }
         } else {
           touchHandler.CancelTap();
@@ -238,9 +239,7 @@ void DisplayApp::Refresh() {
           if (currentApp == Apps::Clock) {
             PushMessageToSystemTask(System::Messages::GoToSleep);
           } else {
-            LoadApp(returnToApp, returnDirection);
-            brightnessController.Set(settingsController.GetBrightness());
-            brightnessController.Backup();
+            LoadPreviousScreen();
           }
         }
         break;
