@@ -131,7 +131,6 @@ void DisplayApp::InitHw() {
 
 void DisplayApp::Refresh() {
   auto LoadPreviousScreen = [this]() {
-    brightnessController.Set(settingsController.GetBrightness());
     LoadApp(returnToApp, returnDirection);
   };
 
@@ -185,7 +184,7 @@ void DisplayApp::Refresh() {
       case Messages::TimerDone:
         if (currentApp == Apps::Timer) {
           auto* timer = static_cast<Screens::Timer*>(currentScreen.get());
-          timer->SetDone();
+          timer->Reset();
         } else {
           LoadApp(Apps::Timer, DisplayApp::FullRefreshDirections::Down);
         }
@@ -303,6 +302,8 @@ void DisplayApp::ReturnApp(Apps app, DisplayApp::FullRefreshDirections direction
 
 void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) {
   touchHandler.CancelTap();
+  brightnessController.Set(settingsController.GetBrightness());
+
   currentScreen.reset(nullptr);
   SetFullRefresh(direction);
 
@@ -311,7 +312,8 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
 
   switch (app) {
     case Apps::Launcher:
-      currentScreen = std::make_unique<Screens::ApplicationList>(this, settingsController, batteryController, dateTimeController);
+      currentScreen =
+        std::make_unique<Screens::ApplicationList>(this, settingsController, batteryController, bleController, dateTimeController);
       ReturnApp(Apps::Clock, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
     case Apps::None:
@@ -368,7 +370,7 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       currentScreen = std::make_unique<Screens::Timer>(this, timerController);
       break;
     case Apps::Alarm:
-      currentScreen = std::make_unique<Screens::Alarm>(this, alarmController, settingsController, *systemTask);
+      currentScreen = std::make_unique<Screens::Alarm>(this, alarmController, settingsController.GetClockType(), *systemTask);
       break;
 
     // Settings
@@ -378,7 +380,8 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
                                                                dateTimeController,
                                                                brightnessController,
                                                                motorController,
-                                                               settingsController);
+                                                               settingsController,
+                                                               bleController);
       ReturnApp(Apps::Clock, FullRefreshDirections::LeftAnim, TouchEvents::SwipeLeft);
       break;
     case Apps::Settings:
