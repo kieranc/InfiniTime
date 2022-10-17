@@ -56,7 +56,7 @@ using namespace Pinetime::Applications;
 using namespace Pinetime::Applications::Display;
 
 namespace {
-  static inline bool in_isr(void) {
+  inline bool in_isr() {
     return (SCB->ICSR & SCB_ICSR_VECTACTIVE_Msk) != 0;
   }
 }
@@ -76,7 +76,8 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
                        Pinetime::Controllers::TimerController& timerController,
                        Pinetime::Controllers::AlarmController& alarmController,
                        Pinetime::Controllers::BrightnessController& brightnessController,
-                       Pinetime::Controllers::TouchHandler& touchHandler)
+                       Pinetime::Controllers::TouchHandler& touchHandler,
+                       Pinetime::Controllers::FS& filesystem)
   : lcd {lcd},
     lvgl {lvgl},
     touchPanel {touchPanel},
@@ -92,7 +93,8 @@ DisplayApp::DisplayApp(Drivers::St7789& lcd,
     timerController {timerController},
     alarmController {alarmController},
     brightnessController {brightnessController},
-    touchHandler {touchHandler} {
+    touchHandler {touchHandler},
+    filesystem {filesystem} {
 }
 
 void DisplayApp::Start(System::BootErrors error) {
@@ -126,7 +128,7 @@ void DisplayApp::Process(void* instance) {
 
 void DisplayApp::InitHw() {
   brightnessController.Init();
-  brightnessController.Set(settingsController.GetBrightness());
+  ApplyBrightness();
 }
 
 void DisplayApp::Refresh() {
@@ -157,7 +159,7 @@ void DisplayApp::Refresh() {
         brightnessController.Set(Controllers::BrightnessController::Levels::Low);
         break;
       case Messages::RestoreBrightness:
-        brightnessController.Set(settingsController.GetBrightness());
+        ApplyBrightness();
         break;
       case Messages::GoToSleep:
         while (brightnessController.Level() != Controllers::BrightnessController::Levels::Off) {
@@ -168,7 +170,7 @@ void DisplayApp::Refresh() {
         state = States::Idle;
         break;
       case Messages::GoToRunning:
-        brightnessController.Set(settingsController.GetBrightness());
+        ApplyBrightness();
         state = States::Running;
         break;
       case Messages::UpdateTimeOut:
@@ -302,7 +304,7 @@ void DisplayApp::ReturnApp(Apps app, DisplayApp::FullRefreshDirections direction
 
 void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) {
   touchHandler.CancelTap();
-  brightnessController.Set(settingsController.GetBrightness());
+  ApplyBrightness();
 
   currentScreen.reset(nullptr);
   SetFullRefresh(direction);
@@ -326,7 +328,8 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
                                                        settingsController,
                                                        heartRateController,
                                                        motionController,
-                                                       systemTask->nimble().weather());
+                                                       systemTask->nimble().weather(),
+                                                       filesystem);
       break;
 
     case Apps::Error:
@@ -389,7 +392,7 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       ReturnApp(Apps::QuickSettings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
     case Apps::SettingWatchFace:
-      currentScreen = std::make_unique<Screens::SettingWatchFace>(this, settingsController);
+      currentScreen = std::make_unique<Screens::SettingWatchFace>(this, settingsController, filesystem);
       ReturnApp(Apps::Settings, FullRefreshDirections::Down, TouchEvents::SwipeDown);
       break;
     case Apps::SettingTimeFormat:
@@ -529,4 +532,13 @@ void DisplayApp::PushMessageToSystemTask(Pinetime::System::Messages message) {
 
 void DisplayApp::Register(Pinetime::System::SystemTask* systemTask) {
   this->systemTask = systemTask;
+}
+void DisplayApp::ApplyBrightness() {
+  auto brightness = settingsController.GetBrightness();
+  if(brightness != Controllers::BrightnessController::Levels::Low &&
+      brightness != Controllers::BrightnessController::Levels::Medium &&
+      brightness != Controllers::BrightnessController::Levels::High) {
+    brightness = Controllers::BrightnessController::Levels::High;
+  }
+  brightnessController.Set(brightness);
 }
