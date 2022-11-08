@@ -114,36 +114,62 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_label_set_text(notificationIcon, "");
 
+  
   weatherIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_obj_set_style_local_text_font(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &fontawesome_weathericons);
   lv_label_set_text(weatherIcon, Symbols::cloudSunRain);
   lv_obj_align(weatherIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
   lv_obj_set_auto_realign(weatherIcon, true);
+  
 
   //std::unique_ptr<Controllers::WeatherData::Temperature>& current = weatherService.GetCurrentTemperature();
 
-  tempHigh = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
-  lv_obj_set_style_local_text_letter_space(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
-  lv_obj_set_style_local_text_color(tempHigh, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  lv_label_set_text(tempHigh, "--");
+  tempHighLbl = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
+  lv_obj_set_style_local_text_letter_space(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
+  lv_obj_set_style_local_text_color(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  //lv_label_set_text(tempHighLbl, "--");
   //lv_label_set_text_fmt(tempHigh, "%d#°C", current->temperature / 100);
   //lv_label_set_text_fmt(tempHigh, "%i°C", weatherService.GetTodayMaxTemp() / 100);
-  lv_obj_align(tempHigh, sidebar, LV_ALIGN_IN_LEFT_MID, 2, -50);
+  lv_obj_align(tempHighLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -90);
 
   /* tempSlash = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_label_set_text(tempSlash, "25/11");
   lv_obj_align(tempSlash, sidebar, LV_ALIGN_IN_TOP_MID, 0, 70); */
 
-  tempLow = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
-  lv_obj_set_style_local_text_letter_space(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
-  lv_obj_set_style_local_text_color(tempLow, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  lv_label_set_text(tempLow, "--");
+  tempLowLbl = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
+  lv_obj_set_style_local_text_letter_space(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
+  lv_obj_set_style_local_text_color(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  //lv_label_set_text(tempLowLbl, "--");
   //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
-  lv_obj_align(tempLow, sidebar, LV_ALIGN_IN_LEFT_MID, 2, -30);
+  lv_obj_align(tempLowLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -70);
+
+  tempLbl = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
+  lv_obj_set_style_local_text_letter_space(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
+  lv_obj_set_style_local_text_color(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  //lv_label_set_text(tempLbl, "--");
+  //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
+  lv_obj_align(tempLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -50);
+
+  precipLbl = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
+  lv_obj_set_style_local_text_letter_space(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
+  lv_obj_set_style_local_text_color(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  //lv_label_set_text(precipLbl, "--");
+  //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
+  lv_obj_align(precipLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -30);
+
+  cloudsLbl = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_set_style_local_text_font(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
+  lv_obj_set_style_local_text_letter_space(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
+  lv_obj_set_style_local_text_color(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
+  //lv_label_set_text(cloudsLbl, "--");
+  //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
+  lv_obj_align(cloudsLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -10);
 
   // Calendar icon
   calendarOuter = lv_obj_create(lv_scr_act(), nullptr);
@@ -556,26 +582,36 @@ void WatchFacePineTimeStyle::Refresh() {
 
   minTemp = (weatherService.GetTodayMinTemp() / 100);
   maxTemp = (weatherService.GetTodayMaxTemp() / 100);
+  nowTemp = (weatherService.GetCurrentTemperature()->temperature / 100);
   clouds = (weatherService.GetCurrentClouds()->amount);
   precip = (weatherService.GetCurrentPrecipitation()->amount);
   //if (minTemp.IsUpdated() || maxTemp.IsUpdated() || clouds.IsUpdated() || precip.IsUpdated()) {
-  if (minTemp.IsUpdated() || maxTemp.IsUpdated()) {
+  //if (minTemp.IsUpdated() || maxTemp.IsUpdated()) {
   //if (true) {
-    lv_label_set_text_fmt(tempLow, "%d", minTemp);
-    lv_label_set_text_fmt(tempHigh, "%d", maxTemp);
-    if ((clouds < 50) && (precip < 30)) {
+    lv_label_set_text_fmt(tempHighLbl, "%d", maxTemp);
+    lv_label_set_text_fmt(tempLowLbl, "%d", minTemp);
+    lv_label_set_text_fmt(tempLbl, "%d", nowTemp);
+    lv_label_set_text_fmt(precipLbl, "%d", precip);
+    lv_label_set_text_fmt(cloudsLbl, "%d", clouds);
+
+    
+    if ((clouds <= 30) && (precip < 1)) {
       lv_label_set_text(weatherIcon, Symbols::sun);
-    } else if ((clouds > 50) && (precip < 30)) {
+    } else if ((clouds > 75) && (precip < 3)) {
       lv_label_set_text(weatherIcon, Symbols::cloud);
-    } else if ((clouds > 50) && (precip > 30)) {
+    } else if ((clouds > 75) && (precip >= 3)) {
       lv_label_set_text(weatherIcon, Symbols::cloudShowersHeavy);
     } else {
-      lv_label_set_text(weatherIcon, Symbols::cloudSunRain);
+      lv_label_set_text(weatherIcon, Symbols::cloudSun);
     };
-    lv_obj_realign(tempLow);
-    lv_obj_realign(tempHigh);
+    
+    lv_obj_realign(tempHighLbl);
+    lv_obj_realign(tempLowLbl);
+    lv_obj_realign(tempLbl);
+    lv_obj_realign(precipLbl);
+    lv_obj_realign(cloudsLbl);
     lv_obj_realign(weatherIcon);
-  }
+  //}
 
   if (!lv_obj_get_hidden(btnSetColor)) {
     if ((savedTick > 0) && (lv_tick_get() - savedTick > 3000)) {

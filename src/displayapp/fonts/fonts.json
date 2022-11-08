@@ -89,10 +89,10 @@
       "sources": [
          {
             "file": "FontAwesome5-Solid+Brands+Regular.woff",
-            "range": "0xf185, 0xf6c4, 0xf743, 0xf740, 0xf75f"
+            "range": "0xf185, 0xf6c4, 0xf743, 0xf740, 0xf75f, 0xf0c2"
          }
       ],
       "bpp": 1,
-      "size": 30
+      "size": 25
    }
 }

@@ -29,7 +29,7 @@
 #include "displayapp/screens/Steps.h"
 #include "displayapp/screens/PassKey.h"
 #include "displayapp/screens/Error.h"
-#include <components/ble/weather/WeatherService.h>
+#include "displayapp/screens/Weather.h"
 
 #include "drivers/Cst816s.h"
 #include "drivers/St7789.h"
@@ -478,6 +478,9 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
       break;
     case Apps::Motion:
       currentScreen = std::make_unique<Screens::Motion>(this, motionController);
+      break;
+    case Apps::Weather:
+      currentScreen = std::make_unique<Screens::Weather>(this, systemTask->nimble().weather());
       break;
     case Apps::Steps:
       currentScreen = std::make_unique<Screens::Steps>(this, motionController, settingsController);
