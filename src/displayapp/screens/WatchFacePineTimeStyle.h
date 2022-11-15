@@ -98,10 +98,12 @@ namespace Pinetime {
         lv_obj_t* tempHighLbl;
         lv_obj_t* tempLowLbl;
         lv_obj_t* tempLbl;
+        lv_obj_t* tempSlash;
         lv_obj_t* precipLbl;
         lv_obj_t* cloudsLbl;
         lv_obj_t* plugIcon;
         lv_obj_t* bleIcon;
+        lv_obj_t* bleAlert;
         lv_obj_t* calendarOuter;
         lv_obj_t* calendarInner;
         lv_obj_t* calendarBar1;

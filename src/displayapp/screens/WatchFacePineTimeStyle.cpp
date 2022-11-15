@@ -99,27 +99,35 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   // Display icons
   batteryIcon.Create(sidebar);
   batteryIcon.SetColor(LV_COLOR_BLACK);
-  lv_obj_align(batteryIcon.GetObject(), nullptr, LV_ALIGN_IN_TOP_MID, 0, 2);
+  lv_obj_align(batteryIcon.GetObject(), nullptr, LV_ALIGN_IN_TOP_MID, 10, 2);
 
   plugIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_text_static(plugIcon, Symbols::plug);
   lv_obj_set_style_local_text_color(plugIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_obj_align(plugIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 2);
+  lv_obj_align(plugIcon, sidebar, LV_ALIGN_IN_TOP_MID, 10, 2);
 
   bleIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
-  lv_label_set_text(bleIcon, "");
+  lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+  lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, -10, 2);
+  //lv_obj_set_style_local_text_letter_space(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -10);
+  //lv_label_set_text(bleIcon, "");
+
+  /*bleAlert = lv_label_create(bleIcon, nullptr);
+  lv_obj_set_style_local_text_color(bleAlert, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_RED);
+  lv_obj_align(bleAlert, bleIcon, LV_ALIGN_CENTER, 0, 0);
+  lv_label_set_text_static(bleAlert, "x");*/
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
-  lv_label_set_text(notificationIcon, "");
+  lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
+  //lv_label_set_text(notificationIcon, "");
 
   
   weatherIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_obj_set_style_local_text_font(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &fontawesome_weathericons);
   lv_label_set_text(weatherIcon, Symbols::cloudSunRain);
-  lv_obj_align(weatherIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
+  lv_obj_align(weatherIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 35);
   lv_obj_set_auto_realign(weatherIcon, true);
   
 
@@ -132,12 +140,16 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   //lv_label_set_text(tempHighLbl, "--");
   //lv_label_set_text_fmt(tempHigh, "%d#°C", current->temperature / 100);
   //lv_label_set_text_fmt(tempHigh, "%i°C", weatherService.GetTodayMaxTemp() / 100);
-  lv_obj_align(tempHighLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -90);
+  lv_obj_align(tempHighLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -40);
+  
 
-  /* tempSlash = lv_label_create(lv_scr_act(), nullptr);
+  tempSlash = lv_label_create(lv_scr_act(), nullptr);
+  //lv_obj_set_style_local_text_font(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_color(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  lv_label_set_text(tempSlash, "25/11");
-  lv_obj_align(tempSlash, sidebar, LV_ALIGN_IN_TOP_MID, 0, 70); */
+  lv_obj_set_style_local_text_letter_space(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -2);
+  //lv_label_set_text(tempSlash, "25°");
+  lv_obj_align(tempSlash, sidebar, LV_ALIGN_IN_TOP_MID, 0, 65);
+
 
   tempLowLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
@@ -145,7 +157,7 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_text_color(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   //lv_label_set_text(tempLowLbl, "--");
   //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
-  lv_obj_align(tempLowLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -70);
+  lv_obj_align(tempLowLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -20);
 
   tempLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
@@ -153,7 +165,7 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_text_color(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   //lv_label_set_text(tempLbl, "--");
   //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
-  lv_obj_align(tempLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -50);
+  lv_obj_align(tempLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 0);
 
   precipLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
@@ -161,7 +173,7 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_text_color(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   //lv_label_set_text(precipLbl, "--");
   //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
-  lv_obj_align(precipLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -30);
+  lv_obj_align(precipLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 20);
 
   cloudsLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
@@ -169,14 +181,14 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_text_color(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   //lv_label_set_text(cloudsLbl, "--");
   //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
-  lv_obj_align(cloudsLbl, sidebar, LV_ALIGN_IN_LEFT_MID, -20, -10);
+  lv_obj_align(cloudsLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 40);
 
   // Calendar icon
   calendarOuter = lv_obj_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_bg_color(calendarOuter, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_set_style_local_radius(calendarOuter, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
   lv_obj_set_size(calendarOuter, 34, 34);
-  lv_obj_align(calendarOuter, sidebar, LV_ALIGN_CENTER, 0, 25);
+  lv_obj_align(calendarOuter, sidebar, LV_ALIGN_CENTER, 0, 20);
 
   calendarInner = lv_obj_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_bg_color(calendarInner, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_WHITE);
@@ -465,17 +477,17 @@ void WatchFacePineTimeStyle::SetBatteryIcon() {
   batteryIcon.SetBatteryPercentage(batteryPercent);
 }
 
-void WatchFacePineTimeStyle::AlignIcons() {
+/*void WatchFacePineTimeStyle::AlignIcons() {
   if (notificationState.Get() && bleState.Get()) {
     lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 8, 25);
-    lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, -8, 25);
+    lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_MID, -8, 25);
   } else if (notificationState.Get() && !bleState.Get()) {
-    lv_obj_align(notificationIcon, sidebar, LV_ALIGN_IN_TOP_MID, 0, 25);
+    lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_MID, 0, 25);
   } else {
-    lv_obj_align(bleIcon, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
+    lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 5, 5);
   }
 }
-
+*/
 void WatchFacePineTimeStyle::Refresh() {
   isCharging = batteryController.IsCharging();
   if (isCharging.IsUpdated()) {
@@ -499,13 +511,14 @@ void WatchFacePineTimeStyle::Refresh() {
   bleRadioEnabled = bleController.IsRadioEnabled();
   if (bleState.IsUpdated() || bleRadioEnabled.IsUpdated()) {
     lv_label_set_text_static(bleIcon, BleIcon::GetIcon(bleState.Get()));
-    AlignIcons();
+    lv_obj_realign(bleIcon);
+   // AlignIcons();
   }
 
   notificationState = notificationManager.AreNewNotificationsAvailable();
   if (notificationState.IsUpdated()) {
     lv_label_set_text_static(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
-    AlignIcons();
+   // AlignIcons();
   }
 
   currentDateTime = dateTimeController.CurrentDateTime();
@@ -588,11 +601,12 @@ void WatchFacePineTimeStyle::Refresh() {
   //if (minTemp.IsUpdated() || maxTemp.IsUpdated() || clouds.IsUpdated() || precip.IsUpdated()) {
   //if (minTemp.IsUpdated() || maxTemp.IsUpdated()) {
   //if (true) {
-    lv_label_set_text_fmt(tempHighLbl, "%d", maxTemp);
-    lv_label_set_text_fmt(tempLowLbl, "%d", minTemp);
-    lv_label_set_text_fmt(tempLbl, "%d", nowTemp);
+    lv_label_set_text_fmt(tempHighLbl, "%d°", maxTemp);
+    lv_label_set_text_fmt(tempLowLbl, "%d°", minTemp);
+    lv_label_set_text_fmt(tempLbl, "%d°", nowTemp);
+    lv_label_set_text_fmt(tempSlash, "%d°", nowTemp);
     lv_label_set_text_fmt(precipLbl, "%d", precip);
-    lv_label_set_text_fmt(cloudsLbl, "%d", clouds);
+    lv_label_set_text_fmt(cloudsLbl, "C %d", clouds);
 
     
     if ((clouds <= 30) && (precip < 1)) {
@@ -608,6 +622,7 @@ void WatchFacePineTimeStyle::Refresh() {
     lv_obj_realign(tempHighLbl);
     lv_obj_realign(tempLowLbl);
     lv_obj_realign(tempLbl);
+    lv_obj_realign(tempSlash);
     lv_obj_realign(precipLbl);
     lv_obj_realign(cloudsLbl);
     lv_obj_realign(weatherIcon);
