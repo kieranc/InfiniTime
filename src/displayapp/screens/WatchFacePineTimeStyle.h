@@ -83,6 +83,7 @@ namespace Pinetime {
         lv_obj_t* btnRandom;
         lv_obj_t* btnClose;
         lv_obj_t* btnSteps;
+        lv_obj_t* btnWeather;
         lv_obj_t* timebar;
         lv_obj_t* sidebar;
         lv_obj_t* timeDD1;
@@ -103,7 +104,7 @@ namespace Pinetime {
         lv_obj_t* cloudsLbl;
         lv_obj_t* plugIcon;
         lv_obj_t* bleIcon;
-        lv_obj_t* bleAlert;
+        //lv_obj_t* bleAlert;
         lv_obj_t* calendarOuter;
         lv_obj_t* calendarInner;
         lv_obj_t* calendarBar1;
@@ -114,8 +115,8 @@ namespace Pinetime {
         lv_obj_t* stepGauge;
         lv_obj_t* btnSetColor;
         lv_obj_t* btnSetOpts;
-        lv_obj_t* lbl_btnSetColor;
-        lv_obj_t* lbl_btnSetOpts;
+        //lv_obj_t* lbl_btnSetColor;
+        //lv_obj_t* lbl_btnSetOpts;
         lv_obj_t* stepIcon;
         lv_obj_t* stepValue;
         lv_color_t needle_colors[1];

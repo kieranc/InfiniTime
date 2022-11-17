@@ -404,6 +404,16 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   lv_obj_set_event_cb(btnSteps, event_handler);
   lv_obj_set_hidden(btnSteps, true);
 
+  btnWeather = lv_btn_create(lv_scr_act(), nullptr);
+  btnWeather->user_data = this;
+  lv_obj_set_size(btnSteps, 160, 60);
+  lv_obj_align(btnWeather, lv_scr_act(), LV_ALIGN_CENTER, 0, 90);
+  lv_obj_set_style_local_bg_opa(btnWeather, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
+  lv_obj_t* lblWeather = lv_label_create(btnWeather, nullptr);
+  lv_label_set_text_static(lblWeather, "Steps style");
+  lv_obj_set_event_cb(btnWeather, event_handler);
+  lv_obj_set_hidden(btnWeather, true);
+
   btnSetColor = lv_btn_create(lv_scr_act(), nullptr);
   btnSetColor->user_data = this;
   lv_obj_set_size(btnSetColor, 150, 60);
@@ -411,9 +421,9 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_radius(btnSetColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 20);
   lv_obj_set_style_local_bg_opa(btnSetColor, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
   lv_obj_set_event_cb(btnSetColor, event_handler);
-  lbl_btnSetColor = lv_label_create(btnSetColor, nullptr);
-  lv_obj_set_style_local_text_font(lbl_btnSetColor, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_sys_48);
-  lv_label_set_text_static(lbl_btnSetColor, Symbols::paintbrushLg);
+  lv_obj_t* lblSetColor = lv_label_create(btnSetColor, nullptr);
+  lv_obj_set_style_local_text_font(lblSetColor, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_sys_48);
+  lv_label_set_text_static(lblSetColor, Symbols::paintbrushLg);
   lv_obj_set_hidden(btnSetColor, true);
 
   btnSetOpts = lv_btn_create(lv_scr_act(), nullptr);
@@ -423,9 +433,9 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   lv_obj_set_style_local_radius(btnSetOpts, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 20);
   lv_obj_set_style_local_bg_opa(btnSetOpts, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_50);
   lv_obj_set_event_cb(btnSetOpts, event_handler);
-  lbl_btnSetOpts = lv_label_create(btnSetOpts, nullptr);
-  lv_obj_set_style_local_text_font(lbl_btnSetOpts, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_sys_48);
-  lv_label_set_text_static(lbl_btnSetOpts, Symbols::settings);
+  lv_obj_t* lblSetOpts = lv_label_create(btnSetOpts, nullptr);
+  lv_obj_set_style_local_text_font(lblSetOpts, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &lv_font_sys_48);
+  lv_label_set_text_static(lblSetOpts, Symbols::settings);
   lv_obj_set_hidden(btnSetOpts, true);
 
   taskRefresh = lv_task_create(RefreshTaskCallback, LV_DISP_DEF_REFR_PERIOD, LV_TASK_PRIO_MID, this);
