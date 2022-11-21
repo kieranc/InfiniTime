@@ -63,10 +63,10 @@ namespace Pinetime {
         DirtyValue<bool> notificationState {};
         //DirtyValue<int16_t> minTemp {};
         //DirtyValue<int16_t> maxTemp {};
-        //DirtyValue<int16_t> nowTemp {};
+        DirtyValue<int16_t> nowTemp {};
         int16_t minTemp = 0;
         int16_t maxTemp = 0;
-        int16_t nowTemp = 0;
+        //int16_t nowTemp2 = 0;
         int16_t clouds = 0;
         int16_t precip = 0;
 
@@ -93,8 +93,6 @@ namespace Pinetime {
         lv_obj_t* dateDayOfWeek;
         lv_obj_t* dateDay;
         lv_obj_t* dateMonth;
-//        lv_obj_t* backgroundLabel;
-        //lv_obj_t* batteryIcon;
         lv_obj_t* weatherIcon;
         lv_obj_t* tempHighLbl;
         lv_obj_t* tempLowLbl;
@@ -104,7 +102,6 @@ namespace Pinetime {
         lv_obj_t* cloudsLbl;
         lv_obj_t* plugIcon;
         lv_obj_t* bleIcon;
-        //lv_obj_t* bleAlert;
         lv_obj_t* calendarOuter;
         lv_obj_t* calendarInner;
         lv_obj_t* calendarBar1;
@@ -115,8 +112,6 @@ namespace Pinetime {
         lv_obj_t* stepGauge;
         lv_obj_t* btnSetColor;
         lv_obj_t* btnSetOpts;
-        //lv_obj_t* lbl_btnSetColor;
-        //lv_obj_t* lbl_btnSetOpts;
         lv_obj_t* stepIcon;
         lv_obj_t* stepValue;
         lv_color_t needle_colors[1];

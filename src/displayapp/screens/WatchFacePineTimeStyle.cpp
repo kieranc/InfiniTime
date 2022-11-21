@@ -109,19 +109,10 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   bleIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, -10, 2);
-  //lv_obj_set_style_local_text_letter_space(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -10);
-  //lv_label_set_text(bleIcon, "");
-
-  /*bleAlert = lv_label_create(bleIcon, nullptr);
-  lv_obj_set_style_local_text_color(bleAlert, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_RED);
-  lv_obj_align(bleAlert, bleIcon, LV_ALIGN_CENTER, 0, 0);
-  lv_label_set_text_static(bleAlert, "x");*/
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
-  //lv_label_set_text(notificationIcon, "");
-
   
   weatherIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
@@ -135,24 +126,14 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
     lv_obj_set_hidden(weatherIcon, true);
   }
   
-
-  //std::unique_ptr<Controllers::WeatherData::Temperature>& current = weatherService.GetCurrentTemperature();
-
   tempHighLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  //lv_label_set_text(tempHighLbl, "--");
-  //lv_label_set_text_fmt(tempHigh, "%d#°C", current->temperature / 100);
-  //lv_label_set_text_fmt(tempHigh, "%i°C", weatherService.GetTodayMaxTemp() / 100);
   lv_obj_align(tempHighLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -40);
   
-
   tempSlash = lv_label_create(lv_scr_act(), nullptr);
-  //lv_obj_set_style_local_text_font(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_color(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  //lv_obj_set_style_local_text_letter_space(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -2);
-  //lv_label_set_text(tempSlash, "25°");
   lv_obj_align(tempSlash, sidebar, LV_ALIGN_IN_TOP_MID, 0, 65);
   if (settingsController.GetPTSWeather() == Pinetime::Controllers::Settings::PTSWeather::On) {
     lv_obj_set_hidden(tempSlash, false);
@@ -160,37 +141,28 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
     lv_obj_set_hidden(tempSlash, true);
   }
 
-
   tempLowLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  //lv_label_set_text(tempLowLbl, "--");
-  //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
   lv_obj_align(tempLowLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -20);
 
   tempLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  //lv_label_set_text(tempLbl, "--");
-  //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
   lv_obj_align(tempLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 0);
 
   precipLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  //lv_label_set_text(precipLbl, "--");
-  //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
   lv_obj_align(precipLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 20);
 
   cloudsLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
-  //lv_label_set_text(cloudsLbl, "--");
-  //lv_label_set_text_fmt(tempLow, "%i°C", weatherService.GetTodayMinTemp() / 100);
   lv_obj_align(cloudsLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 40);
 
   // Calendar icon
@@ -502,17 +474,6 @@ void WatchFacePineTimeStyle::SetBatteryIcon() {
   batteryIcon.SetBatteryPercentage(batteryPercent);
 }
 
-/*void WatchFacePineTimeStyle::AlignIcons() {
-  if (notificationState.Get() && bleState.Get()) {
-    lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 8, 25);
-    lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_MID, -8, 25);
-  } else if (notificationState.Get() && !bleState.Get()) {
-    lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_MID, 0, 25);
-  } else {
-    lv_obj_align(bleIcon, sidebar, LV_ALIGN_IN_TOP_MID, 5, 5);
-  }
-}
-*/
 void WatchFacePineTimeStyle::Refresh() {
   isCharging = batteryController.IsCharging();
   if (isCharging.IsUpdated()) {
@@ -537,13 +498,11 @@ void WatchFacePineTimeStyle::Refresh() {
   if (bleState.IsUpdated() || bleRadioEnabled.IsUpdated()) {
     lv_label_set_text_static(bleIcon, BleIcon::GetIcon(bleState.Get()));
     lv_obj_realign(bleIcon);
-   // AlignIcons();
   }
 
   notificationState = notificationManager.AreNewNotificationsAvailable();
   if (notificationState.IsUpdated()) {
     lv_label_set_text_static(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
-   // AlignIcons();
   }
 
   currentDateTime = dateTimeController.CurrentDateTime();
@@ -621,24 +580,25 @@ void WatchFacePineTimeStyle::Refresh() {
   minTemp = (weatherService.GetTodayMinTemp() / 100);
   maxTemp = (weatherService.GetTodayMaxTemp() / 100);
   nowTemp = (weatherService.GetCurrentTemperature()->temperature / 100);
+  //nowTemp2 = (weatherService.GetCurrentTemperature()->temperature / 100);
   clouds = (weatherService.GetCurrentClouds()->amount);
   precip = (weatherService.GetCurrentPrecipitation()->amount);
   //if (minTemp.IsUpdated() || maxTemp.IsUpdated() || clouds.IsUpdated() || precip.IsUpdated()) {
   //if (minTemp.IsUpdated() || maxTemp.IsUpdated()) {
-  //if (true) {
+  if (nowTemp.IsUpdated()) {
     lv_label_set_text_fmt(tempHighLbl, "%d°", maxTemp);
     lv_label_set_text_fmt(tempLowLbl, "%d°", minTemp);
-    lv_label_set_text_fmt(tempLbl, "%d°", nowTemp);
-    lv_label_set_text_fmt(tempSlash, "%d°", nowTemp);
+    lv_label_set_text_fmt(tempLbl, "%d°", nowTemp.Get());
+    lv_label_set_text_fmt(tempSlash, "%d°", nowTemp.Get());
     lv_label_set_text_fmt(precipLbl, "%d", precip);
     lv_label_set_text_fmt(cloudsLbl, "C %d", clouds);
 
     
-    if ((clouds <= 30) && (precip < 1)) {
+    if ((clouds <= 30) && (precip = 0)) {
       lv_label_set_text(weatherIcon, Symbols::sun);
-    } else if ((clouds > 75) && (precip < 3)) {
+    } else if ((clouds > 70) && (precip >= 1)) {
       lv_label_set_text(weatherIcon, Symbols::cloud);
-    } else if ((clouds > 75) && (precip >= 3)) {
+    } else if ((clouds > 70) && (precip >= 1)) {
       lv_label_set_text(weatherIcon, Symbols::cloudShowersHeavy);
     } else {
       lv_label_set_text(weatherIcon, Symbols::cloudSun);
@@ -651,7 +611,7 @@ void WatchFacePineTimeStyle::Refresh() {
     lv_obj_realign(precipLbl);
     lv_obj_realign(cloudsLbl);
     lv_obj_realign(weatherIcon);
-  //}
+  }
 
   if (!lv_obj_get_hidden(btnSetColor)) {
     if ((savedTick > 0) && (lv_tick_get() - savedTick > 3000)) {
