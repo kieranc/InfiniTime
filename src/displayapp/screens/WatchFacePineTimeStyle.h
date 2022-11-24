@@ -61,12 +61,9 @@ namespace Pinetime {
         DirtyValue<bool> motionSensorOk {};
         DirtyValue<uint32_t> stepCount {};
         DirtyValue<bool> notificationState {};
-        //DirtyValue<int16_t> minTemp {};
-        //DirtyValue<int16_t> maxTemp {};
         DirtyValue<int16_t> nowTemp {};
         int16_t minTemp = 0;
         int16_t maxTemp = 0;
-        //int16_t nowTemp2 = 0;
         int16_t clouds = 0;
         int16_t precip = 0;
 
@@ -128,7 +125,6 @@ namespace Pinetime {
 
         void SetBatteryIcon();
         void CloseMenu();
-        void AlignIcons();
 
         lv_task_t* taskRefresh;
       };

@@ -113,7 +113,7 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, Convert(settingsController.GetPTSColorTime()));
   lv_obj_align(notificationIcon, timebar, LV_ALIGN_IN_TOP_LEFT, 5, 5);
-  
+
   weatherIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_set_style_local_text_font(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &fontawesome_weathericons);
@@ -125,13 +125,13 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   } else {
     lv_obj_set_hidden(weatherIcon, true);
   }
-  
+
   tempHighLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_align(tempHighLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -40);
-  
+
   tempSlash = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_align(tempSlash, sidebar, LV_ALIGN_IN_TOP_MID, 0, 65);
@@ -175,7 +175,7 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   } else {
     lv_obj_align(calendarOuter, sidebar, LV_ALIGN_CENTER, 0, 0);
   }
-  
+
   calendarInner = lv_obj_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_bg_color(calendarInner, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_WHITE);
   lv_obj_set_style_local_radius(calendarInner, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, 0);
@@ -580,11 +580,9 @@ void WatchFacePineTimeStyle::Refresh() {
   minTemp = (weatherService.GetTodayMinTemp() / 100);
   maxTemp = (weatherService.GetTodayMaxTemp() / 100);
   nowTemp = (weatherService.GetCurrentTemperature()->temperature / 100);
-  //nowTemp2 = (weatherService.GetCurrentTemperature()->temperature / 100);
   clouds = (weatherService.GetCurrentClouds()->amount);
   precip = (weatherService.GetCurrentPrecipitation()->amount);
-  //if (minTemp.IsUpdated() || maxTemp.IsUpdated() || clouds.IsUpdated() || precip.IsUpdated()) {
-  //if (minTemp.IsUpdated() || maxTemp.IsUpdated()) {
+
   if (nowTemp.IsUpdated()) {
     lv_label_set_text_fmt(tempHighLbl, "%d°", maxTemp);
     lv_label_set_text_fmt(tempLowLbl, "%d°", minTemp);
@@ -593,7 +591,6 @@ void WatchFacePineTimeStyle::Refresh() {
     lv_label_set_text_fmt(precipLbl, "%d", precip);
     lv_label_set_text_fmt(cloudsLbl, "C %d", clouds);
 
-    
     if ((clouds <= 30) && (precip = 0)) {
       lv_label_set_text(weatherIcon, Symbols::sun);
     } else if ((clouds > 70) && (precip >= 1)) {
@@ -603,7 +600,7 @@ void WatchFacePineTimeStyle::Refresh() {
     } else {
       lv_label_set_text(weatherIcon, Symbols::cloudSun);
     };
-    
+
     lv_obj_realign(tempHighLbl);
     lv_obj_realign(tempLowLbl);
     lv_obj_realign(tempLbl);
