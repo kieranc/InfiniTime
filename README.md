@@ -20,7 +20,6 @@ Fast open-source firmware for the [PineTime smartwatch](https://www.pine64.org/p
 - [InfiniLink](https://github.com/InfiniTimeOrg/InfiniLink) (iOS) **[Looking for a new maintainer]**
 - [ITD](https://gitea.arsenm.dev/Arsen6331/itd) (Linux)
 
-
 ## Development
 
 - [InfiniTime Vision](doc/InfiniTimeVision.md)
