@@ -64,7 +64,6 @@ namespace Pinetime {
                  Pinetime::Controllers::BrightnessController& brightnessController,
                  Pinetime::Controllers::TouchHandler& touchHandler,
                  Pinetime::Controllers::FS& filesystem);
-                 
       void Start(System::BootErrors error);
       void PushMessage(Display::Messages msg);
 

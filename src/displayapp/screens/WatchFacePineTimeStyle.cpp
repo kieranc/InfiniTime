@@ -204,17 +204,17 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   // Display date
   dateDayOfWeek = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(dateDayOfWeek, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_label_set_text(dateDayOfWeek, "THU");
+  lv_label_set_text_static(dateDayOfWeek, "THU");
   lv_obj_align(dateDayOfWeek, calendarOuter, LV_ALIGN_CENTER, 0, -32);
 
   dateDay = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(dateDay, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_label_set_text(dateDay, "25");
+  lv_label_set_text_static(dateDay, "25");
   lv_obj_align(dateDay, calendarOuter, LV_ALIGN_CENTER, 0, 3);
 
   dateMonth = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(dateMonth, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
-  lv_label_set_text(dateMonth, "MAR");
+  lv_label_set_text_static(dateMonth, "MAR");
   lv_obj_align(dateMonth, calendarOuter, LV_ALIGN_CENTER, 0, 32);
 
   // Step count gauge
