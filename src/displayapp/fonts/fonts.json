@@ -1,14 +1,4 @@
 {
-   "jetbrains_mono_bold_16": {
-      "sources": [
-         {
-            "file": "JetBrainsMono-Bold.ttf",
-            "symbols": "0123456789-°C"
-         }
-      ],
-      "bpp": 1,
-      "size": 16
-   },
    "jetbrains_mono_bold_20": {
       "sources": [
          {

@@ -127,7 +127,6 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   }
 
   tempHighLbl = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_align(tempHighLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -40);
@@ -142,25 +141,21 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(DisplayApp* app,
   }
 
   tempLowLbl = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_obj_align(tempLowLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -20);
 
   tempLbl = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_obj_align(tempLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 0);
 
   precipLbl = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(precipLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_obj_align(precipLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 20);
 
   cloudsLbl = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_font(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_bold_16);
   lv_obj_set_style_local_text_letter_space(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(cloudsLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_obj_align(cloudsLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, 40);
