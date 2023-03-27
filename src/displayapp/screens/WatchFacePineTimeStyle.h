@@ -5,11 +5,11 @@
 #include <cstdint>
 #include <memory>
 #include "displayapp/screens/Screen.h"
+#include "displayapp/screens/BatteryIcon.h"
 #include "displayapp/Colors.h"
 #include "components/datetime/DateTimeController.h"
 #include <components/ble/weather/WeatherService.h>
 #include "components/ble/BleController.h"
-#include <displayapp/screens/BatteryIcon.h>
 
 namespace Pinetime {
   namespace Controllers {
@@ -25,10 +25,9 @@ namespace Pinetime {
     namespace Screens {
       class WatchFacePineTimeStyle : public Screen {
       public:
-        WatchFacePineTimeStyle(DisplayApp* app,
-                               Controllers::DateTime& dateTimeController,
-                               Controllers::Battery& batteryController,
-                               Controllers::Ble& bleController,
+        WatchFacePineTimeStyle(Controllers::DateTime& dateTimeController,
+                               const Controllers::Battery& batteryController,
+                               const Controllers::Ble& bleController,
                                Controllers::NotificationManager& notificationManager,
                                Controllers::Settings& settingsController,
                                Controllers::MotionController& motionController,
@@ -116,12 +115,12 @@ namespace Pinetime {
         BatteryIcon batteryIcon;
 
         Controllers::DateTime& dateTimeController;
-        Controllers::Battery& batteryController;
-        Controllers::Ble& bleController;
+        const Controllers::Battery& batteryController;
+        const Controllers::Ble& bleController;
         Controllers::NotificationManager& notificationManager;
         Controllers::Settings& settingsController;
-        Controllers::WeatherService& weatherService;
         Controllers::MotionController& motionController;
+        Controllers::WeatherService& weatherService;
 
         void SetBatteryIcon();
         void CloseMenu();
