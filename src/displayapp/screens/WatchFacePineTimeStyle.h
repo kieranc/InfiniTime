@@ -61,8 +61,8 @@ namespace Pinetime {
         DirtyValue<uint32_t> stepCount {};
         DirtyValue<bool> notificationState {};
         DirtyValue<int16_t> nowTemp {};
-        int16_t minTemp = 0;
-        int16_t maxTemp = 0;
+        //int16_t minTemp = 0;
+        //int16_t maxTemp = 0;
         int16_t clouds = 0;
         int16_t precip = 0;
 
@@ -90,8 +90,8 @@ namespace Pinetime {
         lv_obj_t* dateDay;
         lv_obj_t* dateMonth;
         lv_obj_t* weatherIcon;
-        lv_obj_t* tempHighLbl;
-        lv_obj_t* tempLowLbl;
+        //lv_obj_t* tempHighLbl;
+        //lv_obj_t* tempLowLbl;
         lv_obj_t* tempLbl;
         lv_obj_t* tempSlash;
         lv_obj_t* precipLbl;

@@ -124,11 +124,11 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(Controllers::DateTime& dateTimeCo
     lv_obj_set_hidden(weatherIcon, true);
   }
 
-  tempHighLbl = lv_label_create(lv_scr_act(), nullptr);
+  /*tempHighLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_letter_space(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempHighLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_align(tempHighLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -40);
-
+*/
   tempSlash = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(tempSlash, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
   lv_obj_align(tempSlash, sidebar, LV_ALIGN_IN_TOP_MID, 0, 65);
@@ -137,12 +137,12 @@ WatchFacePineTimeStyle::WatchFacePineTimeStyle(Controllers::DateTime& dateTimeCo
   } else {
     lv_obj_set_hidden(tempSlash, true);
   }
-
+/*
   tempLowLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_letter_space(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempLowLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
   lv_obj_align(tempLowLbl, timebar, LV_ALIGN_IN_LEFT_MID, 0, -20);
-
+*/
   tempLbl = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_letter_space(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, -1);
   lv_obj_set_style_local_text_color(tempLbl, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x000000));
@@ -563,38 +563,52 @@ void WatchFacePineTimeStyle::Refresh() {
     }
   }
 
-  minTemp = (weatherService.GetTodayMinTemp() / 100);
-  maxTemp = (weatherService.GetTodayMaxTemp() / 100);
-  nowTemp = (weatherService.GetCurrentTemperature()->temperature / 100);
-  clouds = (weatherService.GetCurrentClouds()->amount);
-  precip = (weatherService.GetCurrentPrecipitation()->amount);
+  //minTemp = (weatherService.GetTodayMinTemp() / 100);
+  //maxTemp = (weatherService.GetTodayMaxTemp() / 100);
 
-  if (nowTemp.IsUpdated()) {
-    lv_label_set_text_fmt(tempHighLbl, "%d°", maxTemp);
-    lv_label_set_text_fmt(tempLowLbl, "%d°", minTemp);
-    lv_label_set_text_fmt(tempLbl, "%d°", nowTemp.Get());
-    lv_label_set_text_fmt(tempSlash, "%d°", nowTemp.Get());
-    lv_label_set_text_fmt(precipLbl, "%d", precip);
-    lv_label_set_text_fmt(cloudsLbl, "C %d", clouds);
+  if (weatherService.GetCurrentTemperature()->timestamp != 0 && weatherService.GetCurrentClouds()->timestamp != 0 && weatherService.GetCurrentPrecipitation()->timestamp != 0) {
+    nowTemp = (weatherService.GetCurrentTemperature()->temperature / 100);
+    clouds = (weatherService.GetCurrentClouds()->amount);
+    precip = (weatherService.GetCurrentPrecipitation()->amount);
+    if (nowTemp.IsUpdated()) {
+      //lv_label_set_text_fmt(tempHighLbl, "%d°", maxTemp);
+      //lv_label_set_text_fmt(tempLowLbl, "%d°", minTemp);
+      lv_label_set_text_fmt(tempLbl, "%d°", nowTemp.Get());
+      lv_label_set_text_fmt(tempSlash, "%d°", nowTemp.Get());
+      lv_label_set_text_fmt(precipLbl, "%d", precip);
+      lv_label_set_text_fmt(cloudsLbl, "C %d", clouds);
 
-    if ((clouds <= 30) && (precip = 0)) {
-      lv_label_set_text(weatherIcon, Symbols::sun);
-    } else if ((clouds > 70) && (precip >= 1)) {
-      lv_label_set_text(weatherIcon, Symbols::cloud);
-    } else if ((clouds > 70) && (precip >= 1)) {
-      lv_label_set_text(weatherIcon, Symbols::cloudShowersHeavy);
-    } else {
-      lv_label_set_text(weatherIcon, Symbols::cloudSun);
-    };
-
-    lv_obj_realign(tempHighLbl);
-    lv_obj_realign(tempLowLbl);
+      if ((clouds <= 30) && (precip == 0)) {
+        lv_label_set_text(weatherIcon, Symbols::sun);
+      } else if ((clouds >= 70) && (clouds <= 90) && (precip == 1)) {
+        lv_label_set_text(weatherIcon, Symbols::cloudSunRain);
+      } else if ((clouds > 90) && (precip == 0)) {
+        lv_label_set_text(weatherIcon, Symbols::cloud);
+      } else if ((clouds > 70) && (precip >= 2)) {
+        lv_label_set_text(weatherIcon, Symbols::cloudShowersHeavy);
+      } else {
+        lv_label_set_text(weatherIcon, Symbols::cloudSun);
+      };
+      lv_obj_realign(tempLbl);
+      lv_obj_realign(tempSlash);
+      lv_obj_realign(precipLbl);
+      lv_obj_realign(cloudsLbl);
+      lv_obj_realign(weatherIcon);
+    }
+  } else {
+    lv_label_set_text_static(tempLbl, "--");
+    lv_label_set_text_static(tempSlash, "--");
+    lv_label_set_text_static(precipLbl, "--");
+    lv_label_set_text_static(cloudsLbl, "--");
+    lv_label_set_text(weatherIcon, Symbols::ban);
     lv_obj_realign(tempLbl);
     lv_obj_realign(tempSlash);
     lv_obj_realign(precipLbl);
     lv_obj_realign(cloudsLbl);
     lv_obj_realign(weatherIcon);
   }
+    //lv_obj_realign(tempHighLbl);
+    //lv_obj_realign(tempLowLbl);
 
   if (!lv_obj_get_hidden(btnSetColor)) {
     if ((savedTick > 0) && (lv_tick_get() - savedTick > 3000)) {
