@@ -4,11 +4,14 @@
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <displayapp/Controllers.h>
 #include "displayapp/screens/Screen.h"
 #include "displayapp/screens/BatteryIcon.h"
 #include "displayapp/Colors.h"
 #include "components/datetime/DateTimeController.h"
+#include "components/ble/SimpleWeatherService.h"
 #include "components/ble/BleController.h"
+#include "utility/DirtyValue.h"
 
 namespace Pinetime {
   namespace Controllers {
@@ -24,13 +27,13 @@ namespace Pinetime {
     namespace Screens {
       class WatchFacePineTimeStyle : public Screen {
       public:
-        WatchFacePineTimeStyle(DisplayApp* app,
-                               Controllers::DateTime& dateTimeController,
-                               Controllers::Battery& batteryController,
-                               Controllers::Ble& bleController,
+        WatchFacePineTimeStyle(Controllers::DateTime& dateTimeController,
+                               const Controllers::Battery& batteryController,
+                               const Controllers::Ble& bleController,
                                Controllers::NotificationManager& notificationManager,
                                Controllers::Settings& settingsController,
-                               Controllers::MotionController& motionController);
+                               Controllers::MotionController& motionController,
+                               Controllers::SimpleWeatherService& weather);
         ~WatchFacePineTimeStyle() override;
 
         bool OnTouchEvent(TouchEvents event) override;
@@ -51,14 +54,14 @@ namespace Pinetime {
         uint8_t currentDay = 0;
         uint32_t savedTick = 0;
 
-        DirtyValue<uint8_t> batteryPercentRemaining {};
-        DirtyValue<bool> isCharging {};
-        DirtyValue<bool> bleState {};
-        DirtyValue<bool> bleRadioEnabled {};
-        DirtyValue<std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>> currentDateTime {};
-        DirtyValue<bool> motionSensorOk {};
-        DirtyValue<uint32_t> stepCount {};
-        DirtyValue<bool> notificationState {};
+        Utility::DirtyValue<uint8_t> batteryPercentRemaining {};
+        Utility::DirtyValue<bool> isCharging {};
+        Utility::DirtyValue<bool> bleState {};
+        Utility::DirtyValue<bool> bleRadioEnabled {};
+        Utility::DirtyValue<std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>> currentDateTime {};
+        Utility::DirtyValue<uint32_t> stepCount {};
+        Utility::DirtyValue<bool> notificationState {};
+        Utility::DirtyValue<std::optional<Pinetime::Controllers::SimpleWeatherService::CurrentWeather>> currentWeather {};
 
         static Pinetime::Controllers::Settings::Colors GetNext(Controllers::Settings::Colors color);
         static Pinetime::Controllers::Settings::Colors GetPrevious(Controllers::Settings::Colors color);
@@ -73,6 +76,7 @@ namespace Pinetime {
         lv_obj_t* btnRandom;
         lv_obj_t* btnClose;
         lv_obj_t* btnSteps;
+        lv_obj_t* btnWeather;
         lv_obj_t* timebar;
         lv_obj_t* sidebar;
         lv_obj_t* timeDD1;
@@ -82,6 +86,8 @@ namespace Pinetime {
         lv_obj_t* dateDayOfWeek;
         lv_obj_t* dateDay;
         lv_obj_t* dateMonth;
+        lv_obj_t* weatherIcon;
+        lv_obj_t* temperature;
         lv_obj_t* plugIcon;
         lv_obj_t* bleIcon;
         lv_obj_t* calendarOuter;
@@ -94,8 +100,6 @@ namespace Pinetime {
         lv_obj_t* stepGauge;
         lv_obj_t* btnSetColor;
         lv_obj_t* btnSetOpts;
-        lv_obj_t* lbl_btnSetColor;
-        lv_obj_t* lbl_btnSetOpts;
         lv_obj_t* stepIcon;
         lv_obj_t* stepValue;
         lv_color_t needle_colors[1];
@@ -103,18 +107,38 @@ namespace Pinetime {
         BatteryIcon batteryIcon;
 
         Controllers::DateTime& dateTimeController;
-        Controllers::Battery& batteryController;
-        Controllers::Ble& bleController;
+        const Controllers::Battery& batteryController;
+        const Controllers::Ble& bleController;
         Controllers::NotificationManager& notificationManager;
         Controllers::Settings& settingsController;
         Controllers::MotionController& motionController;
+        Controllers::SimpleWeatherService& weatherService;
 
         void SetBatteryIcon();
         void CloseMenu();
-        void AlignIcons();
 
         lv_task_t* taskRefresh;
       };
     }
+
+    template <>
+    struct WatchFaceTraits<WatchFace::PineTimeStyle> {
+      static constexpr WatchFace watchFace = WatchFace::PineTimeStyle;
+      static constexpr const char* name = "PineTimeStyle";
+
+      static Screens::Screen* Create(AppControllers& controllers) {
+        return new Screens::WatchFacePineTimeStyle(controllers.dateTimeController,
+                                                   controllers.batteryController,
+                                                   controllers.bleController,
+                                                   controllers.notificationManager,
+                                                   controllers.settingsController,
+                                                   controllers.motionController,
+                                                   *controllers.weatherController);
+      };
+
+      static bool IsAvailable(Pinetime::Controllers::FS& /*filesystem*/) {
+        return true;
+      }
+    };
   }
 }

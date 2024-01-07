@@ -3,20 +3,17 @@
 #include <bitset>
 #include "components/brightness/BrightnessController.h"
 #include "components/fs/FS.h"
+#include "displayapp/apps/Apps.h"
 
 namespace Pinetime {
   namespace Controllers {
     class Settings {
     public:
       enum class ClockType : uint8_t { H24, H12 };
+      enum class WeatherFormat : uint8_t { Metric, Imperial };
       enum class Notification : uint8_t { On, Off, Sleep };
       enum class ChimesOption : uint8_t { None, Hours, HalfHours };
-      enum class WakeUpMode : uint8_t {
-        SingleTap = 0,
-        DoubleTap = 1,
-        RaiseWrist = 2,
-        Shake = 3,
-      };
+      enum class WakeUpMode : uint8_t { SingleTap = 0, DoubleTap = 1, RaiseWrist = 2, Shake = 3, LowerWrist = 4 };
       enum class Colors : uint8_t {
         White,
         Silver,
@@ -38,13 +35,16 @@ namespace Pinetime {
         Pink
       };
       enum class PTSGaugeStyle : uint8_t { Full, Half, Numeric };
+      enum class PTSWeather : uint8_t { On, Off };
 
       struct PineTimeStyle {
         Colors ColorTime = Colors::Teal;
         Colors ColorBar = Colors::Teal;
         Colors ColorBG = Colors::Black;
         PTSGaugeStyle gaugeStyle = PTSGaugeStyle::Full;
+        PTSWeather weatherEnable = PTSWeather::Off;
       };
+
       struct WatchFaceInfineat {
         bool showSideCover = true;
         int colorIndex = 0;
@@ -60,14 +60,15 @@ namespace Pinetime {
       void Init();
       void SaveSettings();
 
-      void SetClockFace(uint8_t face) {
-        if (face != settings.clockFace) {
+      void SetWatchFace(Pinetime::Applications::WatchFace face) {
+        if (face != settings.watchFace) {
           settingsChanged = true;
         }
-        settings.clockFace = face;
+        settings.watchFace = face;
       };
-      uint8_t GetClockFace() const {
-        return settings.clockFace;
+
+      Pinetime::Applications::WatchFace GetWatchFace() const {
+        return settings.watchFace;
       };
 
       void SetChimeOption(ChimesOption chimeOption) {
@@ -76,6 +77,7 @@ namespace Pinetime {
         }
         settings.chimesOption = chimeOption;
       };
+
       ChimesOption GetChimeOption() const {
         return settings.chimesOption;
       };
@@ -85,6 +87,7 @@ namespace Pinetime {
           settingsChanged = true;
         settings.PTS.ColorTime = colorTime;
       };
+
       Colors GetPTSColorTime() const {
         return settings.PTS.ColorTime;
       };
@@ -94,6 +97,7 @@ namespace Pinetime {
           settingsChanged = true;
         settings.PTS.ColorBar = colorBar;
       };
+
       Colors GetPTSColorBar() const {
         return settings.PTS.ColorBar;
       };
@@ -103,6 +107,7 @@ namespace Pinetime {
           settingsChanged = true;
         settings.PTS.ColorBG = colorBG;
       };
+
       Colors GetPTSColorBG() const {
         return settings.PTS.ColorBG;
       };
@@ -113,6 +118,7 @@ namespace Pinetime {
           settingsChanged = true;
         }
       };
+
       bool GetInfineatShowSideCover() const {
         return settings.watchFaceInfineat.showSideCover;
       };
@@ -123,6 +129,7 @@ namespace Pinetime {
           settingsChanged = true;
         }
       };
+
       int GetInfineatColorIndex() const {
         return settings.watchFaceInfineat.colorIndex;
       };
@@ -132,8 +139,19 @@ namespace Pinetime {
           settingsChanged = true;
         settings.PTS.gaugeStyle = gaugeStyle;
       };
+
       PTSGaugeStyle GetPTSGaugeStyle() const {
         return settings.PTS.gaugeStyle;
+      };
+
+      void SetPTSWeather(PTSWeather weatherEnable) {
+        if (weatherEnable != settings.PTS.weatherEnable)
+          settingsChanged = true;
+        settings.PTS.weatherEnable = weatherEnable;
+      };
+
+      PTSWeather GetPTSWeather() const {
+        return settings.PTS.weatherEnable;
       };
 
       void SetAppMenu(uint8_t menu) {
@@ -147,6 +165,7 @@ namespace Pinetime {
       void SetSettingsMenu(uint8_t menu) {
         settingsMenu = menu;
       };
+
       uint8_t GetSettingsMenu() const {
         return settingsMenu;
       };
@@ -157,8 +176,20 @@ namespace Pinetime {
         }
         settings.clockType = clocktype;
       };
+
       ClockType GetClockType() const {
         return settings.clockType;
+      };
+
+      void SetWeatherFormat(WeatherFormat weatherFormat) {
+        if (weatherFormat != settings.weatherFormat) {
+          settingsChanged = true;
+        }
+        settings.weatherFormat = weatherFormat;
+      };
+
+      WeatherFormat GetWeatherFormat() const {
+        return settings.weatherFormat;
       };
 
       void SetNotificationStatus(Notification status) {
@@ -167,6 +198,7 @@ namespace Pinetime {
         }
         settings.notificationStatus = status;
       };
+
       Notification GetNotificationStatus() const {
         return settings.notificationStatus;
       };
@@ -213,7 +245,7 @@ namespace Pinetime {
         }
       };
 
-      std::bitset<4> getWakeUpModes() const {
+      std::bitset<5> getWakeUpModes() const {
         return settings.wakeUpMode;
       }
 
@@ -254,24 +286,27 @@ namespace Pinetime {
     private:
       Pinetime::Controllers::FS& fs;
 
-      static constexpr uint32_t settingsVersion = 0x0004;
+      static constexpr uint32_t settingsVersion = 0x0007;
+
       struct SettingsData {
         uint32_t version = settingsVersion;
         uint32_t stepsGoal = 10000;
         uint32_t screenTimeOut = 15000;
 
         ClockType clockType = ClockType::H24;
+        WeatherFormat weatherFormat = WeatherFormat::Metric;
         Notification notificationStatus = Notification::On;
 
-        uint8_t clockFace = 0;
+        Pinetime::Applications::WatchFace watchFace = Pinetime::Applications::WatchFace::Digital;
         ChimesOption chimesOption = ChimesOption::None;
 
         PineTimeStyle PTS;
 
         WatchFaceInfineat watchFaceInfineat;
 
-        std::bitset<4> wakeUpMode {0};
+        std::bitset<5> wakeUpMode {0};
         uint16_t shakeWakeThreshold = 150;
+
         Controllers::BrightnessController::Levels brightLevel = Controllers::BrightnessController::Levels::Medium;
       };
 

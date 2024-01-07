@@ -13,7 +13,7 @@ namespace Pinetime {
 
       class SettingWakeUp : public Screen {
       public:
-        SettingWakeUp(DisplayApp* app, Pinetime::Controllers::Settings& settingsController);
+        SettingWakeUp(Pinetime::Controllers::Settings& settingsController);
         ~SettingWakeUp() override;
 
         void UpdateSelected(lv_obj_t* object);
@@ -23,12 +23,14 @@ namespace Pinetime {
           Controllers::Settings::WakeUpMode wakeUpMode;
           const char* name;
         };
+
         Controllers::Settings& settingsController;
-        static constexpr std::array<Option, 4> options = {{
+        static constexpr std::array<Option, 5> options = {{
           {Controllers::Settings::WakeUpMode::SingleTap, "Single Tap"},
           {Controllers::Settings::WakeUpMode::DoubleTap, "Double Tap"},
           {Controllers::Settings::WakeUpMode::RaiseWrist, "Raise Wrist"},
           {Controllers::Settings::WakeUpMode::Shake, "Shake Wake"},
+          {Controllers::Settings::WakeUpMode::LowerWrist, "Lower Wrist"},
         }};
 
         lv_obj_t* cbOption[options.size()];

@@ -5,9 +5,10 @@
 namespace Pinetime {
   namespace Drivers {
     class Spi;
+
     class St7789 {
     public:
-      explicit St7789(Spi& spi, uint8_t pinDataCommand);
+      explicit St7789(Spi& spi, uint8_t pinDataCommand, uint8_t pinReset);
       St7789(const St7789&) = delete;
       St7789& operator=(const St7789&) = delete;
       St7789(St7789&&) = delete;
@@ -28,6 +29,7 @@ namespace Pinetime {
     private:
       Spi& spi;
       uint8_t pinDataCommand;
+      uint8_t pinReset;
       uint8_t verticalScrollingStartAddress = 0;
 
       void HardwareReset();

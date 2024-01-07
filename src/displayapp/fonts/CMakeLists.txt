@@ -1,6 +1,6 @@
 set(FONTS jetbrains_mono_42 jetbrains_mono_76 jetbrains_mono_bold_20
-   jetbrains_mono_extrabold_compressed lv_font_navi_80 lv_font_sys_48
-   open_sans_light)
+   jetbrains_mono_extrabold_compressed lv_font_sys_48
+   open_sans_light fontawesome_weathericons)
 find_program(LV_FONT_CONV "lv_font_conv" NO_CACHE REQUIRED
    HINTS "${CMAKE_SOURCE_DIR}/node_modules/.bin")
 message(STATUS "Using ${LV_FONT_CONV} to generate font files")
@@ -32,12 +32,6 @@ foreach(FONT ${FONTS})
    add_custom_target(infinitime_fonts_${FONT}
       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${FONT}.c
    )
-
-# skip files, which currently cause problems when turning on CMake untiy build 
-   set_source_files_properties(
-      ${FONT}.c PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
-   )
-
    target_sources(infinitime_fonts PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/${FONT}.c")
    add_dependencies(infinitime_fonts infinitime_fonts_${FONT})
 endforeach()

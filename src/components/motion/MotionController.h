@@ -1,8 +1,12 @@
 #pragma once
 
 #include <cstdint>
-#include <drivers/Bma421.h>
-#include <components/ble/MotionService.h>
+
+#include <FreeRTOS.h>
+
+#include "drivers/Bma421.h"
+#include "components/ble/MotionService.h"
+#include "utility/CircularBuffer.h"
 
 namespace Pinetime {
   namespace Controllers {
@@ -19,12 +23,15 @@ namespace Pinetime {
       int16_t X() const {
         return x;
       }
+
       int16_t Y() const {
-        return y;
+        return yHistory[0];
       }
+
       int16_t Z() const {
-        return z;
+        return zHistory[0];
       }
+
       uint32_t NbSteps() const {
         return nbSteps;
       }
@@ -32,16 +39,17 @@ namespace Pinetime {
       void ResetTrip() {
         currentTripSteps = 0;
       }
+
       uint32_t GetTripSteps() const {
         return currentTripSteps;
       }
 
-      bool Should_ShakeWake(uint16_t thresh);
-      bool Should_RaiseWake(bool isSleeping);
-      int32_t currentShakeSpeed();
-      void IsSensorOk(bool isOk);
-      bool IsSensorOk() const {
-        return isSensorOk;
+      bool ShouldShakeWake(uint16_t thresh);
+      bool ShouldRaiseWake() const;
+      bool ShouldLowerSleep() const;
+
+      int32_t CurrentShakeSpeed() const {
+        return accumulatedSpeed;
       }
 
       DeviceTypes DeviceType() const {
@@ -49,24 +57,43 @@ namespace Pinetime {
       }
 
       void Init(Pinetime::Drivers::Bma421::DeviceTypes types);
-      void SetService(Pinetime::Controllers::MotionService* service);
+
+      void SetService(Pinetime::Controllers::MotionService* service) {
+        this->service = service;
+      }
 
     private:
-      uint32_t nbSteps;
+      uint32_t nbSteps = 0;
       uint32_t currentTripSteps = 0;
-      int16_t x;
-      int16_t y;
-      int16_t z;
-      int16_t lastYForWakeUp = 0;
-      bool isSensorOk = false;
+
+      TickType_t lastTime = 0;
+      TickType_t time = 0;
+
+      struct AccelStats {
+        static constexpr uint8_t numHistory = 2;
+
+        int16_t yMean = 0;
+        int16_t zMean = 0;
+        int16_t prevYMean = 0;
+        int16_t prevZMean = 0;
+
+        uint32_t yVariance = 0;
+        uint32_t zVariance = 0;
+      };
+
+      AccelStats GetAccelStats() const;
+
+      AccelStats stats = {};
+
+      int16_t lastX = 0;
+      int16_t x = 0;
+      static constexpr uint8_t histSize = 8;
+      Utility::CircularBuffer<int16_t, histSize> yHistory = {};
+      Utility::CircularBuffer<int16_t, histSize> zHistory = {};
+      int32_t accumulatedSpeed = 0;
+
       DeviceTypes deviceType = DeviceTypes::Unknown;
       Pinetime::Controllers::MotionService* service = nullptr;
-
-      int16_t lastXForShake = 0;
-      int16_t lastYForShake = 0;
-      int16_t lastZForShake = 0;
-      int32_t accumulatedspeed = 0;
-      uint32_t lastShakeTime = 0;
     };
   }
 }

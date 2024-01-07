@@ -8,7 +8,7 @@
 
 using namespace Pinetime::Applications::Screens;
 
-constexpr std::array<SettingWakeUp::Option, 4> SettingWakeUp::options;
+constexpr std::array<SettingWakeUp::Option, 5> SettingWakeUp::options;
 
 namespace {
   void event_handler(lv_obj_t* obj, lv_event_t event) {
@@ -19,8 +19,7 @@ namespace {
   }
 }
 
-SettingWakeUp::SettingWakeUp(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::Settings& settingsController)
-  : Screen(app), settingsController {settingsController} {
+SettingWakeUp::SettingWakeUp(Pinetime::Controllers::Settings& settingsController) : settingsController {settingsController} {
   lv_obj_t* container1 = lv_cont_create(lv_scr_act(), nullptr);
 
   lv_obj_set_style_local_bg_opa(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
@@ -28,9 +27,9 @@ SettingWakeUp::SettingWakeUp(Pinetime::Applications::DisplayApp* app, Pinetime::
   lv_obj_set_style_local_pad_inner(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 5);
   lv_obj_set_style_local_border_width(container1, LV_CONT_PART_MAIN, LV_STATE_DEFAULT, 0);
 
-  lv_obj_set_pos(container1, 10, 60);
+  lv_obj_set_pos(container1, 10, 35);
   lv_obj_set_width(container1, LV_HOR_RES - 20);
-  lv_obj_set_height(container1, LV_VER_RES - 50);
+  lv_obj_set_height(container1, LV_VER_RES - 20);
   lv_cont_set_layout(container1, LV_LAYOUT_COLUMN_LEFT);
 
   lv_obj_t* title = lv_label_create(lv_scr_act(), nullptr);

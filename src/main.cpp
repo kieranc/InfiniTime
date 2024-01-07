@@ -1,5 +1,4 @@
 // nrf
-#include <hal/nrf_rtc.h>
 #include <hal/nrf_wdt.h>
 #include <legacy/nrf_drv_clock.h>
 #include <libraries/gpiote/app_gpiote.h>
@@ -69,7 +68,7 @@ Pinetime::Drivers::SpiMaster spi {Pinetime::Drivers::SpiMaster::SpiModule::SPI0,
                                    Pinetime::PinMap::SpiMiso}};
 
 Pinetime::Drivers::Spi lcdSpi {spi, Pinetime::PinMap::SpiLcdCsn};
-Pinetime::Drivers::St7789 lcd {lcdSpi, Pinetime::PinMap::LcdDataCommand};
+Pinetime::Drivers::St7789 lcd {lcdSpi, Pinetime::PinMap::LcdDataCommand, Pinetime::PinMap::LcdReset};
 
 Pinetime::Drivers::Spi flashSpi {spi, Pinetime::PinMap::SpiFlashCsn};
 Pinetime::Drivers::SpiNorFlash spiNorFlash {flashSpi};
@@ -81,14 +80,11 @@ static constexpr uint32_t MaxTwiFrequencyWithoutHardwareBug {0x06200000};
 Pinetime::Drivers::TwiMaster twiMaster {NRF_TWIM1, MaxTwiFrequencyWithoutHardwareBug, Pinetime::PinMap::TwiSda, Pinetime::PinMap::TwiScl};
 Pinetime::Drivers::Cst816S touchPanel {twiMaster, touchPanelTwiAddress};
 #ifdef PINETIME_IS_RECOVERY
-  #include "displayapp/DummyLittleVgl.h"
   #include "displayapp/DisplayAppRecovery.h"
 #else
-  #include "displayapp/LittleVgl.h"
   #include "displayapp/DisplayApp.h"
+  #include "main.h"
 #endif
-Pinetime::Components::LittleVgl lvgl {lcd, touchPanel};
-
 Pinetime::Drivers::Bma421 motionSensor {twiMaster, motionSensorTwiAddress};
 Pinetime::Drivers::Hrs3300 heartRateSensor {twiMaster, heartRateSensorTwiAddress};
 
@@ -106,47 +102,39 @@ Pinetime::Controllers::MotorController motorController {};
 
 Pinetime::Controllers::DateTime dateTimeController {settingsController};
 Pinetime::Drivers::Watchdog watchdog;
-Pinetime::Drivers::WatchdogView watchdogView(watchdog);
 Pinetime::Controllers::NotificationManager notificationManager;
 Pinetime::Controllers::MotionController motionController;
-Pinetime::Controllers::TimerController timerController;
 Pinetime::Controllers::AlarmController alarmController {dateTimeController};
-Pinetime::Controllers::TouchHandler touchHandler(touchPanel, lvgl);
+Pinetime::Controllers::TouchHandler touchHandler;
 Pinetime::Controllers::ButtonHandler buttonHandler;
 Pinetime::Controllers::BrightnessController brightnessController {};
 
 Pinetime::Applications::DisplayApp displayApp(lcd,
-                                              lvgl,
                                               touchPanel,
                                               batteryController,
                                               bleController,
                                               dateTimeController,
-                                              watchdogView,
+                                              watchdog,
                                               notificationManager,
                                               heartRateController,
                                               settingsController,
                                               motorController,
                                               motionController,
-                                              timerController,
                                               alarmController,
                                               brightnessController,
                                               touchHandler,
                                               fs);
 
 Pinetime::System::SystemTask systemTask(spi,
-                                        lcd,
                                         spiNorFlash,
                                         twiMaster,
                                         touchPanel,
-                                        lvgl,
                                         batteryController,
                                         bleController,
                                         dateTimeController,
-                                        timerController,
                                         alarmController,
                                         watchdog,
                                         notificationManager,
-                                        motorController,
                                         heartRateSensor,
                                         motionController,
                                         motionSensor,
@@ -157,7 +145,17 @@ Pinetime::System::SystemTask systemTask(spi,
                                         fs,
                                         touchHandler,
                                         buttonHandler);
+int mallocFailedCount = 0;
+int stackOverflowCount = 0;
+extern "C" {
+void vApplicationMallocFailedHook() {
+  mallocFailedCount++;
+}
 
+void vApplicationStackOverflowHook(TaskHandle_t /*xTask*/, char* /*pcTaskName*/) {
+  stackOverflowCount++;
+}
+}
 /* Variable Declarations for variables in noinit SRAM
    Increment NoInit_MagicValue upon adding variables to this area
 */
@@ -306,7 +304,12 @@ void calibrate_lf_clock_rc(nrf_drv_clock_evt_type_t /*event*/) {
   nrf_drv_clock_calibration_start(16, calibrate_lf_clock_rc);
 }
 
+void enable_dcdc_regulator() {
+  NRF_POWER->DCDCEN = 1;
+}
+
 int main() {
+  enable_dcdc_regulator();
   logger.Init();
 
   nrf_drv_clock_init();
@@ -351,8 +354,6 @@ int main() {
     memset(&__start_noinit_data, 0, (uintptr_t) &__stop_noinit_data - (uintptr_t) &__start_noinit_data);
     NoInit_MagicWord = NoInit_MagicValue;
   }
-
-  lvgl.Init();
 
   systemTask.Start();
 

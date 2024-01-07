@@ -131,8 +131,8 @@ void SpiMaster::OnEndEvent() {
   if (s > 0) {
     auto currentSize = std::min((size_t) 255, s);
     PrepareTx(currentBufferAddr, currentSize);
-    currentBufferAddr += currentSize;
-    currentBufferSize -= currentSize;
+    currentBufferAddr = currentBufferAddr + currentSize;
+    currentBufferSize = currentBufferSize - currentSize;
 
     spiBaseAddress->TASKS_START = 1;
   } else {
@@ -153,7 +153,7 @@ void SpiMaster::OnEndEvent() {
 void SpiMaster::OnStartedEvent() {
 }
 
-void SpiMaster::PrepareTx(const volatile uint32_t bufferAddress, const volatile size_t size) {
+void SpiMaster::PrepareTx(const uint32_t bufferAddress, const size_t size) {
   spiBaseAddress->TXD.PTR = bufferAddress;
   spiBaseAddress->TXD.MAXCNT = size;
   spiBaseAddress->TXD.LIST = 0;
@@ -163,10 +163,7 @@ void SpiMaster::PrepareTx(const volatile uint32_t bufferAddress, const volatile 
   spiBaseAddress->EVENTS_END = 0;
 }
 
-void SpiMaster::PrepareRx(const volatile uint32_t cmdAddress,
-                          const volatile size_t cmdSize,
-                          const volatile uint32_t bufferAddress,
-                          const volatile size_t size) {
+void SpiMaster::PrepareRx(const uint32_t bufferAddress, const size_t size) {
   spiBaseAddress->TXD.PTR = 0;
   spiBaseAddress->TXD.MAXCNT = 0;
   spiBaseAddress->TXD.LIST = 0;
@@ -198,8 +195,8 @@ bool SpiMaster::Write(uint8_t pinCsn, const uint8_t* data, size_t size) {
 
   auto currentSize = std::min((size_t) 255, (size_t) currentBufferSize);
   PrepareTx(currentBufferAddr, currentSize);
-  currentBufferSize -= currentSize;
-  currentBufferAddr += currentSize;
+  currentBufferSize = currentBufferSize - currentSize;
+  currentBufferAddr = currentBufferAddr + currentSize;
   spiBaseAddress->TASKS_START = 1;
 
   if (size == 1) {
@@ -207,6 +204,9 @@ bool SpiMaster::Write(uint8_t pinCsn, const uint8_t* data, size_t size) {
       ;
     nrf_gpio_pin_set(this->pinCsn);
     currentBufferAddr = 0;
+
+    DisableWorkaroundForFtpan58(spiBaseAddress, 0, 0);
+
     xSemaphoreGive(mutex);
   }
 
@@ -234,7 +234,7 @@ bool SpiMaster::Read(uint8_t pinCsn, uint8_t* cmd, size_t cmdSize, uint8_t* data
   while (spiBaseAddress->EVENTS_END == 0)
     ;
 
-  PrepareRx((uint32_t) cmd, cmdSize, (uint32_t) data, dataSize);
+  PrepareRx((uint32_t) data, dataSize);
   spiBaseAddress->TASKS_START = 1;
 
   while (spiBaseAddress->EVENTS_END == 0)

@@ -5,7 +5,7 @@
 
 using namespace Pinetime::Applications::Screens;
 
-Twos::Twos(Pinetime::Applications::DisplayApp* app) : Screen(app) {
+Twos::Twos() {
 
   struct colorPair {
     lv_color_t bg;
@@ -242,7 +242,7 @@ void Twos::updateGridDisplay() {
     const unsigned int col = i % nCols;
     if (grid[row][col].value > 0) {
       char buffer[7];
-      sprintf(buffer, "%d", grid[row][col].value);
+      snprintf(buffer, sizeof(buffer), "%u", grid[row][col].value);
       lv_table_set_cell_value(gridDisplay, row, col, buffer);
     } else {
       lv_table_set_cell_value(gridDisplay, row, col, "");

@@ -46,7 +46,6 @@ set(SDK_SOURCE_FILES
         # FreeRTOS
         ${NRF5_SDK_PATH}/external/freertos/source/croutine.c
         ${NRF5_SDK_PATH}/external/freertos/source/event_groups.c
-        ${NRF5_SDK_PATH}/external/freertos/source/portable/MemMang/heap_4.c
         ${NRF5_SDK_PATH}/external/freertos/source/list.c
         ${NRF5_SDK_PATH}/external/freertos/source/queue.c
         ${NRF5_SDK_PATH}/external/freertos/source/stream_buffer.c
@@ -356,23 +355,16 @@ set(LVGL_SRC
         libs/lvgl/src/lv_widgets/lv_win.c
         )
 
-set(QCBOR_SRC
-        libs/QCBOR/src/ieee754.c
-        libs/QCBOR/src/qcbor_decode.c
-        libs/QCBOR/src/qcbor_encode.c
-        libs/QCBOR/src/qcbor_err_to_str.c
-        libs/QCBOR/src/UsefulBuf.c
-        )
-
 list(APPEND IMAGE_FILES
         displayapp/icons/battery/batteryicon.c
         )
 list(APPEND SOURCE_FILES
+        stdlib.c
+        FreeRTOS/heap_4_infinitime.c
         BootloaderVersion.cpp
         logging/NrfLogger.cpp
         displayapp/DisplayApp.cpp
         displayapp/screens/Screen.cpp
-        displayapp/screens/Clock.cpp
         displayapp/screens/Tile.cpp
         displayapp/screens/InfiniPaint.cpp
         displayapp/screens/Paddle.cpp
@@ -384,7 +376,6 @@ list(APPEND SOURCE_FILES
         displayapp/screens/Label.cpp
         displayapp/screens/FirmwareUpdate.cpp
         displayapp/screens/Music.cpp
-        displayapp/screens/Weather.cpp
         displayapp/screens/Navigation.cpp
         displayapp/screens/Metronome.cpp
         displayapp/screens/Motion.cpp
@@ -393,7 +384,6 @@ list(APPEND SOURCE_FILES
         displayapp/screens/Notifications.cpp
         displayapp/screens/Twos.cpp
         displayapp/screens/HeartRate.cpp
-        displayapp/screens/Motion.cpp
         displayapp/screens/FlashLight.cpp
         displayapp/screens/List.cpp
         displayapp/screens/CheckboxList.cpp
@@ -407,6 +397,7 @@ list(APPEND SOURCE_FILES
         displayapp/Colors.cpp
         displayapp/widgets/Counter.cpp
         displayapp/widgets/PageIndicator.cpp
+        displayapp/widgets/DotIndicator.cpp
         displayapp/widgets/StatusIcons.cpp
 
         ## Settings
@@ -414,9 +405,11 @@ list(APPEND SOURCE_FILES
         displayapp/screens/settings/Settings.cpp
         displayapp/screens/settings/SettingWatchFace.cpp
         displayapp/screens/settings/SettingTimeFormat.cpp
+        displayapp/screens/settings/SettingWeatherFormat.cpp
         displayapp/screens/settings/SettingWakeUp.cpp
         displayapp/screens/settings/SettingDisplay.cpp
         displayapp/screens/settings/SettingSteps.cpp
+        displayapp/screens/settings/SettingSetDateTime.cpp
         displayapp/screens/settings/SettingSetDate.cpp
         displayapp/screens/settings/SettingSetTime.cpp
         displayapp/screens/settings/SettingChimes.cpp
@@ -424,7 +417,6 @@ list(APPEND SOURCE_FILES
         displayapp/screens/settings/SettingBluetooth.cpp
 
         ## Watch faces
-        displayapp/icons/bg_clock.c
         displayapp/screens/WatchFaceAnalog.cpp
         displayapp/screens/WatchFaceDigital.cpp
         displayapp/screens/WatchFaceInfineat.cpp
@@ -440,7 +432,6 @@ list(APPEND SOURCE_FILES
         drivers/SpiMaster.cpp
         drivers/Spi.cpp
         drivers/Watchdog.cpp
-        drivers/DebugPins.cpp
         drivers/InternalFlash.cpp
         drivers/Hrs3300.cpp
         drivers/Bma421.cpp
@@ -460,7 +451,7 @@ list(APPEND SOURCE_FILES
         components/ble/CurrentTimeService.cpp
         components/ble/AlertNotificationService.cpp
         components/ble/MusicService.cpp
-        components/ble/weather/WeatherService.cpp
+        components/ble/SimpleWeatherService.cpp
         components/ble/NavigationService.cpp
         components/ble/BatteryInformationService.cpp
         components/ble/FSService.cpp
@@ -471,7 +462,7 @@ list(APPEND SOURCE_FILES
         components/firmwarevalidator/FirmwareValidator.cpp
         components/motor/MotorController.cpp
         components/settings/Settings.cpp
-        components/timer/TimerController.cpp
+        components/timer/Timer.cpp
         components/alarm/AlarmController.cpp
         components/fs/FS.cpp
         drivers/Cst816s.cpp
@@ -487,16 +478,19 @@ list(APPEND SOURCE_FILES
         drivers/TwiMaster.cpp
 
         heartratetask/HeartRateTask.cpp
-        components/heartrate/Ppg.cpp
-        components/heartrate/Biquad.cpp
-        components/heartrate/Ptagc.cpp
         components/heartrate/HeartRateController.cpp
+        components/heartrate/Ppg.cpp
 
         buttonhandler/ButtonHandler.cpp
         touchhandler/TouchHandler.cpp
+
+        utility/Math.cpp
         )
 
 list(APPEND RECOVERY_SOURCE_FILES
+        stdlib.c
+        FreeRTOS/heap_4_infinitime.c
+
         BootloaderVersion.cpp
         logging/NrfLogger.cpp
         displayapp/DisplayAppRecovery.cpp
@@ -507,7 +501,6 @@ list(APPEND RECOVERY_SOURCE_FILES
         drivers/SpiMaster.cpp
         drivers/Spi.cpp
         drivers/Watchdog.cpp
-        drivers/DebugPins.cpp
         drivers/InternalFlash.cpp
         drivers/Hrs3300.cpp
         drivers/Bma421.cpp
@@ -527,7 +520,7 @@ list(APPEND RECOVERY_SOURCE_FILES
         components/ble/CurrentTimeService.cpp
         components/ble/AlertNotificationService.cpp
         components/ble/MusicService.cpp
-        components/ble/weather/WeatherService.cpp
+        components/ble/SimpleWeatherService.cpp
         components/ble/BatteryInformationService.cpp
         components/ble/FSService.cpp
         components/ble/ImmediateAlertService.cpp
@@ -537,7 +530,7 @@ list(APPEND RECOVERY_SOURCE_FILES
         components/ble/MotionService.cpp
         components/firmwarevalidator/FirmwareValidator.cpp
         components/settings/Settings.cpp
-        components/timer/TimerController.cpp
+        components/timer/Timer.cpp
         components/alarm/AlarmController.cpp
         drivers/Cst816s.cpp
         FreeRTOS/port.c
@@ -552,15 +545,19 @@ list(APPEND RECOVERY_SOURCE_FILES
         components/heartrate/HeartRateController.cpp
         heartratetask/HeartRateTask.cpp
         components/heartrate/Ppg.cpp
-        components/heartrate/Biquad.cpp
-        components/heartrate/Ptagc.cpp
+
         components/motor/MotorController.cpp
         components/fs/FS.cpp
         buttonhandler/ButtonHandler.cpp
         touchhandler/TouchHandler.cpp
+
+        utility/Math.cpp
         )
 
 list(APPEND RECOVERYLOADER_SOURCE_FILES
+        stdlib.c
+        FreeRTOS/heap_4_infinitime.c
+
         # FreeRTOS
         FreeRTOS/port.c
         FreeRTOS/port_cmsis_systick.c
@@ -591,7 +588,6 @@ set(INCLUDE_FILES
         displayapp/Messages.h
         displayapp/TouchEvents.h
         displayapp/screens/Screen.h
-        displayapp/screens/Clock.h
         displayapp/screens/Tile.h
         displayapp/screens/InfiniPaint.h
         displayapp/screens/StopWatch.h
@@ -616,13 +612,13 @@ set(INCLUDE_FILES
         displayapp/Colors.h
         displayapp/widgets/Counter.h
         displayapp/widgets/PageIndicator.h
+        displayapp/widgets/DotIndicator.h
         displayapp/widgets/StatusIcons.h
         drivers/St7789.h
         drivers/SpiNorFlash.h
         drivers/SpiMaster.h
         drivers/Spi.h
         drivers/Watchdog.h
-        drivers/DebugPins.h
         drivers/InternalFlash.h
         drivers/Hrs3300.h
         drivers/PinMap.h
@@ -651,21 +647,13 @@ set(INCLUDE_FILES
         components/ble/BleClient.h
         components/ble/HeartRateService.h
         components/ble/MotionService.h
-        components/ble/weather/WeatherService.h
+        components/ble/SimpleWeatherService.h
         components/settings/Settings.h
-        components/timer/TimerController.h
+        components/timer/Timer.h
         components/alarm/AlarmController.h
         drivers/Cst816s.h
         FreeRTOS/portmacro.h
         FreeRTOS/portmacro_cmsis.h
-        libs/date/include/date/tz.h
-        libs/date/include/date/chrono_io.h
-        libs/date/include/date/date.h
-        libs/date/include/date/islamic.h
-        libs/date/include/date/iso_week.h
-        libs/date/include/date/julian.h
-        libs/date/include/date/ptz.h
-        libs/date/include/date/tz_private.h
         displayapp/LittleVgl.h
         displayapp/InfiniTimeTheme.h
         systemtask/SystemTask.h
@@ -674,21 +662,24 @@ set(INCLUDE_FILES
         drivers/TwiMaster.h
         heartratetask/HeartRateTask.h
         components/heartrate/Ppg.h
-        components/heartrate/Biquad.h
-        components/heartrate/Ptagc.h
         components/heartrate/HeartRateController.h
+        libs/arduinoFFT/src/arduinoFFT.h
+        libs/arduinoFFT/src/defs.h
+        libs/arduinoFFT/src/types.h
         components/motor/MotorController.h
         buttonhandler/ButtonHandler.h
         touchhandler/TouchHandler.h
+        utility/Math.h
         )
 
 include_directories(
         ${CMAKE_BINARY_DIR}/src # include generated files like Version.h
         .
         ../
+)
+include_directories(SYSTEM
         libs/
         FreeRTOS/
-        libs/date/include
         libs/mynewt-nimble/porting/npl/freertos/include
         libs/mynewt-nimble/nimble/include
         libs/mynewt-nimble/porting/nimble/include
@@ -779,7 +770,7 @@ link_directories(
 
 
 set(COMMON_FLAGS -MP -MD -mthumb -mabi=aapcs -ftree-vrp -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin -fshort-enums -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -fstack-usage -fno-exceptions -fno-non-call-exceptions)
-set(WARNING_FLAGS -Wall -Wextra -Warray-bounds=2 -Wformat=2 -Wformat-overflow=2 -Wformat-truncation=2 -Wformat-nonliteral -Wno-unused-parameter -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-expansion-to-defined -Wreturn-type -Werror=return-type)
+set(WARNING_FLAGS -Wall -Wextra -Warray-bounds=2 -Wformat=2 -Wformat-overflow=2 -Wformat-truncation=2 -Wformat-nonliteral -Wno-missing-field-initializers -Wno-unknown-pragmas -Wno-expansion-to-defined -Wreturn-type -Werror=return-type -Werror)
 set(DEBUG_FLAGS -Og -g3)
 set(RELEASE_FLAGS -Os)
 set(CXX_FLAGS -fno-rtti)
@@ -790,7 +781,7 @@ add_definitions(-DOS_CPUTIME_FREQ)
 add_definitions(-DNRF52 -DNRF52832 -DNRF52832_XXAA -DNRF52_PAN_74 -DNRF52_PAN_64 -DNRF52_PAN_12 -DNRF52_PAN_58 -DNRF52_PAN_54 -DNRF52_PAN_31 -DNRF52_PAN_51 -DNRF52_PAN_36 -DNRF52_PAN_15 -DNRF52_PAN_20 -DNRF52_PAN_55 -DBOARD_PCA10040)
 add_definitions(-DFREERTOS)
 add_definitions(-D__STACK_SIZE=1024)
-add_definitions(-D__HEAP_SIZE=4096)
+add_definitions(-D__HEAP_SIZE=0)
 add_definitions(-DMYNEWT_VAL_BLE_LL_RFMGMT_ENABLE_TIME=1500)
 
 # Note: Only use this for debugging
@@ -803,18 +794,18 @@ add_definitions(-DTARGET_DEVICE_NAME="${TARGET_DEVICE}")
 if(TARGET_DEVICE STREQUAL "PINETIME")
   add_definitions(-DDRIVER_PINMAP_PINETIME)
   add_definitions(-DCLOCK_CONFIG_LF_SRC=1) # XTAL
-elseif(TARGET_DEVICE STREQUAL "MOY-TFK5") # P8a
+elseif(TARGET_DEVICE STREQUAL "MOY_TFK5") # P8a
   add_definitions(-DDRIVER_PINMAP_P8)
   add_definitions(-DCLOCK_CONFIG_LF_SRC=1) # XTAL
-elseif(TARGET_DEVICE STREQUAL "MOY-TIN5") # P8a variant 2
+elseif(TARGET_DEVICE STREQUAL "MOY_TIN5") # P8a variant 2
   add_definitions(-DDRIVER_PINMAP_P8)
   add_definitions(-DCLOCK_CONFIG_LF_SRC=1) # XTAL
-elseif(TARGET_DEVICE STREQUAL "MOY-TON5") # P8b
+elseif(TARGET_DEVICE STREQUAL "MOY_TON5") # P8b
   add_definitions(-DDRIVER_PINMAP_P8)
   add_definitions(-DCLOCK_CONFIG_LF_SRC=0) # RC
   add_definitions(-DMYNEWT_VAL_BLE_LL_SCA=500)
   add_definitions(-DCLOCK_CONFIG_LF_CAL_ENABLED=1)
-elseif(TARGET_DEVICE STREQUAL "MOY-UNK") # P8b mirrored
+elseif(TARGET_DEVICE STREQUAL "MOY_UNK") # P8b mirrored
   add_definitions(-DDRIVER_PINMAP_P8)
   add_definitions(-DCLOCK_CONFIG_LF_SRC=0) # RC
   add_definitions(-DMYNEWT_VAL_BLE_LL_SCA=500)
@@ -855,6 +846,8 @@ target_compile_options(infinitime_fonts PUBLIC
         $<$<COMPILE_LANGUAGE:ASM>: ${ASM_FLAGS}>
         )
 
+add_subdirectory(displayapp/apps)
+
 # NRF SDK
 add_library(nrf-sdk STATIC ${SDK_SOURCE_FILES})
 target_include_directories(nrf-sdk SYSTEM PUBLIC . ../)
@@ -892,27 +885,6 @@ target_compile_options(lvgl PRIVATE
         $<$<COMPILE_LANGUAGE:ASM>: ${ASM_FLAGS}>
         )
 
-# QCBOR
-add_library(QCBOR STATIC ${QCBOR_SRC})
-target_include_directories(QCBOR SYSTEM PUBLIC libs/QCBOR/inc)
-# This is required with the current configuration
-target_compile_definitions(QCBOR PUBLIC QCBOR_DISABLE_FLOAT_HW_USE)
-# These are for space-saving
-target_compile_definitions(QCBOR PUBLIC QCBOR_DISABLE_PREFERRED_FLOAT)
-target_compile_definitions(QCBOR PUBLIC QCBOR_DISABLE_EXP_AND_MANTISSA)
-target_compile_definitions(QCBOR PUBLIC QCBOR_DISABLE_INDEFINITE_LENGTH_STRINGS)
-#target_compile_definitions(QCBOR PUBLIC QCBOR_DISABLE_INDEFINITE_LENGTH_ARRAYS)
-target_compile_definitions(QCBOR PUBLIC QCBOR_DISABLE_UNCOMMON_TAGS)
-target_compile_definitions(QCBOR PUBLIC USEFULBUF_CONFIG_LITTLE_ENDIAN)
-set_target_properties(QCBOR PROPERTIES LINKER_LANGUAGE C)
-target_compile_options(QCBOR PRIVATE
-        ${COMMON_FLAGS}
-        $<$<CONFIG:DEBUG>: ${DEBUG_FLAGS}>
-        $<$<CONFIG:RELEASE>: ${RELEASE_FLAGS}>
-        $<$<COMPILE_LANGUAGE:ASM>: ${ASM_FLAGS}>
-        -O3
-        )
-
 # LITTLEFS_SRC
 add_library(littlefs STATIC ${LITTLEFS_SRC})
 target_include_directories(littlefs SYSTEM PUBLIC . ../)
@@ -931,7 +903,7 @@ set(EXECUTABLE_FILE_NAME ${EXECUTABLE_NAME}-${pinetime_VERSION_MAJOR}.${pinetime
 set(NRF5_LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/gcc_nrf52.ld")
 add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES OUTPUT_NAME ${EXECUTABLE_FILE_NAME})
-target_link_libraries(${EXECUTABLE_NAME} nimble nrf-sdk lvgl littlefs QCBOR infinitime_fonts)
+target_link_libraries(${EXECUTABLE_NAME} nimble nrf-sdk lvgl littlefs infinitime_fonts infinitime_apps)
 target_compile_options(${EXECUTABLE_NAME} PUBLIC
         ${COMMON_FLAGS}
         ${WARNING_FLAGS}
@@ -965,7 +937,7 @@ set(IMAGE_MCUBOOT_FILE_NAME_BIN ${EXECUTABLE_MCUBOOT_NAME}-image-${pinetime_VERS
 set(DFU_MCUBOOT_FILE_NAME ${EXECUTABLE_MCUBOOT_NAME}-dfu-${pinetime_VERSION_MAJOR}.${pinetime_VERSION_MINOR}.${pinetime_VERSION_PATCH}.zip)
 set(NRF5_LINKER_SCRIPT_MCUBOOT "${CMAKE_SOURCE_DIR}/gcc_nrf52-mcuboot.ld")
 add_executable(${EXECUTABLE_MCUBOOT_NAME} ${SOURCE_FILES})
-target_link_libraries(${EXECUTABLE_MCUBOOT_NAME} nimble nrf-sdk lvgl littlefs QCBOR infinitime_fonts)
+target_link_libraries(${EXECUTABLE_MCUBOOT_NAME} nimble nrf-sdk lvgl littlefs infinitime_fonts infinitime_apps)
 set_target_properties(${EXECUTABLE_MCUBOOT_NAME} PROPERTIES OUTPUT_NAME ${EXECUTABLE_MCUBOOT_FILE_NAME})
 target_compile_options(${EXECUTABLE_MCUBOOT_NAME} PUBLIC
         ${COMMON_FLAGS}
@@ -986,8 +958,8 @@ add_custom_command(TARGET ${EXECUTABLE_MCUBOOT_NAME}
         COMMAND ${CMAKE_SIZE_UTIL} ${EXECUTABLE_MCUBOOT_FILE_NAME}.out
         COMMAND ${CMAKE_OBJCOPY} -O binary ${EXECUTABLE_MCUBOOT_FILE_NAME}.out "${EXECUTABLE_MCUBOOT_FILE_NAME}.bin"
         COMMAND ${CMAKE_OBJCOPY} -O ihex ${EXECUTABLE_MCUBOOT_FILE_NAME}.out "${EXECUTABLE_MCUBOOT_FILE_NAME}.hex"
-        COMMAND ${CMAKE_SOURCE_DIR}/tools/mcuboot/imgtool.py create --align 4 --version 1.0.0 --header-size 32 --slot-size 475136 --pad-header ${EXECUTABLE_MCUBOOT_FILE_NAME}.hex ${IMAGE_MCUBOOT_FILE_NAME_HEX}
-        COMMAND ${CMAKE_SOURCE_DIR}/tools/mcuboot/imgtool.py create --align 4 --version 1.0.0 --header-size 32 --slot-size 475136 --pad-header ${EXECUTABLE_MCUBOOT_FILE_NAME}.bin ${IMAGE_MCUBOOT_FILE_NAME_BIN}
+        COMMAND ${CMAKE_SOURCE_DIR}/tools/mcuboot/imgtool.py create --align 1 --version 1.0.0 --header-size 32 --slot-size 475136 --pad-header ${EXECUTABLE_MCUBOOT_FILE_NAME}.hex ${IMAGE_MCUBOOT_FILE_NAME_HEX}
+        COMMAND ${CMAKE_SOURCE_DIR}/tools/mcuboot/imgtool.py create --align 1 --version 1.0.0 --header-size 32 --slot-size 475136 --pad-header ${EXECUTABLE_MCUBOOT_FILE_NAME}.bin ${IMAGE_MCUBOOT_FILE_NAME_BIN}
         COMMENT "post build steps for ${EXECUTABLE_MCUBOOT_FILE_NAME}"
         )
 
@@ -1007,7 +979,7 @@ endif()
 set(EXECUTABLE_RECOVERY_NAME "pinetime-recovery")
 set(EXECUTABLE_RECOVERY_FILE_NAME ${EXECUTABLE_RECOVERY_NAME}-${pinetime_VERSION_MAJOR}.${pinetime_VERSION_MINOR}.${pinetime_VERSION_PATCH})
 add_executable(${EXECUTABLE_RECOVERY_NAME} ${RECOVERY_SOURCE_FILES})
-target_link_libraries(${EXECUTABLE_RECOVERY_NAME} nimble nrf-sdk littlefs QCBOR infinitime_fonts)
+target_link_libraries(${EXECUTABLE_RECOVERY_NAME} nimble nrf-sdk littlefs infinitime_fonts infinitime_apps)
 set_target_properties(${EXECUTABLE_RECOVERY_NAME} PROPERTIES OUTPUT_NAME ${EXECUTABLE_RECOVERY_FILE_NAME})
 target_compile_definitions(${EXECUTABLE_RECOVERY_NAME} PUBLIC "PINETIME_IS_RECOVERY")
 target_compile_options(${EXECUTABLE_RECOVERY_NAME} PUBLIC
@@ -1039,7 +1011,7 @@ set(IMAGE_RECOVERY_MCUBOOT_FILE_NAME ${EXECUTABLE_RECOVERY_MCUBOOT_NAME}-image-$
 set(IMAGE_RECOVERY_MCUBOOT_FILE_NAME_HEX ${IMAGE_RECOVERY_MCUBOOT_FILE_NAME}.hex)
 set(DFU_RECOVERY_MCUBOOT_FILE_NAME ${EXECUTABLE_RECOVERY_MCUBOOT_NAME}-dfu-${pinetime_VERSION_MAJOR}.${pinetime_VERSION_MINOR}.${pinetime_VERSION_PATCH}.zip)
 add_executable(${EXECUTABLE_RECOVERY_MCUBOOT_NAME} ${RECOVERY_SOURCE_FILES})
-target_link_libraries(${EXECUTABLE_RECOVERY_MCUBOOT_NAME} nimble nrf-sdk littlefs QCBOR infinitime_fonts)
+target_link_libraries(${EXECUTABLE_RECOVERY_MCUBOOT_NAME} nimble nrf-sdk littlefs infinitime_fonts infinitime_apps)
 set_target_properties(${EXECUTABLE_RECOVERY_MCUBOOT_NAME} PROPERTIES OUTPUT_NAME ${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME})
 target_compile_definitions(${EXECUTABLE_RECOVERY_MCUBOOT_NAME} PUBLIC "PINETIME_IS_RECOVERY")
 target_compile_options(${EXECUTABLE_RECOVERY_MCUBOOT_NAME} PUBLIC
@@ -1061,7 +1033,7 @@ add_custom_command(TARGET ${EXECUTABLE_RECOVERY_MCUBOOT_NAME}
         COMMAND ${CMAKE_SIZE_UTIL} ${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME}.out
         COMMAND ${CMAKE_OBJCOPY} -O binary ${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME}.out "${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME}.bin"
         COMMAND ${CMAKE_OBJCOPY} -O ihex ${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME}.out "${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME}.hex"
-        COMMAND ${CMAKE_SOURCE_DIR}/tools/mcuboot/imgtool.py create --align 4 --version 1.0.0 --header-size 32 --slot-size 475136 --pad-header ${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME}.hex ${IMAGE_RECOVERY_MCUBOOT_FILE_NAME_HEX}
+        COMMAND ${CMAKE_SOURCE_DIR}/tools/mcuboot/imgtool.py create --align 1 --version 1.0.0 --header-size 32 --slot-size 475136 --pad-header ${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME}.hex ${IMAGE_RECOVERY_MCUBOOT_FILE_NAME_HEX}
         COMMAND ${CMAKE_OBJCOPY} -I ihex -O binary ${IMAGE_RECOVERY_MCUBOOT_FILE_NAME_HEX} "${IMAGE_RECOVERY_MCUBOOT_FILE_NAME}.bin"
         COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/bin2c.py ${IMAGE_RECOVERY_MCUBOOT_FILE_NAME}.bin recoveryImage > recoveryImage.h
         COMMENT "post build steps for ${EXECUTABLE_RECOVERY_MCUBOOT_FILE_NAME}"
@@ -1079,7 +1051,7 @@ endif()
 set(EXECUTABLE_RECOVERYLOADER_NAME "pinetime-recovery-loader")
 set(EXECUTABLE_RECOVERYLOADER_FILE_NAME ${EXECUTABLE_RECOVERYLOADER_NAME}-${pinetime_VERSION_MAJOR}.${pinetime_VERSION_MINOR}.${pinetime_VERSION_PATCH})
 add_executable(${EXECUTABLE_RECOVERYLOADER_NAME} ${RECOVERYLOADER_SOURCE_FILES})
-target_link_libraries(${EXECUTABLE_RECOVERYLOADER_NAME} nrf-sdk QCBOR infinitime_fonts)
+target_link_libraries(${EXECUTABLE_RECOVERYLOADER_NAME} nrf-sdk infinitime_fonts infinitime_apps)
 set_target_properties(${EXECUTABLE_RECOVERYLOADER_NAME} PROPERTIES OUTPUT_NAME ${EXECUTABLE_RECOVERYLOADER_FILE_NAME})
 target_compile_options(${EXECUTABLE_RECOVERYLOADER_NAME} PUBLIC
         ${COMMON_FLAGS}
@@ -1114,7 +1086,7 @@ set(IMAGE_MCUBOOT_RECOVERYLOADER_FILE_NAME ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_N
 set(IMAGE_MCUBOOT_RECOVERYLOADER_FILE_NAME_HEX ${IMAGE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.hex)
 set(DFU_MCUBOOT_RECOVERYLOADER_FILE_NAME ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_NAME}-dfu-${pinetime_VERSION_MAJOR}.${pinetime_VERSION_MINOR}.${pinetime_VERSION_PATCH}.zip)
 add_executable(${EXECUTABLE_MCUBOOT_RECOVERYLOADER_NAME} ${RECOVERYLOADER_SOURCE_FILES})
-target_link_libraries(${EXECUTABLE_MCUBOOT_RECOVERYLOADER_NAME} nrf-sdk QCBOR infinitime_fonts)
+target_link_libraries(${EXECUTABLE_MCUBOOT_RECOVERYLOADER_NAME} nrf-sdk infinitime_fonts infinitime_apps)
 set_target_properties(${EXECUTABLE_MCUBOOT_RECOVERYLOADER_NAME} PROPERTIES OUTPUT_NAME ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME})
 target_compile_options(${EXECUTABLE_MCUBOOT_RECOVERYLOADER_NAME} PUBLIC
         ${COMMON_FLAGS}
@@ -1139,7 +1111,7 @@ add_custom_command(TARGET ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_NAME}
         COMMAND ${CMAKE_SIZE_UTIL} ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.out
         COMMAND ${CMAKE_OBJCOPY} -O binary ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.out "${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.bin"
         COMMAND ${CMAKE_OBJCOPY} -O ihex ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.out "${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.hex"
-        COMMAND ${CMAKE_SOURCE_DIR}/tools/mcuboot/imgtool.py create --align 4 --version 1.0.0 --header-size 32 --slot-size 475136 --pad-header ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.hex ${IMAGE_MCUBOOT_RECOVERYLOADER_FILE_NAME_HEX}
+        COMMAND ${CMAKE_SOURCE_DIR}/tools/mcuboot/imgtool.py create --align 1 --version 1.0.0 --header-size 32 --slot-size 475136 --pad-header ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.hex ${IMAGE_MCUBOOT_RECOVERYLOADER_FILE_NAME_HEX}
         COMMAND ${CMAKE_OBJCOPY} -I ihex -O binary ${IMAGE_MCUBOOT_RECOVERYLOADER_FILE_NAME_HEX} "${IMAGE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.bin"
         COMMAND python3 ${CMAKE_SOURCE_DIR}/tools/bin2c.py ${IMAGE_MCUBOOT_RECOVERYLOADER_FILE_NAME}.bin recoveryLoaderImage > recoveryLoaderImage.h
         COMMENT "post build steps for ${EXECUTABLE_MCUBOOT_RECOVERYLOADER_FILE_NAME}"
@@ -1156,27 +1128,4 @@ endif()
 if(BUILD_RESOURCES)
   add_subdirectory(resources)
 endif()
-
-# skip files, which currently cause problems when turning on CMake untiy build 
-set_source_files_properties(
-        "${NRF5_SDK_PATH}/integration/nrfx/legacy/nrf_drv_clock.c"
-        "${NRF5_SDK_PATH}/modules/nrfx/drivers/src/nrfx_saadc.c"
-        ${CMAKE_CURRENT_SOURCE_DIR}/components/ble/AlertNotificationClient.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/components/ble/NavigationService.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/components/ble/NavigationService.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/settings/SettingChimes.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/settings/SettingDisplay.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/settings/SettingSetDate.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/settings/SettingSetTime.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/settings/SettingShakeThreshold.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/settings/SettingSteps.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/settings/SettingWakeUp.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/WatchFaceInfineat.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/displayapp/screens/WatchFacePineTimeStyle.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/lvgl/src/lv_core/lv_obj.c
-        ${CMAKE_CURRENT_SOURCE_DIR}/libs/mynewt-nimble/ext/tinycrypt/src/ecc_dh.c
-        PROPERTIES
-        SKIP_UNITY_BUILD_INCLUSION
-        ON
-        )
 

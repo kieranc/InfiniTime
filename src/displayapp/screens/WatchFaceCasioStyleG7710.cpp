@@ -1,6 +1,5 @@
 #include "displayapp/screens/WatchFaceCasioStyleG7710.h"
 
-#include <date/date.h>
 #include <lvgl/lvgl.h>
 #include <cstdio>
 #include "displayapp/screens/BatteryIcon.h"
@@ -15,17 +14,16 @@
 #include "components/settings/Settings.h"
 using namespace Pinetime::Applications::Screens;
 
-WatchFaceCasioStyleG7710::WatchFaceCasioStyleG7710(DisplayApp* app,
-                                                   Controllers::DateTime& dateTimeController,
-                                                   Controllers::Battery& batteryController,
-                                                   Controllers::Ble& bleController,
+WatchFaceCasioStyleG7710::WatchFaceCasioStyleG7710(Controllers::DateTime& dateTimeController,
+                                                   const Controllers::Battery& batteryController,
+                                                   const Controllers::Ble& bleController,
                                                    Controllers::NotificationManager& notificatioManager,
                                                    Controllers::Settings& settingsController,
                                                    Controllers::HeartRateController& heartRateController,
                                                    Controllers::MotionController& motionController,
                                                    Controllers::FS& filesystem)
-  : Screen(app),
-    currentDateTime {{}},
+  : currentDateTime {{}},
+    batteryIcon(false),
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
@@ -50,14 +48,14 @@ WatchFaceCasioStyleG7710::WatchFaceCasioStyleG7710(DisplayApp* app,
     font_segment115 = lv_font_load("F:/fonts/7segments_115.bin");
   }
 
-  label_battery_vallue = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(label_battery_vallue, lv_scr_act(), LV_ALIGN_IN_TOP_RIGHT, 0, 0);
-  lv_obj_set_style_local_text_color(label_battery_vallue, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, color_text);
-  lv_label_set_text_static(label_battery_vallue, "00%");
+  label_battery_value = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_align(label_battery_value, lv_scr_act(), LV_ALIGN_IN_TOP_RIGHT, 0, 0);
+  lv_obj_set_style_local_text_color(label_battery_value, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, color_text);
+  lv_label_set_text_static(label_battery_value, "00%");
 
   batteryIcon.Create(lv_scr_act());
   batteryIcon.SetColor(color_text);
-  lv_obj_align(batteryIcon.GetObject(), label_battery_vallue, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+  lv_obj_align(batteryIcon.GetObject(), label_battery_value, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
   batteryPlug = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(batteryPlug, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, color_text);
@@ -205,7 +203,7 @@ void WatchFaceCasioStyleG7710::Refresh() {
   if (batteryPercentRemaining.IsUpdated()) {
     auto batteryPercent = batteryPercentRemaining.Get();
     batteryIcon.SetBatteryPercentage(batteryPercent);
-    lv_label_set_text_fmt(label_battery_vallue, "%d%%", batteryPercent);
+    lv_label_set_text_fmt(label_battery_value, "%d%%", batteryPercent);
   }
 
   bleState = bleController.IsConnected();
@@ -213,7 +211,7 @@ void WatchFaceCasioStyleG7710::Refresh() {
   if (bleState.IsUpdated() || bleRadioEnabled.IsUpdated()) {
     lv_label_set_text_static(bleIcon, BleIcon::GetIcon(bleState.Get()));
   }
-  lv_obj_realign(label_battery_vallue);
+  lv_obj_realign(label_battery_value);
   lv_obj_realign(batteryIcon.GetObject());
   lv_obj_realign(batteryPlug);
   lv_obj_realign(bleIcon);
@@ -224,48 +222,36 @@ void WatchFaceCasioStyleG7710::Refresh() {
     lv_label_set_text_static(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
   }
 
-  currentDateTime = dateTimeController.CurrentDateTime();
-
+  currentDateTime = std::chrono::time_point_cast<std::chrono::minutes>(dateTimeController.CurrentDateTime());
   if (currentDateTime.IsUpdated()) {
-    auto newDateTime = currentDateTime.Get();
+    uint8_t hour = dateTimeController.Hours();
+    uint8_t minute = dateTimeController.Minutes();
 
-    auto dp = date::floor<date::days>(newDateTime);
-    auto time = date::make_time(newDateTime - dp);
-    auto yearMonthDay = date::year_month_day(dp);
-
-    auto year = static_cast<int>(yearMonthDay.year());
-    auto month = static_cast<Pinetime::Controllers::DateTime::Months>(static_cast<unsigned>(yearMonthDay.month()));
-    auto day = static_cast<unsigned>(yearMonthDay.day());
-    auto dayOfWeek = static_cast<Pinetime::Controllers::DateTime::Days>(date::weekday(yearMonthDay).iso_encoding());
-
-    uint8_t hour = time.hours().count();
-    uint8_t minute = time.minutes().count();
-    auto weekNumberFormat = "%V";
-
-    if (displayedHour != hour || displayedMinute != minute) {
-      displayedHour = hour;
-      displayedMinute = minute;
-
-      if (settingsController.GetClockType() == Controllers::Settings::ClockType::H12) {
-        char ampmChar[2] = "A";
-        if (hour == 0) {
-          hour = 12;
-        } else if (hour == 12) {
-          ampmChar[0] = 'P';
-        } else if (hour > 12) {
-          hour = hour - 12;
-          ampmChar[0] = 'P';
-        }
-        lv_label_set_text(label_time_ampm, ampmChar);
-        lv_label_set_text_fmt(label_time, "%2d:%02d", hour, minute);
-        lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, 40);
-      } else {
-        lv_label_set_text_fmt(label_time, "%02d:%02d", hour, minute);
-        lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, 40);
+    if (settingsController.GetClockType() == Controllers::Settings::ClockType::H12) {
+      char ampmChar[2] = "A";
+      if (hour == 0) {
+        hour = 12;
+      } else if (hour == 12) {
+        ampmChar[0] = 'P';
+      } else if (hour > 12) {
+        hour = hour - 12;
+        ampmChar[0] = 'P';
       }
+      lv_label_set_text(label_time_ampm, ampmChar);
+      lv_label_set_text_fmt(label_time, "%2d:%02d", hour, minute);
+    } else {
+      lv_label_set_text_fmt(label_time, "%02d:%02d", hour, minute);
     }
+    lv_obj_realign(label_time);
 
-    if ((year != currentYear) || (month != currentMonth) || (dayOfWeek != currentDayOfWeek) || (day != currentDay)) {
+    currentDate = std::chrono::time_point_cast<days>(currentDateTime.Get());
+    if (currentDate.IsUpdated()) {
+      const char* weekNumberFormat = "%V";
+
+      uint16_t year = dateTimeController.Year();
+      Controllers::DateTime::Months month = dateTimeController.Month();
+      uint8_t day = dateTimeController.Day();
+      int dayOfYear = dateTimeController.DayOfYear();
       if (settingsController.GetClockType() == Controllers::Settings::ClockType::H24) {
         // 24h mode: ddmmyyyy, first DOW=Monday;
         lv_label_set_text_fmt(label_date, "%3d-%2d", day, month);
@@ -280,33 +266,26 @@ void WatchFaceCasioStyleG7710::Refresh() {
                                  // first day of week 1; days in the new year before this are in week 0. [ tm_year, tm_wday, tm_yday]
       }
 
-      uint8_t weekNumber;
-      uint16_t dayOfYearNumber, daysTillEndOfYearNumber;
-
       time_t ttTime =
         std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(currentDateTime.Get()));
       tm* tmTime = std::localtime(&ttTime);
 
-      dayOfYearNumber = tmTime->tm_yday + 1; //  tm_yday  day of year [0,365] => yday+1
-      daysTillEndOfYearNumber = (yearMonthDay.year().is_leap() ? 366 : 365) - dayOfYearNumber;
+      // TODO: When we start using C++20, use std::chrono::year::is_leap
+      int daysInCurrentYear = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 ? 366 : 365;
+      uint16_t daysTillEndOfYearNumber = daysInCurrentYear - dayOfYear;
 
       char buffer[8];
       strftime(buffer, 8, weekNumberFormat, tmTime);
-      weekNumber = atoi(buffer);
+      uint8_t weekNumber = atoi(buffer);
 
       lv_label_set_text_fmt(label_day_of_week, "%s", dateTimeController.DayOfWeekShortToString());
-      lv_label_set_text_fmt(label_day_of_year, "%3d-%3d", dayOfYearNumber, daysTillEndOfYearNumber);
+      lv_label_set_text_fmt(label_day_of_year, "%3d-%3d", dayOfYear, daysTillEndOfYearNumber);
       lv_label_set_text_fmt(label_week_number, "WK%02d", weekNumber);
 
       lv_obj_realign(label_day_of_week);
       lv_obj_realign(label_day_of_year);
       lv_obj_realign(label_week_number);
       lv_obj_realign(label_date);
-
-      currentYear = year;
-      currentMonth = month;
-      currentDayOfWeek = dayOfWeek;
-      currentDay = day;
     }
   }
 
@@ -326,13 +305,13 @@ void WatchFaceCasioStyleG7710::Refresh() {
   }
 
   stepCount = motionController.NbSteps();
-  motionSensorOk = motionController.IsSensorOk();
-  if (stepCount.IsUpdated() || motionSensorOk.IsUpdated()) {
+  if (stepCount.IsUpdated()) {
     lv_label_set_text_fmt(stepValue, "%lu", stepCount.Get());
     lv_obj_realign(stepValue);
     lv_obj_realign(stepIcon);
   }
 }
+
 bool WatchFaceCasioStyleG7710::IsAvailable(Pinetime::Controllers::FS& filesystem) {
   lfs_file file = {};
 
