@@ -1,4 +1,4 @@
-name: CI
+name: CustomBuild
 
 # Run this workflow whenever the build may be affected
 on:
